@@ -39,6 +39,11 @@ async def on_message(message):
     elif message.content =='!t':
      general_channel = client.get_channel(745925853229350975)
      await general_channel.send('This is the default prefix')
+        
+     if message.content == "hi": 
+      
+      await message.channel.send("Hello There")   
+        
 
     
 client.run('ODYxOTE5MzE1NTA2NDk1NTA4.YOQy6g.Q-Z4wnYMTtvkaCxpqjDsSJoxpgs')

@@ -2,11 +2,18 @@
 # Import Discord Package
 
 import discord, asyncio
+
 from discord.ext import commands
 
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 #Client
-client = commands.Bot(command_prefix='!')
+
+client = commands.Bot(command_prefix='!t')
 
 #C O M M A N D S
  
@@ -17,7 +24,7 @@ async def on_ready():
 
     general_channel = client.get_channel(745925853229350975)
 
-    await general_channel.send('Hello, tonyG')
+    await general_channel.send('Who dares awaken me?!')
     
 
 
@@ -46,14 +53,12 @@ async def on_message(message):
     if message.content == "hi": 
       
       await message.channel.send("Hello There")   
-      await client.process_commands(message)
+      
     
-@client.command()
+@client.command('clear')
 @commands.has_permissions(manage_messages = True)
 async def purge(ctx, amount = 3):
   await ctx.channel.purge(limit = amount)
 
 
 client.run('ODYxOTE5MzE1NTA2NDk1NTA4.YOQy6g.W7Fsxy11nGR9NW-vMkD8r5qucV8')
-
-

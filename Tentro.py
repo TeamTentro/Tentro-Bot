@@ -49,8 +49,9 @@ async def on_message(message):
     
 @client.command(name='clear')
 @commands.has_permissions(manage_messages = True)
-async def purge(ctx, amount = 3):
-  await ctx.channel.purge(limit = amount)
+async def purge(ctx, amount: int):
+  await ctx.channel.purge(limit = amount+1)
+  await ctx.send(f"{ctx.author.mention}, purged {amount} message(s)")
 
 with open("token.0", "r", encoding="utf-8") as f:
   bottoken = f.read()

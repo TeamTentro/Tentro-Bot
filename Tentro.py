@@ -26,12 +26,13 @@ async def on_ready():
 @client.event
 async def on_message(message):
     if message.content == '!thelp':
+      user = bot.get_user(user_id)
       general_channel = client.get_channel(745925853229350975)
       myEmbed = discord.Embed(title="These are all the commands", color=0xFF0000)
       myEmbed.add_field(name="code version:", value="v1.0", inline=False)
       myEmbed.add_field(name="Date released:", value="July 6th", inline=False)
       myEmbed.set_footer(text="This is idk")
-      myEmbed.set_author(name="Aksy")
+      myEmbed.set_author(name="<@"user">")
 
       await general_channel.send(embed=myEmbed)
       

@@ -29,7 +29,7 @@ async def on_message(message):
     if message.content == '!thelp':
       
       myEmbed = discord.Embed(title="These are all the commands", color=0xFF0000)
-      myEmbed.add_field(name="available commands:", value="Clear", inline=False)
+      myEmbed.add_field(name="available commands:", value="!tclear", inline=False)
       myEmbed.add_field(name="bot version:", value="v1.0", inline=False)
       myEmbed.add_field(name="Date released:", value="July 6th", inline=False)
       myEmbed.set_footer(text="Still in progress!")

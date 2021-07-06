@@ -32,7 +32,7 @@ async def on_message(message):
       myEmbed.add_field(name="code version:", value="v1.0", inline=False)
       myEmbed.add_field(name="Date released:", value="July 6th", inline=False)
       myEmbed.set_footer(text="This is idk")
-      myEmbed.set_author(name="<@"user">")
+      myEmbed.set_author(name=user.mention)
 
       await general_channel.send(embed=myEmbed)
       

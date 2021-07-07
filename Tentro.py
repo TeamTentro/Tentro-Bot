@@ -64,6 +64,7 @@ async def ban(ctx, member : discord.Member, *, reason=None):
   embed = discord.Embed(title = (f"You have been banned from: {guild.name}.\n**Reason:** {reason}."), colour=discord.Color(0xff0000))
   await member.send(embed=embed)
   
+  
 
   
 
@@ -106,6 +107,45 @@ async def mute(ctx, member: discord.Member, *, reason=None):
 async def purge(ctx, amount: int):
   await ctx.channel.purge(limit = amount+1)
   await ctx.send(f"{ctx.author.mention}, purged {amount} message(s)")
+
+
+@client.command(description="Unmutes a specified user.")
+@commands.has_permissions(manage_messages=True)
+async def unmute(ctx, member: discord.Member):
+   guild = ctx.guild
+   mutedRole = discord.utils.get(ctx.guild.roles, name="Muted")
+
+   await member.remove_roles(mutedRole)
+   embed = discord.Embed(title="Unmuted", description=f"{member.mention} has been unmuted.",colour=discord.Colour(0xff0000))
+   embed.set_footer(text='Unmute')
+   embed.timestamp = datetime.datetime.now()
+   await ctx.send(embed=embed)
+   embed = discord.Embed(title = (f"**You have been unmuted in: {guild.name}.**"), colour=discord.Color(0xff0000))
+   await member.send(embed=embed)
+
+
+@client.command(name='ping')
+async def ping(ctx, arg=None):
+  embed = discord.Embed(title=f'My ping is: {round(client.latency * 1000)}ms.', colour=discord.Colour(0xff0000))
+  await ctx.send(embed=embed)
+
+
+@client.command()
+async def unban(ctx, *, user: discord.User,):
+    guild = ctx.guild
+    embed = discord.Embed(title='Sucess!', description = f"{user} has been sucessfully unbanned!", colour=discord.Colour(0xff0000))
+    
+    if ctx.author.guild_permissions.administrator:
+      await ctx.send(embed=embed)
+      await guild.unban(user=user)
+    else:
+      await ctx.send("You dont have the required permissions to do that!")
+
+
+
+
+  
+
 
 with open("token.0", "r", encoding="utf-8") as f:
   bottoken = f.read()

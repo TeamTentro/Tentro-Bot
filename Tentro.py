@@ -2,6 +2,7 @@
 # Import Discord Package
 
 import discord, asyncio, datetime
+from discord import colour
 from discord.ext import commands
 
 
@@ -55,12 +56,14 @@ async def on_message(message):
 async def ban(ctx, member : discord.Member, *, reason=None):
   guild = ctx.guild
   await member.ban(reason=reason)
-  embed = discord.Embed(title="Banned", description=f"{member.mention} was banned from the server.", colour=discord.Colour(0xff0000))
+  embed = discord.Embed(title="Banned", description=f"{member.mention} has been banned from the server.", colour=discord.Colour(0xff0000))
   embed.add_field(name="Reason:", value=reason, inline=False)
-  embed.set_footer(text='ban')
+  embed.set_footer(text='Ban')
   embed.timestamp = datetime.datetime.now()
   await ctx.send(embed=embed)
-  await member.send(f" You have been banned from: {guild.name}. Reason: {reason}")
+  embed = discord.Embed(title = (f"You have been banned from: {guild.name}.\n**Reason:** {reason}."), colour=discord.Color(0xff0000))
+  await member.send(embed=embed)
+  
 
   
 
@@ -69,12 +72,13 @@ async def ban(ctx, member : discord.Member, *, reason=None):
 async def kick(ctx, member : discord.Member, *, reason=None):
   guild = ctx.guild
   await member.kick(reason=reason)
-  embed = discord.Embed(title="Kicked", description=f"{member.mention} was kicked from the server.", colour=discord.Colour(0xff0000))
+  embed = discord.Embed(title="Kicked", description=f"{member.mention} has been kicked from the server.", colour=discord.Colour(0xff0000))
   embed.add_field(name="Reason:", value=reason, inline=False)
   embed.set_footer(text='Kick')
   embed.timestamp = datetime.datetime.now()
   await ctx.send(embed=embed)
-  await member.send(f" You have been kicked from: {guild.name}. Reason: {reason}")
+  embed = discord.Embed(title = (f"You have been kicked from: {guild.name}.\n**Reason:** {reason}."), colour=discord.Color(0xff0000))
+  await member.send(embed=embed)
     
 @client.command(name='mute')   
 @commands.has_permissions(manage_messages=True)
@@ -87,13 +91,15 @@ async def mute(ctx, member: discord.Member, *, reason=None):
 
         for channel in guild.channels:
             await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
-    embed = discord.Embed(title="Muted", description=f"{member.mention} was muted from the server.", colour=discord.Colour(0xff0000))
+    embed = discord.Embed(title="Muted", description=f"{member.mention} has been muted.", colour=discord.Colour(0xff0000))
     embed.add_field(name="Reason:", value=reason, inline=False)
     embed.set_footer(text="Mute")
     embed.timestamp = datetime.datetime.now()
     await ctx.send(embed=embed)
     await member.add_roles(mutedRole, reason=reason)
-    await member.send(f" You have been muted from: {guild.name}. Reason: {reason}.") 
+    embed = discord.Embed(title = (f"You have been muted in: {guild.name}.\n**Reason:** {reason}."), colour=discord.Color(0xff0000))
+    await member.send(embed=embed)
+    
     
 @client.command(name='clear')
 @commands.has_permissions(manage_messages = True)

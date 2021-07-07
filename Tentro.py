@@ -30,7 +30,7 @@ async def on_message(message):
       
       myEmbed = discord.Embed(title="These are all the commands", color=0xFF0000)
       myEmbed.add_field(name="available commands:", value="!tclear", inline=False)
-      myEmbed.add_field(name="bot version:", value="v1.0", inline=False)
+      myEmbed.add_field(name="bot version:", value="v1.1", inline=False)
       myEmbed.add_field(name="Date released:", value="July 6th", inline=False)
       myEmbed.set_footer(text="Still in progress!")
       myEmbed.set_author(name=message.author.name)
@@ -58,11 +58,11 @@ async def mute(ctx, member: discord.Member, *, reason=None):
 
         for channel in guild.channels:
             await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
-    embed = discord.Embed(title="muted", description=f"{member.mention} was muted ", colour=discord.Colour.light_gray())
+    embed = discord.Embed(title="Mute", description=f"{member.mention} was muted ", colour=discord.Colour.red())
     embed.add_field(name="reason:", value=reason, inline=False)
     await ctx.send(embed=embed)
     await member.add_roles(mutedRole, reason=reason)
-    await member.send(f" you have been muted from: {guild.name} reason: {reason}") 
+    await member.send(f" You have been muted from: {guild.name} reason: {reason}") 
     
 @client.command(name='clear')
 @commands.has_permissions(manage_messages = True)

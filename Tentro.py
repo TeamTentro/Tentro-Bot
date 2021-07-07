@@ -1,12 +1,14 @@
 
 # Import Discord Package
 
-import discord, asyncio
+import discord, asyncio, datetime
 from discord.ext import commands
+
 
 #Client
 
 client = commands.Bot(command_prefix='!t')
+client.remove_command('help')
 
 #C O M M A N D S
  
@@ -17,8 +19,10 @@ async def on_ready():
 
     general_channel = client.get_channel(745925853229350975)
 
-    await general_channel.send('I do be alive doe')
+    await general_channel.send('Bot is online!')
     
+
+
 
 
 @client.event
@@ -26,11 +30,12 @@ async def on_message(message):
     if message.content == '!thelp':
       
       myEmbed = discord.Embed(title="These are all the commands", color=0xFF0000)
-      myEmbed.add_field(name="available commands:", value="!tclear", inline=False)
-      myEmbed.add_field(name="bot version:", value="v1.1", inline=False)
+      myEmbed.add_field(name="available commands:", value="!tclear, !tban, !tkick, !tclear, !tmute", inline=False)
+      myEmbed.add_field(name="bot version:", value="v1.0", inline=False)
       myEmbed.add_field(name="Date released:", value="July 6th", inline=False)
       myEmbed.set_footer(text="Still in progress!")
       myEmbed.set_author(name=message.author.name)
+      myEmbed.timestamp = message.created_at
        
       await message.channel.send(embed=myEmbed)
       
@@ -43,23 +48,52 @@ async def on_message(message):
       
       await message.channel.send("Hello There")   
     await client.process_commands(message)
+
+
+@client.command(name='ban')
+@commands.has_permissions(administrator=True)
+async def ban(ctx, member : discord.Member, *, reason=None):
+  guild = ctx.guild
+  await member.ban(reason=reason)
+  embed = discord.Embed(title="Banned", description=f"{member.mention} was banned from the server.", colour=discord.Colour(0xff0000))
+  embed.add_field(name="Reason:", value=reason, inline=False)
+  embed.set_footer(text='ban')
+  embed.timestamp = datetime.datetime.now()
+  await ctx.send(embed=embed)
+  await member.send(f" You have been banned from: {guild.name} reason: {reason}")
+
+  
+
+@client.command(name='kick')
+@commands.has_permissions(administrator=True)
+async def kick(ctx, member : discord.Member, *, reason=None):
+  guild = ctx.guild
+  await member.kick(reason=reason)
+  embed = discord.Embed(title="Kicked", description=f"{member.mention} was kicked from the server.", colour=discord.Colour(0xff0000))
+  embed.add_field(name="Reason:", value=reason, inline=False)
+  embed.set_footer(text='Kick')
+  embed.timestamp = datetime.datetime.now()
+  await ctx.send(embed=embed)
+  await member.send(f" You have been kicked from: {guild.name} reason: {reason}")
     
-    
- @commands.has_permissions(manage_messages=True)
+@client.command(name='mute')   
+@commands.has_permissions(manage_messages=True)
 async def mute(ctx, member: discord.Member, *, reason=None):
     guild = ctx.guild
     mutedRole = discord.utils.get(guild.roles, name="Muted")
 
     if not mutedRole:
-        mutedRole = await guild.create_role(name="Muted", colour=discord.Colour(0x5d6e62))
+        mutedRole = await guild.create_role(name="Muted", colour=discord.Colour(0x34eb40))
 
         for channel in guild.channels:
             await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
-    embed = discord.Embed(title="Mute", description=f"{member.mention} was muted ", colour=discord.Colour.red())
-    embed.add_field(name="reason:", value=reason, inline=False)
+    embed = discord.Embed(title="Muted", description=f"{member.mention} was muted from the server.", colour=discord.Colour(0xff0000))
+    embed.add_field(name="Reason:", value=reason, inline=False)
+    embed.set_footer(text="Mute")
+    embed.timestamp = datetime.datetime.now()
     await ctx.send(embed=embed)
     await member.add_roles(mutedRole, reason=reason)
-    await member.send(f" You have been muted from: {guild.name} reason: {reason}") 
+    await member.send(f" You have been muted from: {guild.name} reason: {reason}.") 
     
 @client.command(name='clear')
 @commands.has_permissions(manage_messages = True)
@@ -71,4 +105,3 @@ with open("token.0", "r", encoding="utf-8") as f:
   bottoken = f.read()
 
   client.run(bottoken)
-

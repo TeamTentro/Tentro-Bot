@@ -126,7 +126,7 @@ async def unmute(ctx, member: discord.Member):
 
 @client.command(name='ping')
 async def ping(ctx, arg=None):
-  embed = discord.Embed(title=f'My ping is: {round(client.latency * 1000)}ms.', colour=discord.Colour(0xff0000))
+  embed = discord.Embed(title=f'Pong!', description = f"Client latency: {round(client.latency * 1000)}ms" , colour=discord.Colour(0xff0000))
   await ctx.send(embed=embed)
 
 

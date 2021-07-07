@@ -4,7 +4,6 @@
 import discord, asyncio
 from discord.ext import commands
 
-
 #Client
 
 client = commands.Bot(command_prefix='!t')

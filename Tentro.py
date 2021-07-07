@@ -30,8 +30,8 @@ async def on_message(message):
     if message.content == '!thelp':
       
       myEmbed = discord.Embed(title="These are all the commands", color=0xFF0000)
-      myEmbed.add_field(name="available commands:", value="!tclear, !tban, !tkick, !tclear, !tmute", inline=False)
-      myEmbed.add_field(name="bot version:", value="v1.0", inline=False)
+      myEmbed.add_field(name="Available commands:", value="!tclear, !tban, !tkick, !tmute", inline=False)
+      myEmbed.add_field(name="Bot version:", value="v1.0", inline=False)
       myEmbed.add_field(name="Date released:", value="July 6th", inline=False)
       myEmbed.set_footer(text="Still in progress!")
       myEmbed.set_author(name=message.author.name)
@@ -60,7 +60,7 @@ async def ban(ctx, member : discord.Member, *, reason=None):
   embed.set_footer(text='ban')
   embed.timestamp = datetime.datetime.now()
   await ctx.send(embed=embed)
-  await member.send(f" You have been banned from: {guild.name} reason: {reason}")
+  await member.send(f" You have been banned from: {guild.name}. Reason: {reason}")
 
   
 
@@ -74,7 +74,7 @@ async def kick(ctx, member : discord.Member, *, reason=None):
   embed.set_footer(text='Kick')
   embed.timestamp = datetime.datetime.now()
   await ctx.send(embed=embed)
-  await member.send(f" You have been kicked from: {guild.name} reason: {reason}")
+  await member.send(f" You have been kicked from: {guild.name}. Reason: {reason}")
     
 @client.command(name='mute')   
 @commands.has_permissions(manage_messages=True)
@@ -93,7 +93,7 @@ async def mute(ctx, member: discord.Member, *, reason=None):
     embed.timestamp = datetime.datetime.now()
     await ctx.send(embed=embed)
     await member.add_roles(mutedRole, reason=reason)
-    await member.send(f" You have been muted from: {guild.name} reason: {reason}.") 
+    await member.send(f" You have been muted from: {guild.name}. Reason: {reason}.") 
     
 @client.command(name='clear')
 @commands.has_permissions(manage_messages = True)

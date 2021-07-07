@@ -18,7 +18,7 @@ async def on_ready():
 
     general_channel = client.get_channel(745925853229350975)
 
-    await general_channel.send('Who dares awaken me?!')
+    await general_channel.send('I do be alive doe')
     
 
 

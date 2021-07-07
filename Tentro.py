@@ -47,12 +47,22 @@ async def on_message(message):
       await message.channel.send("Hello There")   
     await client.process_commands(message)
     
-     if message.content == "!tkick @Tentrio": 
-      
-      await message.channel.send("funne")   
-    await client.process_commands(message)
     
-    
+ @commands.has_permissions(manage_messages=True)
+async def mute(ctx, member: discord.Member, *, reason=None):
+    guild = ctx.guild
+    mutedRole = discord.utils.get(guild.roles, name="Muted")
+
+    if not mutedRole:
+        mutedRole = await guild.create_role(name="Muted", colour=discord.Colour(0x34eb40))
+
+        for channel in guild.channels:
+            await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
+    embed = discord.Embed(title="muted", description=f"{member.mention} was muted ", colour=discord.Colour.light_gray())
+    embed.add_field(name="reason:", value=reason, inline=False)
+    await ctx.send(embed=embed)
+    await member.add_roles(mutedRole, reason=reason)
+    await member.send(f" you have been muted from: {guild.name} reason: {reason}") 
     
 @client.command(name='clear')
 @commands.has_permissions(manage_messages = True)
@@ -65,18 +75,3 @@ with open("token.0", "r", encoding="utf-8") as f:
 
   client.run(bottoken)
 
-@commands.has_permissions(manage_messages=True)
-async def mute(ctx, member: discord.Member, *, reason=None):
-    guild = ctx.guild
-    mutedRole = discord.utils.get(guild.roles, name="Muted")
-
-    if not mutedRole:
-        mutedRole = await guild.create_role(name="Muted", colour=discord.Colour(#34eb40))
-
-        for channel in guild.channels:
-            await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
-    embed = discord.Embed(title="muted", description=f"{member.mention} was muted ", colour=discord.Colour.light_gray())
-    embed.add_field(name="reason:", value=reason, inline=False)
-    await ctx.send(embed=embed)
-    await member.add_roles(mutedRole, reason=reason)
-    await member.send(f" you have been muted from: {guild.name} reason: {reason}")

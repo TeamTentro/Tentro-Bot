@@ -1,10 +1,8 @@
-
 # Import Discord Package
 
 import discord, asyncio, datetime
 from discord import colour
 from discord.ext import commands
-
 
 #Client
 
@@ -12,8 +10,6 @@ client = commands.Bot(command_prefix='!t')
 client.remove_command('help')
 
 #C O M M A N D S
- 
-
 
 @client.event
 async def on_ready():
@@ -21,10 +17,6 @@ async def on_ready():
     general_channel = client.get_channel(745925853229350975)
 
     await general_channel.send('Bot is online!')
-    
-
-print("Hello there")
-
 
 @client.event
 async def on_message(message):
@@ -50,7 +42,6 @@ async def on_message(message):
       await message.channel.send("Hello There")   
     await client.process_commands(message)
 
-
 @client.command(name='ban')
 @commands.has_permissions(administrator=True)
 async def ban(ctx, member : discord.Member, *, reason=None):
@@ -63,10 +54,6 @@ async def ban(ctx, member : discord.Member, *, reason=None):
   await ctx.send(embed=embed)
   embed = discord.Embed(title = (f"You have been banned from: {guild.name}.\n**Reason:** {reason}."), colour=discord.Color(0xff0000))
   await member.send(embed=embed)
-  
-  
-
-  
 
 @client.command(name='kick')
 @commands.has_permissions(administrator=True)
@@ -101,13 +88,11 @@ async def mute(ctx, member: discord.Member, *, reason=None):
     embed = discord.Embed(title = (f"You have been muted in: {guild.name}.\n**Reason:** {reason}."), colour=discord.Color(0xff0000))
     await member.send(embed=embed)
     
-    
 @client.command(name='clear')
 @commands.has_permissions(manage_messages = True)
 async def purge(ctx, amount: int):
   await ctx.channel.purge(limit = amount+1)
   await ctx.send(f"{ctx.author.mention}, purged {amount} message(s)")
-
 
 @client.command(description="Unmutes a specified user.")
 @commands.has_permissions(manage_messages=True)
@@ -123,15 +108,13 @@ async def unmute(ctx, member: discord.Member):
    embed = discord.Embed(title = (f"**You have been unmuted in: {guild.name}.**"), colour=discord.Color(0xff0000))
    await member.send(embed=embed)
 
-
 @client.command(name='ping')
 async def ping(ctx, arg=None):
   embed = discord.Embed(title=f'Pong!', description = f"Client latency: {round(client.latency * 1000)}ms" , colour=discord.Colour(0xff0000))
   await ctx.send(embed=embed)
 
-
 @client.command()
-async def unban(ctx, *, user: discord.User,):
+async def unban(ctx, *, user: discord.User):
     guild = ctx.guild
     embed = discord.Embed(title='Sucess!', description = f"{user} has been sucessfully unbanned!", colour=discord.Colour(0xff0000))
     
@@ -141,11 +124,14 @@ async def unban(ctx, *, user: discord.User,):
     else:
       await ctx.send("You dont have the required permissions to do that!")
 
-
-
-
-  
-
+if __name__ == '__main__':
+    # When running this file, if it is the 'main' file
+    # I.E its not being imported from another python file run this
+    for file in os.listdir(cwd+"/cogs"):
+        if file.endswith(".py") and not file.startswith("_"):
+            client.load_extension(f"cogs.{file[:-3]}")
+    # This is a simple way to load cogs. Under the cogs folder you can make files (EG: moderation.py, util.py. In moderation there might be the ban command, unban command and other
+    # moderation commands. In the util there might be ping, help, invite, etc. It's a fancy way of organising your commands!)
 
 with open("token.0", "r", encoding="utf-8") as f:
   bottoken = f.read()

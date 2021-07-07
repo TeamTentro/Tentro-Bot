@@ -23,7 +23,7 @@ async def on_ready():
     await general_channel.send('Bot is online!')
     
 
-
+print("Hello there")
 
 
 @client.event

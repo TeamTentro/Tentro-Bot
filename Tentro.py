@@ -54,7 +54,7 @@ async def mute(ctx, member: discord.Member, *, reason=None):
     mutedRole = discord.utils.get(guild.roles, name="Muted")
 
     if not mutedRole:
-        mutedRole = await guild.create_role(name="Muted", colour=discord.Colour(0x34eb40))
+        mutedRole = await guild.create_role(name="Muted", colour=discord.Colour(0x5d6e62))
 
         for channel in guild.channels:
             await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)

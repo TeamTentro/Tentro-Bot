@@ -30,7 +30,7 @@ async def on_message(message):
     if message.content == '!thelp':
       
       myEmbed = discord.Embed(title="These are all the commands", color=0xFF0000)
-      myEmbed.add_field(name="Available commands:", value="!tclear, !tban, !tkick, !tmute", inline=False)
+      myEmbed.add_field(name="Available commands:", value="!tclear, !tban, !tkick, !tmute, !tunban, !tunmute, !tping, !tserver", inline=False)
       myEmbed.add_field(name="Bot version:", value="v1.0", inline=False)
       myEmbed.add_field(name="Date released:", value="July 6th", inline=False)
       myEmbed.set_footer(text="Still in progress!")
@@ -130,6 +130,11 @@ async def unban(ctx, *, user: discord.User):
       await guild.unban(user=user)
     else:
       await ctx.send("You dont have the required permissions to do that!")
+
+@client.command(name='server')
+async def server(ctx, arg=None):
+    embed = discord.Embed(title='Our amazing server', description = "Click [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ) to join our server!", colour=discord.Color(0xff0000))
+    await ctx.send(embed=embed)
 
 if __name__ == '__main__':
     # When running this file, if it is the 'main' file

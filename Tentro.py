@@ -15,6 +15,15 @@ print(f"{cwd}\n-----")
 client = commands.Bot(command_prefix='t!')
 client.remove_command('help')
 
+# Custom status drip
+
+@client.event
+async def on_ready():
+    await client.change_presence(activity=discord.Activity(type=discord.ActivityType.watching, name='t!help'))
+    
+    print('Connected to bot: {}'.format(client.user.name))
+    print('Bot ID: {}'.format(client.user.id))
+
 #C O M M A N D S
 
 @client.event

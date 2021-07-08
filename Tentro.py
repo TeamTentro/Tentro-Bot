@@ -128,7 +128,8 @@ async def unban(ctx, *, user: discord.User):
       await ctx.send(embed=embed)
       await guild.unban(user=user)
     else:
-      await ctx.send("You dont have the required permissions to do that!", delete_after=3)
+      embed = discord.Embed(title='You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
+      await ctx.send(embed=embed, delete_after=3)
 
 @client.command(name='server')
 async def server(ctx, arg=None):

@@ -49,53 +49,65 @@ async def on_message(message):
     await client.process_commands(message)
 
 @client.command(name='ban')
-@commands.has_permissions(administrator=True)
 async def ban(ctx, member : discord.Member, *, reason=None):
   guild = ctx.guild
-  await member.ban(reason=reason)
-  embed = discord.Embed(title="Banned", description=f"{member.mention} has been banned from the server.", colour=discord.Colour(0xff0000))
-  embed.add_field(name="Reason:", value=reason, inline=False)
-  embed.set_footer(text='Ban')
-  embed.timestamp = datetime.datetime.now()
-  await ctx.send(embed=embed)
-  embed = discord.Embed(title = (f"You have been banned from: {guild.name}.\n**Reason:** {reason}."), colour=discord.Color(0xff0000))
-  await member.send(embed=embed)
+  if ctx.author.guild_permissions.manage_messages:
+   await member.ban(reason=reason)
+   embed = discord.Embed(title="Banned", description=f"{member.mention} has been banned from the server.", colour=discord.Colour(0xff0000))
+   embed.add_field(name="Reason:", value=reason, inline=False)
+   embed.set_footer(text='Ban')
+   embed.timestamp = datetime.datetime.now()
+   await ctx.send(embed=embed)
+   embed = discord.Embed(title = (f"You have been banned from: {guild.name}.\n**Reason:** {reason}."), colour=discord.Color(0xff0000))
+   await member.send(embed=embed)
+  else:
+    embed = discord.Embed(title='You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
+    await ctx.send(embed=embed, delete_after=5)
+     
 
 @client.command(name='kick')
-@commands.has_permissions(administrator=True)
 async def kick(ctx, member : discord.Member, *, reason=None):
   guild = ctx.guild
-  await member.kick(reason=reason)
-  embed = discord.Embed(title="Kicked", description=f"{member.mention} has been kicked from the server.", colour=discord.Colour(0xff0000))
-  embed.add_field(name="Reason:", value=reason, inline=False)
-  embed.set_footer(text='Kick')
-  embed.timestamp = datetime.datetime.now()
-  await ctx.send(embed=embed)
-  embed = discord.Embed(title = (f"You have been kicked from: {guild.name}.\n**Reason:** {reason}."), colour=discord.Color(0xff0000))
-  await member.send(embed=embed)
-    
+  if ctx.author.guild_permissions.kick_members:
+    await member.kick(reason=reason)
+    embed = discord.Embed(title="Kicked", description=f"{member.mention} has been kicked from the server.", colour=discord.Colour(0xff0000))
+    embed.add_field(name="Reason:", value=reason, inline=False)
+    embed.set_footer(text='Kick')
+    embed.timestamp = datetime.datetime.now()
+    await ctx.send(embed=embed)
+    embed = discord.Embed(title = (f"You have been kicked from: {guild.name}.\n**Reason:** {reason}."), colour=discord.Color(0xff0000))
+    await member.send(embed=embed)
+
+  else: 
+    embed = discord.Embed(title='You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
+    await ctx.send(embed=embed, delete_after=5)
+
+
 @client.command(name='m') 
-@commands.has_permissions(administrator=True)  
 async def mute(ctx, member: discord.Member, *, reason=None):
     guild = ctx.guild
     mutedRole = discord.utils.get(guild.roles, name="Muted")
+    if ctx.message.author.guild_permissions.kick_members:
    
   
-    if not mutedRole:
-      mutedRole = await guild.create_role(name="Muted", colour=discord.Colour(0x34eb40))
+      if not mutedRole:
+       mutedRole = await guild.create_role(name="Muted", colour=discord.Colour(0x34eb40))
 
-      for channel in guild.channels:
-            await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
-      embed = discord.Embed(title="Muted", description=f"{member.mention} has been muted indefinitely.", colour=discord.Colour(0xff0000))
-      embed.add_field(name="Reason:", value=reason, inline=False)
-      embed.set_footer(text="Mute")
-      embed.timestamp = datetime.datetime.now()
-      await ctx.send(embed=embed)
-      await member.add_roles(mutedRole, reason=reason)
-      embed = discord.Embed(title = (f"You have been muted in: {guild.name}.\n**Reason:** {reason}."), colour=discord.Color(0xff0000))
-      await member.send(embed=embed)
-    
+       for channel in guild.channels:
+        await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
 
+       embed = discord.Embed(title="Muted", description=f"{member.mention} has been muted indefinitely.", colour=discord.Colour(0xff0000))
+       embed.add_field(name="Reason:", value=reason, inline=False)
+       embed.set_footer(text="Mute")
+       embed.timestamp = datetime.datetime.now()
+       await ctx.send(embed=embed)
+       await member.add_roles(mutedRole, reason=reason)
+       embed = discord.Embed(title = (f"You have been muted in: {guild.name}.\n**Reason:** {reason}."), colour=discord.Color(0xff0000))
+       await member.send(embed=embed)
+     
+    else: 
+      embed = discord.Embed(title='You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
+      await ctx.send(embed=embed, delete_after=5)
 
 
 @client.command(name='clear')
@@ -134,7 +146,7 @@ async def unban(ctx, *, user: discord.User):
       await guild.unban(user=user)
     else:
       embed = discord.Embed(title='You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
-      await ctx.send(embed=embed, delete_after=3)
+      await ctx.send(embed=embed, delete_after=5)
 
 @client.command(name='server')
 async def server(ctx, arg=None):
@@ -143,15 +155,20 @@ async def server(ctx, arg=None):
 
 @client.command(name='mutetimer')
 async def mute(ctx, member: discord.Member,time):
-  if ctx.author.guild_permissions.manage_messages:
+  guild = ctx.guild
+  if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator:
     muted_role=discord.utils.get(ctx.guild.roles, name="Muted")
     time_convert = {"s":1, "m":60, "h":3600,"d":86400}
-    tempmute= float(time[0]) * time_convert[time[-1]] 
+    tempmute = float(time[0]) * time_convert[time[-1]] 
     await member.add_roles(muted_role)
     embed = discord.Embed(description= f"**{member.mention} has been muted for {time}**", color=discord.Color(0xff0000))
     await ctx.send(embed=embed)
+    embed = discord.Embed(title = (f"You have been muted in: {guild.name}.\n**Time period:** {time}."), colour=discord.Color(0xff0000))
+    await member.send(embed=embed)
     await asyncio.sleep(tempmute)
     await member.remove_roles(muted_role)
+    embed = discord.Embed(title = (f"You have been unmuted in: {guild.name}."), colour=discord.Color(0xff0000))
+    await member.send(embed=embed)
   else:
     await ctx.channel.send("You dont have the required permissions to do that!", delete_after=5)
 

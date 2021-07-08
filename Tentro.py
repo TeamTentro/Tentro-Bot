@@ -26,7 +26,7 @@ async def on_ready():
     general_channel = client.get_channel(745925853229350975)
 
     await general_channel.send('Bot is online!')
-    await client.change_presence(activity=discord.Game(name='Watching for e/info'))
+    await client.change_presence(activity=discord.Game(name='t!help for Help!'))
 
 @client.event
 async def on_message(message):

@@ -1,12 +1,11 @@
 # Import Discord Package
 
 import discord, asyncio, datetime
-from discord import * # This imports everything from Discord
+from discord import *
 from discord.ext import commands
 import os
 from pathlib import Path
 
-# Fancy cog loading stuff
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
 print(f"{cwd}\n-----")
@@ -75,7 +74,7 @@ async def kick(ctx, member : discord.Member, *, reason=None):
   embed = discord.Embed(title = (f"You have been kicked from: {guild.name}.\n**Reason:** {reason}."), colour=discord.Color(0xff0000))
   await member.send(embed=embed)
     
-@client.command(name='mute')   
+@client.command(name='m')   
 @commands.has_permissions(manage_messages=True)
 async def mute(ctx, member: discord.Member, *, reason=None):
     guild = ctx.guild
@@ -134,7 +133,20 @@ async def unban(ctx, *, user: discord.User):
 @client.command(name='server')
 async def server(ctx, arg=None):
     embed = discord.Embed(title='Our amazing server', description = "Click [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ) to join our server!", colour=discord.Color(0xff0000))
+
+@client.command(name='mute')
+@commands.has_permissions(manage_messages=True)
+async def mute(ctx, member: discord.Member,time):
+    muted_role=discord.utils.get(ctx.guild.roles, name="Muted")
+    time_convert = {"s":1, "m":60, "h":3600,"d":86400}
+    tempmute= int(time[0]) * time_convert[time[-1]] 
+    await member.add_roles(muted_role)
+    embed = discord.Embed(description= f"**{member.mention} has been muted for {time}**", color=discord.Color(0xff0000))
     await ctx.send(embed=embed)
+    await asyncio.sleep(tempmute)
+    await member.remove_roles(muted_role)
+
+
 
 if __name__ == '__main__':
     # When running this file, if it is the 'main' file

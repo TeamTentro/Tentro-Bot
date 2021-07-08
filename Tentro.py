@@ -26,7 +26,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.content == '!thelp':
+    if message.content == 't!help':
       
       myEmbed = discord.Embed(title="These are all the commands", color=0xFF0000)
       myEmbed.add_field(name="Available commands:", value="!tclear, !tban, !tkick, !tmute, !tunban, !tunmute, !tping, !tserver", inline=False)

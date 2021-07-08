@@ -128,24 +128,24 @@ async def unban(ctx, *, user: discord.User):
       await ctx.send(embed=embed)
       await guild.unban(user=user)
     else:
-      await ctx.send("You dont have the required permissions to do that!")
+      await ctx.send("You dont have the required permissions to do that!", delete_after=3)
 
 @client.command(name='server')
 async def server(ctx, arg=None):
-    embed = discord.Embed(title='Our amazing server', description = "Click [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ) to join our server!", colour=discord.Color(0xff0000))
+  embed = discord.Embed(title='Our amazing server', description = "Click [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ) to join our server!", colour=discord.Color(0xff0000))
+  await ctx.channel.send(embed=embed)
 
-@client.command(name='mute')
+@client.command(name='mutetimer')
 @commands.has_permissions(manage_messages=True)
 async def mute(ctx, member: discord.Member,time):
     muted_role=discord.utils.get(ctx.guild.roles, name="Muted")
     time_convert = {"s":1, "m":60, "h":3600,"d":86400}
-    tempmute= int(time[0]) * time_convert[time[-1]] 
+    tempmute= float(time[0]) * time_convert[time[-1]] 
     await member.add_roles(muted_role)
     embed = discord.Embed(description= f"**{member.mention} has been muted for {time}**", color=discord.Color(0xff0000))
     await ctx.send(embed=embed)
     await asyncio.sleep(tempmute)
     await member.remove_roles(muted_role)
-
 
 
 if __name__ == '__main__':

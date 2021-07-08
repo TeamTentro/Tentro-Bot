@@ -70,8 +70,11 @@ async def ban(ctx, member : discord.Member, *, reason=None):
      
 
 @client.command(name='gr')
-async def addrole(ctx, member : discord.Member, role : discord.Role):
-    await member.add_roles(role)
+@commands.has_permissions(administrator=True) 
+async def role(ctx, user : discord.Member, *, role : discord.Role):
+      await user.add_roles(role)
+      embed = discord.Embed(title='Success!', description=f"Added {role} to {user.mention}.", colour=discord.Color(0xff0000))
+      await ctx.send(embed=embed)
 
 
 @client.command(name='kick')
@@ -92,31 +95,33 @@ async def kick(ctx, member : discord.Member, *, reason=None):
     await ctx.send(embed=embed, delete_after=5)
 
 
-@client.command(name='m') 
+@client.command(name="m") 
 async def mute(ctx, member: discord.Member, *, reason=None):
-    guild = ctx.guild
-    mutedRole = discord.utils.get(guild.roles, name="Muted")
-    if ctx.message.author.guild_permissions.kick_members or ctx.message.author.guild_permissions.administrator:
-   
-  
-      if not mutedRole:
-       mutedRole = await guild.create_role(name="Muted", colour=discord.Colour(0x34eb40))
+  guild = ctx.guild
 
-       for channel in guild.channels:
-        await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
+  mutedRole = discord.utils.get(guild.roles, name="Muted")
+  if ctx.message.author.guild_permissions.kick_members or ctx.message.author.guild_permissions.administrator:
 
-       embed = discord.Embed(title="Muted", description=f"{member.mention} has been muted indefinitely.", colour=discord.Colour(0xff0000))
-       embed.add_field(name="Reason:", value=reason, inline=False)
-       embed.set_footer(text="Mute")
-       embed.timestamp = datetime.datetime.now()
-       await ctx.send(embed=embed)
-       await member.add_roles(mutedRole, reason=reason)
-       embed = discord.Embed(title = (f"You have been muted in: {guild.name}.\n**Reason:** {reason}."), colour=discord.Color(0xff0000))
-       await member.send(embed=embed)
-     
-    else: 
-      embed = discord.Embed(title='You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
-      await ctx.send(embed=embed, delete_after=5)
+    if not mutedRole:
+      mutedRole = await guild.create_role(name="Muted", colour=0x34eb40)
+
+    for channel in guild.channels:
+       await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
+
+    await member.add_roles(mutedRole, reason=reason)
+
+    embed = discord.Embed(title="Muted", description=f"{member.mention} has been muted indefinitely.", colour=0xff0000)
+    embed.add_field(name="Reason:", value=reason, inline=False)
+    embed.set_footer(text="Mute")
+    embed.timestamp = datetime.datetime.now()
+    await ctx.send(embed=embed)
+
+    embed = discord.Embed(title = (f"You have been muted in: {guild.name}.\n**Reason:** {reason}."), colour=0xff0000)
+    await member.send(embed=embed)
+
+  else: 
+    embed = discord.Embed(title="You do not have the required permissions to do that!", colour=0xff0000)
+    await ctx.send(embed=embed, delete_after=5)
 
 
 @client.command(name='clear')

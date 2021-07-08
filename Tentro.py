@@ -1,8 +1,15 @@
 # Import Discord Package
 
 import discord, asyncio, datetime
-from discord import colour
+from discord import * # This imports everything from Discord
 from discord.ext import commands
+import os
+from pathlib import Path
+
+# Fancy cog loading stuff
+cwd = Path(__file__).parents[0]
+cwd = str(cwd)
+print(f"{cwd}\n-----")
 
 #Client
 

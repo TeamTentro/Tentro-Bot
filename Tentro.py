@@ -96,7 +96,7 @@ async def kick(ctx, member : discord.Member, *, reason=None):
 async def mute(ctx, member: discord.Member, *, reason=None):
     guild = ctx.guild
     mutedRole = discord.utils.get(guild.roles, name="Muted")
-    if ctx.message.author.guild_permissions.kick_members:
+    if ctx.message.author.guild_permissions.kick_members or ctx.message.author.guild_permissions.administrator:
    
   
       if not mutedRole:

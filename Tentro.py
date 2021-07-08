@@ -86,7 +86,7 @@ async def mute(ctx, member: discord.Member, *, reason=None):
 
         for channel in guild.channels:
             await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
-    embed = discord.Embed(title="Muted", description=f"{member.mention} has been muted.", colour=discord.Colour(0xff0000))
+    embed = discord.Embed(title="Muted", description=f"{member.mention} has been muted indefinitely.", colour=discord.Colour(0xff0000))
     embed.add_field(name="Reason:", value=reason, inline=False)
     embed.set_footer(text="Mute")
     embed.timestamp = datetime.datetime.now()

@@ -12,7 +12,7 @@ print(f"{cwd}\n-----")
 
 #Client
 
-client = commands.Bot(command_prefix='!t')
+client = commands.Bot(command_prefix='t!')
 client.remove_command('help')
 
 #C O M M A N D S

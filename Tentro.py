@@ -69,6 +69,11 @@ async def ban(ctx, member : discord.Member, *, reason=None):
     await ctx.send(embed=embed, delete_after=5)
      
 
+@client.command(name='gr')
+async def addrole(ctx, member : discord.Member, role : discord.Role):
+    await member.add_roles(role)
+
+
 @client.command(name='kick')
 async def kick(ctx, member : discord.Member, *, reason=None):
   guild = ctx.guild

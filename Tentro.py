@@ -1,8 +1,15 @@
 # Import Discord Package
 
 import discord, asyncio, datetime
-from discord import colour
+from discord import * # This imports everything from Discord
 from discord.ext import commands
+import os
+from pathlib import Path
+
+# Fancy cog loading stuff
+cwd = Path(__file__).parents[0]
+cwd = str(cwd)
+print(f"{cwd}\n-----")
 
 #Client
 
@@ -23,7 +30,7 @@ async def on_message(message):
     if message.content == '!thelp':
       
       myEmbed = discord.Embed(title="These are all the commands", color=0xFF0000)
-      myEmbed.add_field(name="Available commands:", value="!tclear, !tban, !tkick, !tmute", inline=False)
+      myEmbed.add_field(name="Available commands:", value="!tclear, !tban, !tkick, !tmute, !tunban, !tunmute, !tping, !tserver", inline=False)
       myEmbed.add_field(name="Bot version:", value="v1.0", inline=False)
       myEmbed.add_field(name="Date released:", value="July 6th", inline=False)
       myEmbed.set_footer(text="Still in progress!")
@@ -79,7 +86,7 @@ async def mute(ctx, member: discord.Member, *, reason=None):
 
         for channel in guild.channels:
             await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
-    embed = discord.Embed(title="Muted", description=f"{member.mention} has been muted.", colour=discord.Colour(0xff0000))
+    embed = discord.Embed(title="Muted", description=f"{member.mention} has been muted indefinitely.", colour=discord.Colour(0xff0000))
     embed.add_field(name="Reason:", value=reason, inline=False)
     embed.set_footer(text="Mute")
     embed.timestamp = datetime.datetime.now()
@@ -123,6 +130,11 @@ async def unban(ctx, *, user: discord.User):
       await guild.unban(user=user)
     else:
       await ctx.send("You dont have the required permissions to do that!")
+
+@client.command(name='server')
+async def server(ctx, arg=None):
+    embed = discord.Embed(title='Our amazing server', description = "Click [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ) to join our server!", colour=discord.Color(0xff0000))
+    await ctx.send(embed=embed)
 
 if __name__ == '__main__':
     # When running this file, if it is the 'main' file

@@ -160,7 +160,7 @@ async def server(ctx, arg=None):
 @client.command(name='mutetimer')
 async def mute(ctx, member: discord.Member,time):
   guild = ctx.guild
-  if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator:
+  if ctx.author.guild_permissions.manage_messages:
     muted_role=discord.utils.get(ctx.guild.roles, name="Muted")
     time_convert = {"s":1, "m":60, "h":3600,"d":86400}
     tempmute = float(time[0]) * time_convert[time[-1]] 

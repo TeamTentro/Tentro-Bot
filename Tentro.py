@@ -83,8 +83,8 @@ async def role(ctx, user : discord.Member, *, role : discord.Role):
 async def role(ctx, user : discord.Member, *, role : discord.Role):
       await user.remove_roles(role)
       embed = discord.Embed(title='Success!', description=f"Taken {role.mention} from {user.mention}.", colour=discord.Color(0xff0000))
-      embed.set_footer(text='Role Takn')
-      embed.timestamp = datetime.datetime.now()
+      embed.set_footer(text='Role Taken')
+      embed.timestamp = datetime.datetime.utcnow()
       await ctx.send(embed=embed)
 
 

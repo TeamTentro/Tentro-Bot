@@ -170,6 +170,11 @@ async def server(ctx, arg=None):
   embed = discord.Embed(title='Our amazing server', description = "Click [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ) to join our server!", colour=discord.Color(0xff0000))
   await ctx.channel.send(embed=embed)
 
+@client.command(name='invite')
+async def invite(ctx, arg=None):
+  embed = discord.Embed(title='Invite Tentro', description = "Click [here](https://discord.com/oauth2/authorize?client_id=861919315506495508&scope=bot&permissions=8589934591) to invite Tentro to your server!", colour=discord.Color(0xff0000))
+  await ctx.channel.send(embed=embed)
+
 @client.command(name='mutetimer')
 async def mute(ctx, member: discord.Member,time):
   guild = ctx.guild

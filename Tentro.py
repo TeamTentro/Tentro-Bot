@@ -53,6 +53,7 @@ async def on_message(message):
       await message.channel.send("Hello There")   
     await client.process_commands(message)
 
+
 @client.command(name='ban')
 async def ban(ctx, member : discord.Member, *, reason=None):
   guild = ctx.guild
@@ -120,6 +121,13 @@ async def setdelay(ctx,):
   else:
     embed = discord.Embed(title=f'You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
     await ctx.send(embed=embed, delete_after=5)
+
+
+@client.command(name='nickname')
+async def chnick(ctx, member: discord.Member, nick):
+    await member.edit(nick=nick)
+    embed = discord.Embed(title=f'Name changed', description = f"Succesfully changed {member.mention}'s name.", colour=discord.Colour(0xff0000))
+    await ctx.send(embed=embed)
 
 
 
@@ -208,6 +216,8 @@ async def unban(ctx, *, user: discord.User):
     else:
       embed = discord.Embed(title='You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
       await ctx.send(embed=embed, delete_after=5)
+
+
 
 @client.command(name='server')
 async def server(ctx, arg=None):

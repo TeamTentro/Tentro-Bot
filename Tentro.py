@@ -73,7 +73,9 @@ async def ban(ctx, member : discord.Member, *, reason=None):
 @commands.has_permissions(administrator=True) 
 async def role(ctx, user : discord.Member, *, role : discord.Role):
       await user.add_roles(role)
-      embed = discord.Embed(title='Success!', description=f"Added {role} to {user.mention}.", colour=discord.Color(0xff0000))
+      embed = discord.Embed(title='Success!', description=f"Given {role.mention} to {user.mention}.", colour=discord.Color(0xff0000))
+      embed.set_footer(text='Role Given')
+      embed.timestamp = datetime.datetime.now()
       await ctx.send(embed=embed)
 
 

@@ -99,6 +99,30 @@ async def role(ctx, user : discord.Member, *, role : discord.Role):
      await ctx.send(embed=embed, delete_after=5)
 
 
+@client.command(name='slowmode')
+async def setdelay(ctx, seconds: int):
+  guild = ctx.guild
+  if ctx.author.guild_permissions.manage_messages:
+    await ctx.channel.edit(slowmode_delay=seconds)
+    embed = discord.Embed(title=f'Slowmode set to {seconds}s.', colour=discord.Color(0xff0000))
+    await ctx.send(embed=embed)
+  else:
+    embed = discord.Embed(title=f'You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
+    await ctx.send(embed=embed, delete_after=5)
+
+@client.command(name='resetsm')
+async def setdelay(ctx,):
+  guild = ctx.guild
+  if ctx.author.guild_permissions.manage_messages:
+   await ctx.channel.edit(slowmode_delay=0)
+   embed = discord.Embed(title=f'Slowmode reset.', colour=discord.Color(0xff0000))
+   await ctx.send(embed=embed)
+  else:
+    embed = discord.Embed(title=f'You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
+    await ctx.send(embed=embed, delete_after=5)
+
+
+
 @client.command(name='kick')
 async def kick(ctx, member : discord.Member, *, reason=None):
   guild = ctx.guild

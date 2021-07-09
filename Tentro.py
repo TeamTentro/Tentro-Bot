@@ -31,7 +31,7 @@ async def on_ready():
 
 @client.event
 async def on_message(message):
-    if message.content == 't!help':
+    if message.content == 't!help' or message.content == 't!h':
       
       myEmbed = discord.Embed(title="These are all the commands", color=0xFF0000)
       myEmbed.add_field(name="Available commands:", value="!tclear, !tban, !tkick, !tmute, !tunban, !tunmute, !tping, !tserver", inline=False)
@@ -54,7 +54,7 @@ async def on_message(message):
     await client.process_commands(message)
 
 
-@client.command(name='ban')
+@client.command(name='ban', aliases=['b'])
 async def ban(ctx, member : discord.Member, *, reason=None):
   guild = ctx.guild
   if ctx.author.guild_permissions.manage_messages:
@@ -71,7 +71,7 @@ async def ban(ctx, member : discord.Member, *, reason=None):
     await ctx.send(embed=embed, delete_after=5)
      
 
-@client.command(name='gr')
+@client.command(name='giverole', aliases=['gr'])
 async def role(ctx, user : discord.Member, *, role : discord.Role):
     guild = ctx.guild
     if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator:
@@ -86,7 +86,7 @@ async def role(ctx, user : discord.Member, *, role : discord.Role):
      
 
 
-@client.command(name='tr')
+@client.command(name='takerole', aliases=['tr'])
 async def role(ctx, user : discord.Member, *, role : discord.Role):
     guild = ctx.guild
     if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator:
@@ -100,7 +100,7 @@ async def role(ctx, user : discord.Member, *, role : discord.Role):
      await ctx.send(embed=embed, delete_after=5)
 
 
-@client.command(name='slowmode')
+@client.command(name='slowmode', aliases=['sm'])
 async def setdelay(ctx, seconds: int):
   guild = ctx.guild
   if ctx.author.guild_permissions.manage_messages:
@@ -111,8 +111,8 @@ async def setdelay(ctx, seconds: int):
     embed = discord.Embed(title=f'You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
     await ctx.send(embed=embed, delete_after=5)
 
-@client.command(name='resetsm')
-async def setdelay(ctx,):
+@client.command(name='resetslowmode', aliases=['rsm'])
+async def setdelay(ctx):
   guild = ctx.guild
   if ctx.author.guild_permissions.manage_messages:
    await ctx.channel.edit(slowmode_delay=0)
@@ -123,15 +123,15 @@ async def setdelay(ctx,):
     await ctx.send(embed=embed, delete_after=5)
 
 
-@client.command(name='nickname')
-async def chnick(ctx, member: discord.Member, nick):
+@client.command(name='nickname', aliases=['nick'])
+async def chnick(ctx, member: discord.Member, *,nick):
     await member.edit(nick=nick)
     embed = discord.Embed(title=f'Name changed', description = f"Succesfully changed {member.mention}'s name.", colour=discord.Colour(0xff0000))
     await ctx.send(embed=embed)
 
 
 
-@client.command(name='kick')
+@client.command(name='kick', aliases=['k'])
 async def kick(ctx, member : discord.Member, *, reason=None):
   guild = ctx.guild
   if ctx.author.guild_permissions.kick_members:
@@ -149,7 +149,7 @@ async def kick(ctx, member : discord.Member, *, reason=None):
     await ctx.send(embed=embed, delete_after=5)
 
 
-@client.command(name="m") 
+@client.command(name="mute", aliases=['m']) 
 async def mute(ctx, member: discord.Member, *, reason=None):
   guild = ctx.guild
 
@@ -157,10 +157,10 @@ async def mute(ctx, member: discord.Member, *, reason=None):
   if ctx.message.author.guild_permissions.kick_members or ctx.message.author.guild_permissions.administrator:
 
     if not mutedRole:
-      mutedRole = await guild.create_role(name="Muted", colour=0x34eb40)
+      mutedRole = await guild.cireate_role(name="Muted", colour=0x34eb40)
 
-    for channel in guild.channels:
-       await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
+      for channel in guild.channels:
+         await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
 
     await member.add_roles(mutedRole, reason=reason)
 
@@ -178,7 +178,7 @@ async def mute(ctx, member: discord.Member, *, reason=None):
     await ctx.send(embed=embed, delete_after=5)
 
 
-@client.command(name='clear')
+@client.command(name='clear', aliases=['cl'])
 @commands.has_permissions(manage_messages = True)
 async def purge(ctx, amount: int):
   await ctx.channel.purge(limit = amount+1)
@@ -205,7 +205,7 @@ async def ping(ctx, arg=None):
   embed = discord.Embed(title=f'Pong!', description = f"Client latency: {round(client.latency * 1000)}ms" , colour=discord.Colour(0xff0000))
   await ctx.send(embed=embed)
 
-@client.command()
+@client.command(aliases=['ub'])
 async def unban(ctx, *, user: discord.User):
     guild = ctx.guild
     embed = discord.Embed(title='Sucess!', description = f"{user} has been sucessfully unbanned!", colour=discord.Colour(0xff0000))
@@ -224,29 +224,37 @@ async def server(ctx, arg=None):
   embed = discord.Embed(title='Our amazing server', description = "Click [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ) to join our server!", colour=discord.Color(0xff0000))
   await ctx.channel.send(embed=embed)
 
-@client.command(name='invite')
+@client.command(name='invite', aliases=['inv'])
 async def invite(ctx, arg=None):
   embed = discord.Embed(title='Invite Tentro', description = "Click [here](https://discord.com/oauth2/authorize?client_id=861919315506495508&scope=bot&permissions=8589934591) to invite Tentro to your server!", colour=discord.Color(0xff0000))
   await ctx.channel.send(embed=embed)
 
-@client.command(name='mutetimer')
-async def mute(ctx, member: discord.Member,time):
+@client.command(name='timedmute', aliases=['tm'])
+async def mute(ctx, member: discord.Member,time, *,reason=None):
   guild = ctx.guild
   if ctx.author.guild_permissions.manage_messages:
-    muted_role=discord.utils.get(ctx.guild.roles, name="Muted")
-    time_convert = {"s":1, "m":60, "h":3600,"d":86400}
-    tempmute = float(time[0]) * time_convert[time[-1]] 
-    await member.add_roles(muted_role)
-    embed = discord.Embed(description= f"**{member.mention} has been muted for {time}**", color=discord.Color(0xff0000))
-    await ctx.send(embed=embed)
-    embed = discord.Embed(title = (f"You have been muted in: {guild.name}.\n**Time period:** {time}."), colour=discord.Color(0xff0000))
-    await member.send(embed=embed)
-    await asyncio.sleep(tempmute)
-    await member.remove_roles(muted_role)
-    embed = discord.Embed(title = (f"You have been unmuted in: {guild.name}."), colour=discord.Color(0xff0000))
-    await member.send(embed=embed)
+    mutedRole = discord.utils.get(guild.roles, name="Muted")
+    if not mutedRole:
+      mutedRole = await guild.cireate_role(name="Muted", colour=0x34eb40)
+
+      for channel in guild.channels:
+         await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
+    else:
+      await member.add_roles(mutedRole, reason=reason)
+      muted_role=discord.utils.get(ctx.guild.roles, name="Muted")
+      time_convert = {"s":1, "m":60, "h":3600,"d":86400}
+      tempmute = float(time[0]) * time_convert[time[-1]] 
+      await member.add_roles(muted_role)
+      embed = discord.Embed(description= f"**{member.mention} has been muted for {time}**", color=discord.Color(0xff0000))
+      await ctx.send(embed=embed)
+      embed = discord.Embed(title = (f"You have been muted in: {guild.name}.\n**Time period:** {time}."), colour=discord.Color(0xff0000))
+      await member.send(embed=embed)
+      await asyncio.sleep(tempmute)
+      await member.remove_roles(muted_role)
+      embed = discord.Embed(title = (f"You have been unmuted in: {guild.name}."), colour=discord.Color(0xff0000))
+      await member.send(embed=embed)
   else:
-    await ctx.channel.send("You dont have the required permissions to do that!", delete_after=5)
+      await ctx.channel.send("You dont have the required permissions to do that!", delete_after=5)
 
 
 if __name__ == '__main__':

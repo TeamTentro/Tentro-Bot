@@ -75,8 +75,10 @@ async def role(ctx, user : discord.Member, *, role : discord.Role):
       await user.add_roles(role)
       embed = discord.Embed(title='Success!', description=f"Given {role.mention} to {user.mention}.", colour=discord.Color(0xff0000))
       embed.set_footer(text='Role Given')
-      embed.timestamp = datetime.datetime.now()
+      embed.timestamp = datetime.datetime.utcnow()
       await ctx.send(embed=embed)
+
+
 
 
 @client.command(name='kick')
@@ -141,7 +143,7 @@ async def unmute(ctx, member: discord.Member):
     await member.remove_roles(mutedRole)
     embed = discord.Embed(title="Unmuted", description=f"{member.mention} has been unmuted.",colour=discord.Colour(0xff0000))
     embed.set_footer(text='Unmute')
-    embed.timestamp = datetime.datetime.now()
+    embed.timestamp = datetime.datetime.utcnow()
     await ctx.send(embed=embed)
     embed = discord.Embed(title = (f"**You have been unmuted in: {guild.name}.**"), colour=discord.Color(0xff0000))
     await member.send(embed=embed)

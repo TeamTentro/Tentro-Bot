@@ -130,7 +130,8 @@ async def mute(ctx, member: discord.Member, *, reason=None):
 @commands.has_permissions(manage_messages = True)
 async def purge(ctx, amount: int):
   await ctx.channel.purge(limit = amount+1)
-  await ctx.send(f"{ctx.author.mention}, purged {amount} message(s)")
+  embed = discord.Embed(title = 'Messages purged', description=f"{ctx.author.mention}, purged {amount} message(s)", colour=discord.Color(0xff0000))
+  await ctx.send(embed=embed, delete_after=5)
 
 @client.command(description="Unmutes a specified user.")
 async def unmute(ctx, member: discord.Member):

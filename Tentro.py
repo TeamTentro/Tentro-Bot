@@ -33,25 +33,57 @@ async def on_ready():
 async def on_message(message):
     if message.content == 't!help' or message.content == 't!h':
       
-      myEmbed = discord.Embed(title="These are all the commands", color=0xFF0000)
-      myEmbed.add_field(name="Available commands:", value="!tclear, !tban, !tkick, !tmute, !tunban, !tunmute, !tping, !tserver", inline=False)
-      myEmbed.add_field(name="Bot version:", value="v1.0", inline=False)
-      myEmbed.add_field(name="Date released:", value="July 6th", inline=False)
-      myEmbed.set_footer(text="Still in progress!")
-      myEmbed.set_author(name=message.author.name)
-      myEmbed.timestamp = message.created_at
+        myEmbed = discord.Embed(title="These are all the commands", color=0xFF0000)
+        myEmbed.add_field(name="Available commands:", value="!tclear, !tban, !tkick, !tmute, !tunban, !tunmute, !tping, !tserver", inline=False)
+        myEmbed.add_field(name="Bot version:", value="v1.0", inline=False)
+        myEmbed.add_field(name="Date released:", value="July 6th", inline=False)
+        myEmbed.set_footer(text="Still in progress!")
+        myEmbed.set_author(name=message.author.name)
+        myEmbed.timestamp = message.created_at
        
-      await message.channel.send(embed=myEmbed)
+        await message.channel.send(embed=myEmbed)
       
     elif message.content =='!t':
      
      await message.channel.send('This is the default prefix')
 
 
-    if message.content == "hi": 
-      
-      await message.channel.send("Hello There")   
+    if message.content == "hi":     
+
+        await message.channel.send("Hello There")  
+
     await client.process_commands(message)
+
+
+@client.command(name='slowmode', aliases=['sm'])
+async def setdelay(ctx, seconds : int):
+  guild = ctx.guild
+  if ctx.author.guild_permissions.manage_messages:
+      await ctx.channel.edit(slowmode_delay=seconds)
+      embed = discord.Embed(title=f'Slowmode set to {seconds}s.', colour=discord.Color(0xff0000))
+      await ctx.send(embed=embed)
+  else:
+      embed = discord.Embed(title=f'You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
+      await ctx.send(embed=embed, delete_after=5)
+
+@client.command(name='checksm')
+async def checkdelay(ctx, arg = 'seconds'):
+  if ctx.author.guild_permission.manage_messages:
+      await ctx.channel.get(slowmode_delay=arg)
+      embed = discord.Embed(title=f'Slowmode is {arg}s.', colour=discord.Color(0xff0000))
+      await ctx.send(embed=embed)
+  else:
+      embed = discord.Embed(title=f'You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
+      await ctx.send(embed=embed, delete_after=5)
+
+@client.command(name='avatar', aliases=['av'])
+async def avatar(ctx, *, member: discord.Member = None):
+    member = ctx.author if not member else member
+    embed = discord.Embed(title = f"{member.name}", color = (0xff0000), timestamp = ctx.message.created_at)
+    embed.set_image(url=member.avatar_url)
+    embed.set_footer(text=f"Requested by : {member.name}",icon_url=ctx.author.avatar_url)  
+    await ctx.send(embed=embed)
+
 
 
 
@@ -60,14 +92,14 @@ async def on_message(message):
 async def role(ctx, user : discord.Member, *, role : discord.Role):
     guild = ctx.guild
     if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator:
-      await user.add_roles(role)
-      embed = discord.Embed(title='Success!', description=f"Given {role.mention} to {user.mention}.", colour=discord.Color(0xff0000))
-      embed.set_footer(text='Role Given')
-      embed.timestamp = datetime.datetime.utcnow()
-      await ctx.send(embed=embed)
+        await user.add_roles(role)
+        embed = discord.Embed(title='Success!', description=f"Given {role.mention} to {user.mention}.", colour=discord.Color(0xff0000))
+        embed.set_footer(text='Role Given')
+        embed.timestamp = datetime.datetime.utcnow()
+        await ctx.send(embed=embed)
     else:
-     embed = discord.Embed(title='You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
-     await ctx.send(embed=embed, delete_after=5)
+        embed = discord.Embed(title='You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
+        await ctx.send(embed=embed, delete_after=5)
      
 
 
@@ -75,16 +107,21 @@ async def role(ctx, user : discord.Member, *, role : discord.Role):
 async def role(ctx, user : discord.Member, *, role : discord.Role):
     guild = ctx.guild
     if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator:
-      await user.remove_roles(role)
-      embed = discord.Embed(title='Success!', description=f"Taken {role.mention} from {user.mention}.", colour=discord.Color(0xff0000))
-      embed.set_footer(text='Role Taken')
-      embed.timestamp = datetime.datetime.utcnow()
-      await ctx.send(embed=embed)
+        await user.remove_roles(role)
+        embed = discord.Embed(title='Success!', description=f"Taken {role.mention} from {user.mention}.", colour=discord.Color(0xff0000))
+        embed.set_footer(text='Role Taken')
+        embed.timestamp = datetime.datetime.utcnow()
+        await ctx.send(embed=embed)
     else:
-     embed = discord.Embed(title='You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
-     await ctx.send(embed=embed, delete_after=5)
+        embed = discord.Embed(title='You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
+        await ctx.send(embed=embed, delete_after=5)
 
-
+@client.command(name='clear', aliases=['cl'])
+@commands.has_permissions(manage_messages = True)
+async def purge(ctx, amount: int):
+    await ctx.channel.purge(limit = amount+1)
+    embed = discord.Embed(title = 'Messages purged', description=f"{ctx.author.mention}, purged {amount} message(s)", colour=discord.Color(0xff0000))
+    await ctx.send(embed=embed, delete_after=5)
 
 
      
@@ -92,12 +129,12 @@ async def role(ctx, user : discord.Member, *, role : discord.Role):
 async def setdelay(ctx):
   guild = ctx.guild
   if ctx.author.guild_permissions.manage_messages:
-   await ctx.channel.edit(slowmode_delay=0)
-   embed = discord.Embed(title=f'Slowmode reset.', colour=discord.Color(0xff0000))
-   await ctx.send(embed=embed)
+      await ctx.channel.edit(slowmode_delay=0)
+      embed = discord.Embed(title=f'Slowmode reset.', colour=discord.Color(0xff0000))
+      await ctx.send(embed=embed)
   else:
-    embed = discord.Embed(title=f'You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
-    await ctx.send(embed=embed, delete_after=5)
+      embed = discord.Embed(title=f'You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
+      await ctx.send(embed=embed, delete_after=5)
 
 
 @client.command(name='nickname', aliases=['nick'])
@@ -110,16 +147,16 @@ async def chnick(ctx, member: discord.Member, *,nick):
 
 @client.command(name='ping')
 async def ping(ctx, arg=None):
-  embed = discord.Embed(title=f'Pong!', description = f"Client latency: {round(client.latency * 1000)}ms" , colour=discord.Colour(0xff0000))
-  await ctx.send(embed=embed)
+    embed = discord.Embed(title=f'Pong!', description = f"Client latency: {round(client.latency * 1000)}ms" , colour=discord.Colour(0xff0000))
+    await ctx.send(embed=embed)
 
 
 
 
 @client.command(name='server')
 async def server(ctx, arg=None):
-  embed = discord.Embed(title='Our amazing server', description = "Click [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ) to join our server!", colour=discord.Color(0xff0000))
-  await ctx.channel.send(embed=embed)
+    embed = discord.Embed(title='Our amazing server', description = "Click [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ) to join our server!", colour=discord.Color(0xff0000))
+    await ctx.channel.send(embed=embed)
 
 @client.command(name='invite', aliases=['inv'])
 async def invite(ctx, arg=None):

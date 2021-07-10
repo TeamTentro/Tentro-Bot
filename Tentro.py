@@ -85,19 +85,7 @@ async def role(ctx, user : discord.Member, *, role : discord.Role):
      await ctx.send(embed=embed, delete_after=5)
 
 
-@client.command(name='slowmode', aliases=['sm'])
-@client.commands(name='takerole', aliases=['tr'])
-async def role(ctx, user : discord.Member, *, role : discord.Role):
-    guild = ctx.guild
-    if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator:
-      await user.remove_roles(role)
-      embed = discord.Embed(title='Success!', description=f"Taken {role.mention} from {user.mention}.", colour=discord.Color(0xff0000))
-      embed.set_footer(text='Role Taken')
-      embed.timestamp = datetime.datetime.utcnow()
-      await ctx.send(embed=embed)
-    else:
-     embed = discord.Embed(title='You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
-     await ctx.send(embed=embed, delete_after=5)
+
 
      
 @client.command(name='resetslowmode', aliases=['rsm'])

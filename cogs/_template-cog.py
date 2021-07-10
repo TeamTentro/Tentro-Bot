@@ -17,6 +17,6 @@ class NAME_OF_COG(commands.Cog): # Simply put the cog name here too
         
 
         
-  def setup(client):
-   client.add_cog(NAME_OF_COG(client))
+    def setup(client):
+     client.add_cog(NAME_OF_COG(client))
     # Just some fancy cog loading code, don't worry about it.

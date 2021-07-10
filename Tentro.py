@@ -3,7 +3,7 @@
 import discord, asyncio, datetime
 from discord import *
 from discord.ext import commands
-import os
+import os, random
 from pathlib import Path
 
 cwd = Path(__file__).parents[0]
@@ -26,6 +26,36 @@ async def on_ready():
     await client.change_presence(activity=discord.Game(name='t!help for Help!'))
 
 #C O M M A N D S
+
+
+@client.command(name='8ball')
+async def eightball(ctx, *, question=None):
+    responses = ["Definitely.", "It is certain", "Does 2 + 2 equals to 4?", "I don't think so chief.",
+                "Perhaps.",
+                "Maybe, ehhh don't take my word for it.",
+                "Bro thats legit the dumbest 8ball question i have heard.",
+                "How do you not know this.", "Idfk im just a discord bot.", 
+                "No clue bro.", 
+                "Uhhh Not sure about the answer to that one.", "My reply is no.",
+                "My sources say no.",
+                "Outlook not so good.",
+                "Very doubtful.", "I don't know about that. But i do know that it shows that you're really fucking dumb lmao nerd."]
+
+    
+     
+
+    if question == None:
+        await ctx.send('Please ask a question.', delete_after=5)
+
+    else:
+        embed = discord.Embed(title=f"**Question:**\n", description = f"{question}", color = (0xff0000))
+        embed.add_field(name = f"**8ball:**\n" ,value = f"{random.choice(responses)}")
+        
+        
+        
+        await ctx.send(embed=embed)
+  
+
 
 
 
@@ -81,10 +111,8 @@ async def avatar(ctx, *, member: discord.Member = None):
     member = ctx.author if not member else member
     embed = discord.Embed(title = f"{member.name}", color = (0xff0000), timestamp = ctx.message.created_at)
     embed.set_image(url=member.avatar_url)
-    embed.set_footer(text=f"Requested by : {member.name}",icon_url=ctx.author.avatar_url)  
+    embed.set_footer(text=f"Requested by : {ctx.author}",icon_url=ctx.author.avatar_url)  
     await ctx.send(embed=embed)
-
-
 
 
     
@@ -157,6 +185,13 @@ async def ping(ctx, arg=None):
 async def server(ctx, arg=None):
     embed = discord.Embed(title='Our amazing server', description = "Click [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ) to join our server!", colour=discord.Color(0xff0000))
     await ctx.channel.send(embed=embed)
+
+@client.command(name='activate_premium', aliases=['ap'])
+async def server(ctx, arg=None):
+    embed = discord.Embed(title='Premium', description = "Click here [https://discord.com/oauth2/authorize?client_id=861919315506495508&scope=bot&permissions=8589934591](https://tenor.com/view/stick-bug-stick-bugged-bug-dancing-bug-dancing-gif-18059923) to activate premium! You will get redirected to invite the premium version of the bot. Don't forget to give it the perms!", colour=discord.Color(0xff0000))
+    await ctx.channel.send(embed=embed)
+
+
 
 @client.command(name='invite', aliases=['inv'])
 async def invite(ctx, arg=None):

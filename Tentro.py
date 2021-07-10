@@ -71,7 +71,7 @@ async def role(ctx, user : discord.Member, *, role : discord.Role):
      
 
 
-@client.commands(name='takerole', aliases=['tr'])
+@client.command(name='takerole', aliases=['tr'])
 async def role(ctx, user : discord.Member, *, role : discord.Role):
     guild = ctx.guild
     if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator:

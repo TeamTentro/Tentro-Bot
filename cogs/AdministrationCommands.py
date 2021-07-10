@@ -11,34 +11,31 @@ def setup(client):
     client.add_cog(AdministrationCommands(client))
 
 @commands.command(name='timedmute', aliases=['tm'])
-async def mute(self, ctx, member: discord.Member,time, *, reason=None):
+async def mute(self, ctx, member: discord.Member,time, *,reason=None):
   guild = ctx.guild
   if ctx.author.guild_permissions.manage_messages:
-    if time == None:
-    
-      mutedRole = discord.utils.get(guild.roles, name="Muted")
-
+    mutedRole = discord.utils.get(guild.roles, name="Muted")
     if not mutedRole:
+      mutedRole = await guild.cireate_role(name="Muted", colour=0x34eb40)
 
-      mutedRole = await guild.create_role(name="Muted", colour=0x34eb40)
       for channel in guild.channels:
-       await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
-      else:
-        await member.add_roles(mutedRole, reason=reason)
-        muted_role=discord.utils.get(ctx.guild.roles, name="Muted")
-        time_convert = {"s":1, "m":60, "h":3600,"d":86400}
-        tempmute = float(time[0]) * time_convert[time[-1]] 
-        await member.add_roles(muted_role)
-        embed = discord.Embed(description= f"**{member.mention} has been muted for {time}**", color=discord.Color(0xff0000))
-        await ctx.send(embed=embed)
-        embed = discord.Embed(title = (f"You have been muted in: {guild.name}.\n**Time period:** {time}."), colour=discord.Color(0xff0000))
-        await member.send(embed=embed)
-        await asyncio.sleep(tempmute)
-        await member.remove_roles(muted_role)
-        embed = discord.Embed(title = (f"You have been unmuted in: {guild.name}."), colour=discord.Color(0xff0000))
-        await member.send(embed=embed)
+         await channel.set_permissions(mutedRole, speak=False, send_messages=False, read_message_history=True, read_messages=False)
+    else:
+      await member.add_roles(mutedRole, reason=reason)
+      muted_role=discord.utils.get(ctx.guild.roles, name="Muted")
+      time_convert = {"s":1, "m":60, "h":3600,"d":86400}
+      tempmute = float(time[0]) * time_convert[time[-1]] 
+      await member.add_roles(muted_role)
+      embed = discord.Embed(description= f"**{member.mention} has been muted for {time}**", color=discord.Color(0xff0000))
+      await ctx.send(embed=embed)
+      embed = discord.Embed(title = (f"You have been muted in: {guild.name}.\n**Time period:** {time}."), colour=discord.Color(0xff0000))
+      await member.send(embed=embed)
+      await asyncio.sleep(tempmute)
+      await member.remove_roles(muted_role)
+      embed = discord.Embed(title = (f"You have been unmuted in: {guild.name}."), colour=discord.Color(0xff0000))
+      await member.send(embed=embed)
   else:
-   await ctx.send("You dont have the required permissions to do that!", delete_after=5)
+      await ctx.channel.send("You dont have the required permissions to do that!", delete_after=5)
 
 
 

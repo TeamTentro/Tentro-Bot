@@ -138,7 +138,7 @@ if __name__ == '__main__':
     # This is a simple way to load cogs. Under the cogs folder you can make files (EG: moderation.py, util.py. In moderation there might be the ban command, unban command and other
     # moderation commands. In the util there might be ping, help, invite, etc. It's a fancy way of organising your commands!)
 
-client.load_extension('cogs.AdministrationCommands')
+
 
 with open("token.0", "r", encoding="utf-8") as f:
   bottoken = f.read()

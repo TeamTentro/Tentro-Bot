@@ -30,16 +30,16 @@ async def on_ready():
 
 @client.command(name='8ball')
 async def eightball(ctx, *, question=None):
-    responses = ["Definitely.", "It is certain", "Does 2 + 2 equals to 4?", "I don't think so chief.",
+    responses = ["Definitely.", "It is certain", "Does 2 + 2 equal to 4?", "I don't think so chief.",
                 "Perhaps.",
                 "Maybe, ehhh don't take my word for it.",
-                "Bro thats legit the dumbest 8ball question i have heard.",
-                "How do you not know this.", "Idfk im just a discord bot.", 
+                "Ask again.",
+                "How do you not know this.", "I don't know, im just a discord bot.", 
                 "No clue bro.", 
                 "Uhhh Not sure about the answer to that one.", "My reply is no.",
                 "My sources say no.",
                 "Outlook not so good.",
-                "Very doubtful.", "I don't know about that. But i do know that it shows that you're really fucking dumb lmao nerd."]
+                "Very doubtful.", "My sources say yes."]
 
     
      
@@ -54,13 +54,6 @@ async def eightball(ctx, *, question=None):
         
         
         await ctx.send(embed=embed)
-
-
-
-            
-
-
-  
 
 
 
@@ -84,7 +77,7 @@ async def on_message(message):
      await message.channel.send('This is the default prefix')
 
 
-    if message.content == "hi":   
+    if message.content == "hi":     
 
         await message.channel.send("Hello There")  
 
@@ -102,22 +95,22 @@ async def setdelay(ctx, seconds : int):
       embed = discord.Embed(title=f'You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
       await ctx.send(embed=embed, delete_after=5)
 
+
+
 @client.command(name='slowmodecheck', aliases=['checksm'])
 async def checkdelay(ctx):
     seconds = ctx.channel.slowmode_delay
     
     if ctx.author.guild_permissions.manage_messages:
-        embed = discord.Embed(title=f'Slowmode is {seconds}s.', colour=discord.Color(0xff0000))
+        embed = discord.Embed(title=f'Slowmode is {seconds}s.', colour=discord.Colour(0xff0000))
         await ctx.send(embed=embed)
-
-@client.command(name='antilink', aliases=['al'])
-async def antilink(ctx):
-    guild = ctx.guild
-    if ctx.content:('https://www/.') or ('http://www/.')
-        
+    
+    else:
+        embed = discord.Embed(title=f'You do not have the required permissions to do that!', color=discord.Colour(0xff0000))
+        await ctx.send(embed=embed, delete_after=4)
 
 
-
+   
 
 @client.command(name='avatar', aliases=['av'])
 async def avatar(ctx, *, member: discord.Member = None):
@@ -158,6 +151,8 @@ async def role(ctx, user : discord.Member, *, role : discord.Role):
     else:
         embed = discord.Embed(title='You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
         await ctx.send(embed=embed, delete_after=5)
+
+
 
 @client.command(name='clear', aliases=['cl'])
 @commands.has_permissions(manage_messages = True)

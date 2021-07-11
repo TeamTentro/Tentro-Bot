@@ -54,6 +54,24 @@ async def eightball(ctx, *, question=None):
         
         
         await ctx.send(embed=embed)
+
+
+@client.command(name='lockdown', aliases=['ld'])
+async def lockdown(ctx):
+    guild = ctx.guild
+    channel = guild.channel
+    if ctx.author.guild_permissions.administrator:
+        
+        await channel.set_permissions(member, speak=False, send_messages=False, read_message_history=True, read_messages=True)
+        embed = discord.Embed(title=f'Sucessfully locked down {guild.channel}!')
+        await ctx.send(embed=embed)
+
+    else:
+
+        await ctx.send('test')
+            
+
+
   
 
 
@@ -78,7 +96,7 @@ async def on_message(message):
      await message.channel.send('This is the default prefix')
 
 
-    if message.content == "hi":     
+    if message.content == "hi":   
 
         await message.channel.send("Hello There")  
 

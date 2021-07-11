@@ -96,6 +96,22 @@ async def setdelay(ctx, seconds : int):
       embed = discord.Embed(title=f'You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
       await ctx.send(embed=embed, delete_after=5)
 
+@client.command(name='createchannel', aliases=['createch'])
+async def createchannel(ctx, name=None):
+    guild = ctx.message.guild
+    if ctx.author.guild_permissions.administrator:
+        await guild.create_text_channel(name=name)
+        embed = discord.Embed(title=f"Channel {name} has been created!")
+        embed.timestamp = ctx.message.created_at
+        await ctx.send(embed=embed)
+
+
+    else:
+        embed = discord.Embed(title=f'You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
+        await ctx.send(embed=embed, delete_after=5)
+
+
+
 
 
 @client.command(name='slowmodecheck', aliases=['checksm'])

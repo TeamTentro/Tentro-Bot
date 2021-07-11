@@ -13,6 +13,7 @@ print(f"{cwd}\n-----")
 # Bot
 
 bot = commands.Bot(command_prefix="t!")
+print('ok')
 
 # le status
 
@@ -78,7 +79,7 @@ async def _Slowmode(ctx, seconds : int):
       embed = discord.Embed(title=f"You do not have the required permissions to do that!", colour=0xff0000)
       await ctx.send(embed=embed, delete_after=5)
 
-@client.command(name="createchannel", aliases=["createch"])
+@bot.command(name="createchannel", aliases=["createch"])
 async def _CreateChannel(ctx, name=None):
     guild = ctx.message.guild
     if ctx.author.guild_permissions.administrator:
@@ -90,8 +91,7 @@ async def _CreateChannel(ctx, name=None):
         embed = discord.Embed(title=f"You do not have the required permissions to do that!", colour=0xff0000)
         await ctx.send(embed=embed, delete_after=5)
 
-@client.command(name='slowmodecheck', aliases=['checksm'])
-async def checkdelay(ctx):
+
 @bot.command(name="slowmodecheck", aliases=["checksm"])
 async def _SlowmodeCheck(ctx):
     seconds = ctx.channel.slowmode_delay
@@ -174,8 +174,8 @@ async def _ActivatePremium(ctx):
 
 @bot.command(name="invite", aliases=["inv"])
 async def _Invite(ctx):
-  embed = discord.Embed(title="Invite Tentro", description="Click [here](https://discord.com/oauth2/authorize?bot_id=861919315506495508&scope=bot&permissions=8589934591) to invite Tentro to your server!", colour=0xff0000)
-  await ctx.channel.send(embed=embed)
+    embed = discord.Embed(title="Invite Tentro", description="Click [here](https://discord.com/oauth2/authorize?bot_id=861919315506495508&scope=bot&permissions=8589934591) to invite Tentro to your server!", colour=0xff0000)
+    await ctx.channel.send(embed=embed)
 
 @bot.command(name="servername", aliases=["sn"])
 async def _ServerName(ctx):

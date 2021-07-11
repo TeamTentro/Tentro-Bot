@@ -56,19 +56,7 @@ async def eightball(ctx, *, question=None):
         await ctx.send(embed=embed)
 
 
-@client.command(name='lockdown', aliases=['ld'])
-async def lockdown(ctx):
-    guild = ctx.guild
-    channel = guild.channel
-    if ctx.author.guild_permissions.administrator:
-        
-        await channel.set_permissions(member, speak=False, send_messages=False, read_message_history=True, read_messages=True)
-        embed = discord.Embed(title=f'Sucessfully locked down {guild.channel}!')
-        await ctx.send(embed=embed)
 
-    else:
-
-        await ctx.send('test')
             
 
 
@@ -114,15 +102,22 @@ async def setdelay(ctx, seconds : int):
       embed = discord.Embed(title=f'You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
       await ctx.send(embed=embed, delete_after=5)
 
-@client.command(name='checksm')
-async def checkdelay(ctx, arg = 'seconds'):
-  if ctx.author.guild_permission.manage_messages:
-      await ctx.channel.get(slowmode_delay=arg)
-      embed = discord.Embed(title=f'Slowmode is {arg}s.', colour=discord.Color(0xff0000))
-      await ctx.send(embed=embed)
-  else:
-      embed = discord.Embed(title=f'You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
-      await ctx.send(embed=embed, delete_after=5)
+@client.command(name='slowmodecheck', aliases=['checksm'])
+async def checkdelay(ctx):
+    seconds = ctx.channel.slowmode_delay
+    
+    if ctx.author.guild_permissions.manage_messages:
+        embed = discord.Embed(title=f'Slowmode is {seconds}s.', colour=discord.Color(0xff0000))
+        await ctx.send(embed=embed)
+
+@client.command(name='antilink', aliases=['al'])
+async def antilink(ctx):
+    guild = ctx.guild
+    if ctx.content:('https://www/.') or ('http://www/.')
+        
+
+
+
 
 @client.command(name='avatar', aliases=['av'])
 async def avatar(ctx, *, member: discord.Member = None):
@@ -131,6 +126,8 @@ async def avatar(ctx, *, member: discord.Member = None):
     embed.set_image(url=member.avatar_url)
     embed.set_footer(text=f"Requested by : {ctx.author}",icon_url=ctx.author.avatar_url)  
     await ctx.send(embed=embed)
+
+
 
 
     
@@ -218,6 +215,8 @@ async def invite(ctx, arg=None):
 
 
 
+
+
 @client.command(name='lockdown', aliases=['ld'])
 async def lockdown(ctx):
     guild = ctx.guild
@@ -226,12 +225,13 @@ async def lockdown(ctx):
     if ctx.author.guild_permissions.administrator:
         
         await channel.set_permissions(target=default_role, speak=False, send_messages=False, read_message_history=True, read_messages=True)
-        embed = discord.Embed(title=f'Sucessfully locked down your mom!')
+        embed = discord.Embed(title=f'Sucessfully locked down {ctx.channel}!')
         await ctx.send(embed=embed)
 
     else:
 
-        await ctx.send('test')
+        embed = discord.Embed(title=f'You do not have the required permissions to do that!', colour=discord.Color(0xff0000))
+        await ctx.send(embed=embed, delete_after=5)
 
 if __name__ == '__main__':
     # When running this file, if it is the 'main' file

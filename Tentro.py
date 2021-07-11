@@ -218,6 +218,20 @@ async def invite(ctx, arg=None):
 
 
 
+@client.command(name='lockdown', aliases=['ld'])
+async def lockdown(ctx):
+    guild = ctx.guild
+    channel = ctx.channel 
+    default_role = guild.default_role
+    if ctx.author.guild_permissions.administrator:
+        
+        await channel.set_permissions(target=default_role, speak=False, send_messages=False, read_message_history=True, read_messages=True)
+        embed = discord.Embed(title=f'Sucessfully locked down your mom!')
+        await ctx.send(embed=embed)
+
+    else:
+
+        await ctx.send('test')
 
 if __name__ == '__main__':
     # When running this file, if it is the 'main' file

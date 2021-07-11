@@ -13,7 +13,7 @@ print(f"{cwd}\n-----")
 #Client
 
 client = commands.Bot(command_prefix='t!')
-client.remove_command('help')
+
 
 #le status
 
@@ -82,6 +82,7 @@ async def on_message(message):
         await message.channel.send("Hello There")  
 
     await client.process_commands(message)
+    
 
 
 @client.command(name='slowmode', aliases=['sm'])
@@ -208,7 +209,12 @@ async def invite(ctx, arg=None):
   embed = discord.Embed(title='Invite Tentro', description = "Click [here](https://discord.com/oauth2/authorize?client_id=861919315506495508&scope=bot&permissions=8589934591) to invite Tentro to your server!", colour=discord.Color(0xff0000))
   await ctx.channel.send(embed=embed)
 
-
+@client.command(name='servername', aliases=['sn'])
+async def servername(ctx):
+    guild = ctx.guild
+    embed = discord.Embed(title=f'{guild.name}', colour=discord.Colour(0xff0000))
+    embed.timestamp = ctx.message.created_at
+    await ctx.send(embed=embed)
 
 
 

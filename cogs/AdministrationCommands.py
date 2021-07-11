@@ -62,7 +62,7 @@ async def unmute(self, ctx, member: discord.Member):
         await member.remove_roles(mutedRole)
         embed = discord.Embed(title="Unmuted", description=f"{member.mention} has been unmuted.",colour=discord.Colour(0xff0000))
         embed.set_footer(text='Unmute')
-        embed.timestamp = datetime.datetime.utcnow()
+        embed.timestamp = ctx.message.created_at
         await ctx.send(embed=embed)
         embed = discord.Embed(title = (f"**You have been unmuted in: {guild.name}.**"), colour=discord.Color(0xff0000))
         await member.send(embed=embed)
@@ -87,7 +87,7 @@ async def mute(self, ctx, member: discord.Member, *, reason=None):
             embed = discord.Embed(title="Muted", description=f"{member.mention} has been muted indefinitely.", colour=0xff0000)
             embed.add_field(name="Reason:", value=reason, inline=False)
             embed.set_footer(text="Mute")
-            embed.timestamp = datetime.datetime.now()
+            embed.timestamp = ctx.message.created_at
             await ctx.send(embed=embed)
 
             embed = discord.Embed(title = (f"You have been muted in: {guild.name}.\n**Reason:** {reason}."), colour=0xff0000)
@@ -108,7 +108,7 @@ async def kick(self, ctx, member : discord.Member, *, reason=None):
       embed = discord.Embed(title="Kicked", description=f"{member.mention} has been kicked from the server.", colour=discord.Colour(0xff0000))
       embed.add_field(name="Reason:", value=reason, inline=False)
       embed.set_footer(text='Kick')
-      embed.timestamp = datetime.datetime.utcnow()
+      embed.timestamp = ctx.message.created_at
       await ctx.send(embed=embed)
       embed = discord.Embed(title = (f"You have been kicked from: {guild.name}.\n**Reason:** {reason}."), colour=discord.Color(0xff0000))
       await member.send(embed=embed)
@@ -125,7 +125,7 @@ async def ban(self, ctx, member : discord.Member, *, reason=None):
         embed = discord.Embed(title="Banned", description=f"{member.mention} has been banned from the server.", colour=discord.Colour(0xff0000))
         embed.add_field(name="Reason:", value=reason, inline=False)
         embed.set_footer(text='Ban')
-        embed.timestamp = datetime.datetime.now()
+        embed.timestamp = ctx.message.created_at
         await ctx.send(embed=embed)
         embed = discord.Embed(title = (f"You have been banned from: {guild.name}.\n**Reason:** {reason}."), colour=discord.Color(0xff0000))
         await member.send(embed=embed)

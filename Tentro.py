@@ -30,16 +30,16 @@ async def on_ready():
 
 @client.command(name='8ball')
 async def eightball(ctx, *, question=None):
-    responses = ["Definitely.", "It is certain", "Does 2 + 2 equals to 4?", "I don't think so chief.",
+    responses = ["Definitely.", "It is certain", "Does 2 + 2 equal to 4?", "I don't think so chief.",
                 "Perhaps.",
                 "Maybe, ehhh don't take my word for it.",
-                "Bro thats legit the dumbest 8ball question i have heard.",
-                "How do you not know this.", "Idfk im just a discord bot.", 
+                "Ask again.",
+                "How do you not know this.", "I don't know, im just a discord bot.", 
                 "No clue bro.", 
                 "Uhhh Not sure about the answer to that one.", "My reply is no.",
                 "My sources say no.",
                 "Outlook not so good.",
-                "Very doubtful.", "I don't know about that. But i do know that it shows that you're really fucking dumb lmao nerd."]
+                "Very doubtful.", "My sources say yes."]
 
     
      
@@ -54,24 +54,6 @@ async def eightball(ctx, *, question=None):
         
         
         await ctx.send(embed=embed)
-
-
-@client.command(name='lockdown', aliases=['ld'])
-async def lockdown(ctx):
-    guild = ctx.guild
-    channel = guild.channel
-    if ctx.author.guild_permissions.administrator:
-        
-        await channel.set_permissions(member, speak=False, send_messages=False, read_message_history=True, read_messages=True)
-        embed = discord.Embed(title=f'Sucessfully locked down {guild.channel}!')
-        await ctx.send(embed=embed)
-
-    else:
-
-        await ctx.send('test')
-            
-
-
   
 
 
@@ -96,7 +78,7 @@ async def on_message(message):
      await message.channel.send('This is the default prefix')
 
 
-    if message.content == "hi":   
+    if message.content == "hi":     
 
         await message.channel.send("Hello There")  
 

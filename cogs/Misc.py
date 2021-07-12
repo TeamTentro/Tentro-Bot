@@ -15,6 +15,8 @@ class Misc(commands.Cog):
     def __init__(self, bot): 
         self.bot = bot
 
+   
+
     @commands.command(name="8ball")
     async def _8ball(ctx, *, question=None):
         responses = ["Definitely.", "It is certain", "Does 2 + 2 equal to 4?", "I don't think so chief.",
@@ -34,14 +36,12 @@ class Misc(commands.Cog):
             embed = discord.Embed(title=f"**Question:**\n", description = f"{question}", color=0xff0000)
             embed.add_field(name = f"**8ball:**\n" ,value = f"{random.choice(responses)}")
             await ctx.send(embed=embed)
-
-    
     
 
     @commands.command(name='welcome')
     async def welcome(self, ctx):
         guild = ctx.guild
-        member_join = guild.join
+        member_join = discord.on.member_join
         welcome_channel = bot.get_channel("Welcome")
         if ctx.author.has_permissions.administrator:
             await guild.create_text_channel("Welcome")

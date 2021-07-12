@@ -13,7 +13,7 @@ print(f"{cwd}\n-----")
 # Bot
 
 bot = commands.Bot(command_prefix="t!")
-print('ok')
+print('Officially working!')
 
 # le status
 
@@ -57,90 +57,6 @@ async def _8ball(ctx, *, question=None):
         embed.add_field(name = f"**8ball:**\n" ,value = f"{random.choice(responses)}")
         await ctx.send(embed=embed)
 
-@bot.command(name="slowmode", aliases=["sm"])
-async def _Slowmode(ctx, seconds : int):
-  if ctx.author.guild_permissions.manage_messages:
-      await ctx.channel.edit(slowmode_delay=seconds)
-      embed = discord.Embed(title=f"Slowmode set to {seconds}s.", colour=0xff0000)
-      await ctx.send(embed=embed)
-  else:
-      embed = discord.Embed(title=f"You do not have the required permissions to do that!", colour=0xff0000)
-      await ctx.send(embed=embed, delete_after=5)
-
-@bot.command(name="createchannel", aliases=["createch"])
-async def _CreateChannel(ctx, name=None):
-    guild = ctx.message.guild
-    if ctx.author.guild_permissions.administrator:
-        await guild.create_text_channel(name=name)
-        embed = discord.Embed(title=f"Channel {name} has been created!")
-        embed.timestamp = ctx.message.created_at
-        await ctx.send(embed=embed)
-    else:
-        embed = discord.Embed(title=f"You do not have the required permissions to do that!", colour=0xff0000)
-        await ctx.send(embed=embed, delete_after=5)
-
-
-@bot.command(name="slowmodecheck", aliases=["checksm"])
-async def _SlowmodeCheck(ctx):
-    seconds = ctx.channel.slowmode_delay
-    if ctx.author.guild_permissions.manage_messages:
-        embed = discord.Embed(title=f"Slowmode is {seconds}s.", colour=0xff0000)
-        await ctx.send(embed=embed)
-    else:
-        embed = discord.Embed(title=f"You do not have the required permissions to do that!", color=0xff0000)
-        await ctx.send(embed=embed, delete_after=4)
-
-
-
-@bot.command(name="giverole", aliases=["gr"])
-async def _GiveRole(ctx, user : discord.Member, *, role : discord.Role):
-    if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator:
-        await user.add_roles(role)
-        embed = discord.Embed(title="Success!", description=f"Given {role.mention} to {user.mention}.", colour=0xff0000)
-        embed.set_footer(text="Role Given")
-        embed.timestamp = datetime.datetime.utcnow()
-        await ctx.send(embed=embed)
-    else:
-        embed = discord.Embed(title="You do not have the required permissions to do that!", colour=0xff0000)
-        await ctx.send(embed=embed, delete_after=5)
-
-@bot.command(name="takerole", aliases=["tr"])
-async def _TakeRole(ctx, user : discord.Member, *, role : discord.Role):
-    if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator:
-        await user.remove_roles(role)
-        embed = discord.Embed(title="Success!", description=f"Taken {role.mention} from {user.mention}.", colour=0xff0000)
-        embed.set_footer(text="Role Taken")
-        embed.timestamp = datetime.datetime.utcnow()
-        await ctx.send(embed=embed)
-    else:
-        embed = discord.Embed(title="You do not have the required permissions to do that!", colour=0xff0000)
-        await ctx.send(embed=embed, delete_after=5)
-
-@bot.command(name="clear", aliases=["cl"])
-@commands.has_permissions(manage_messages=True)
-async def _Clear(ctx, amount: int):
-    await ctx.channel.purge(limit = amount+1)
-    embed = discord.Embed(title = "Messages purged", description=f"{ctx.author.mention}, purged {amount} message(s)", colour=0xff0000)
-    await ctx.send(embed=embed, delete_after=5)
-
-@bot.command(name="resetslowmode", aliases=["rsm"])
-async def _ResetSlowmode(ctx):
-    if ctx.author.guild_permissions.manage_messages:
-        await ctx.channel.edit(slowmode_delay=0)
-        embed = discord.Embed(title=f"Slowmode reset.", colour=0xff0000)
-        await ctx.send(embed=embed)
-    else:
-        embed = discord.Embed(title=f"You do not have the required permissions to do that!", colour=0xff0000)
-        await ctx.send(embed=embed, delete_after=5)
-
-@bot.command(name="nickname", aliases=["nick"])
-async def _Nickname(ctx, member: discord.Member, *,nick):
-    await member.edit(nick=nick)
-    embed = discord.Embed(title=f"Name changed", description=f"Succesfully changed {member.mention}'s name.", colour=0xff0000)
-    await ctx.send(embed=embed)
-
-
-
 
 
 @bot.command(name="activate_premium", aliases=["ap"])
@@ -155,17 +71,7 @@ async def _Invite(ctx):
 
 
 
-@bot.command(name="lockdown", aliases=["ld"])
-async def _Lockdown(ctx):
-    channel = ctx.channel
-    default_role = ctx.guild.default_role
-    if ctx.author.guild_permissions.administrator:
-        await channel.set_permissions(target=default_role, speak=False, send_messages=False, read_message_history=True, read_messages=True)
-        embed = discord.Embed(title=f"Sucessfully locked down {channel}!")
-        await ctx.send(embed=embed)
-    else:
-        embed = discord.Embed(title=f"You do not have the required permissions to do that!", colour=0xff0000)
-        await ctx.send(embed=embed, delete_after=5)
+
 
 for file in os.listdir(cwd+"/cogs"):
     if file.endswith(".py") and not file.startswith("_"):

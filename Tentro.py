@@ -35,19 +35,7 @@ async def on_message(message):
 
 # C O M M A N D S
 
-bot.remove_command("help")
-@bot.command(name="help")
-async def _Help(ctx):
-
-    embed = discord.Embed(title="These are all the commands", color=0xFF0000)
-    embed.add_field(name="Available commands:", value="!tclear, !tban, !tkick, !tmute, !tunban, !tunmute, !tping, !tserver", inline=False)
-    embed.add_field(name="Bot version:", value="v1.0", inline=False)
-    embed.add_field(name="Date released:", value="July 6th", inline=False)
-    embed.set_footer(text="Still in progress!")
-    embed.set_author(name=ctx.author.name)
-    embed.timestamp = ctx.message.created_at
-
-    await ctx.send(embed=embed)
+@bot.remove_command("help")
 
 @bot.command(name="8ball")
 async def _8ball(ctx, *, question=None):

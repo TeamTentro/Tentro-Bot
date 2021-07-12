@@ -2,6 +2,7 @@ from discord.ext import commands
 from discord import Embed, Member, User, utils
 import asyncio
 import discord
+from discord.ext.commands import bot
 
 
 class Info(commands.Cog):

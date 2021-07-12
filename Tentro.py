@@ -102,13 +102,7 @@ async def _SlowmodeCheck(ctx):
         embed = discord.Embed(title=f"You do not have the required permissions to do that!", color=0xff0000)
         await ctx.send(embed=embed, delete_after=4)
 
-@bot.command(name="avatar", aliases=["av"])
-async def _Avatar(ctx, *, member: discord.Member=None):
-    member = ctx.author if not member else member
-    embed = discord.Embed(title = f"{member.name}", color = (0xff0000), timestamp = ctx.message.created_at)
-    embed.set_image(url=member.avatar_url)
-    embed.set_footer(text=f"Requested by : {ctx.author}",icon_url=ctx.author.avatar_url)
-    await ctx.send(embed=embed)
+
 
 @bot.command(name="giverole", aliases=["gr"])
 async def _GiveRole(ctx, user : discord.Member, *, role : discord.Role):
@@ -157,15 +151,9 @@ async def _Nickname(ctx, member: discord.Member, *,nick):
     embed = discord.Embed(title=f"Name changed", description=f"Succesfully changed {member.mention}'s name.", colour=0xff0000)
     await ctx.send(embed=embed)
 
-@bot.command(name="ping")
-async def _Ping(ctx):
-    embed = discord.Embed(title=f"Pong!", description=f"bot latency: {round(bot.latency * 1000)}ms" , colour=0xff0000)
-    await ctx.send(embed=embed)
 
-@bot.command(name="server")
-async def _Server(ctx):
-    embed = discord.Embed(title="Our amazing server", description = "Click [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ) to join our server!", colour=0xff0000)
-    await ctx.channel.send(embed=embed)
+
+
 
 @bot.command(name="activate_premium", aliases=["ap"])
 async def _ActivatePremium(ctx):
@@ -177,11 +165,7 @@ async def _Invite(ctx):
     embed = discord.Embed(title="Invite Tentro", description="Click [here](https://discord.com/oauth2/authorize?bot_id=861919315506495508&scope=bot&permissions=8589934591) to invite Tentro to your server!", colour=0xff0000)
     await ctx.channel.send(embed=embed)
 
-@bot.command(name="servername", aliases=["sn"])
-async def _ServerName(ctx):
-    embed = discord.Embed(title=f"{ctx.guild.name}", colour=0xff0000)
-    embed.timestamp = ctx.message.created_at
-    await ctx.send(embed=embed)
+
 
 @bot.command(name="lockdown", aliases=["ld"])
 async def _Lockdown(ctx):

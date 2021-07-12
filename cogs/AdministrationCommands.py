@@ -136,4 +136,4 @@ class Admin(commands.Cog):
             await ctx.send(embed=embed, delete_after=5)
 
 def setup(bot):
-    bot.add_cog(Admin(bot))
+    bot.add_cog(Admin(bot)) 

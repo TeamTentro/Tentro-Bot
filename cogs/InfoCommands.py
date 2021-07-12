@@ -1,12 +1,12 @@
 from discord.ext import commands
-from discord import Embed, Member, User, client, utils
+from discord import Embed, Member, User, utils
 import asyncio
 import discord
-from discord.ext.commands import bot
+
 
 class Info(commands.Cog):
 
-    def __init__(self, bot):
+    def __init__(self, bot): 
         self.bot = bot
     
     @commands.command(name="servername", aliases=["sn"])
@@ -25,7 +25,7 @@ class Info(commands.Cog):
 
     @commands.command(name="ping")
     async def _Ping(self, ctx):
-        embed = discord.Embed(title=f"Pong!", description=f"bot latency: {round(client.latency * 1000)}ms" , colour=0xff0000)
+        embed = discord.Embed(title=f"Pong!", description=f"Client latency: {round(self.bot.latency * 1000)}ms" , colour=0xff0000)
         await ctx.send(embed=embed)
 
     @commands.command(name="server")

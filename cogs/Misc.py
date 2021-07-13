@@ -17,25 +17,9 @@ class Misc(commands.Cog):
 
    
 
-    @commands.command(name="8ball")
-    async def _8ball(ctx, *, question=None):
-        responses = ["Definitely.", "It is certain", "Does 2 + 2 equal to 4?", "I don't think so chief.",
-                "Perhaps.",
-                "Maybe, ehhh don't take my word for it.",
-                "Ask again.",
-                "How do you not know this.", "I don't know, im just a discord bot.",
-                "No clue bro.",
-                "Uhhh Not sure about the answer to that one.", "My reply is no.",
-                "My sources say no.",
-                "Outlook not so good.",
-                "Very doubtful.", "My sources say yes."]
+    
 
-        if question == None:
-            await ctx.send("Please ask a question.", delete_after=5)
-        else:
-            embed = discord.Embed(title=f"**Question:**\n", description = f"{question}", color=0xff0000)
-            embed.add_field(name = f"**8ball:**\n" ,value = f"{random.choice(responses)}")
-            await ctx.send(embed=embed)
+        
     
 
     @commands.command(name='welcome')

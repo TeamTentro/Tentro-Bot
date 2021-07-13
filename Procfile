@@ -1,2 +1,2 @@
 heroku ps: scale worker=1
-worker = py tentro.py
+worker = python Tentro.py

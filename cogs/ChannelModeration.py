@@ -41,7 +41,7 @@ class Channel(commands.Cog):
         embed = discord.Embed(title = "Messages purged", description=f"{ctx.author.mention}, purged {amount} message(s)", colour=0xff0000)
         await ctx.send(embed=embed, delete_after=5)
 
-    @commands.command(name="resetslowmode", aliases=["rsm"])
+    @commands.command(name="resetsm", aliases=["rsm"])
     async def _ResetSlowmode(self, ctx):
         if ctx.author.guild_permissions.manage_messages:
             await ctx.channel.edit(slowmode_delay=0)

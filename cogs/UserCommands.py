@@ -3,11 +3,21 @@ from discord import Embed, Member, User, client, utils
 import asyncio
 import discord
 from discord.ext.commands import bot
+red = 0xff0000
+green = 0x34eb40
 
 class User(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+
+
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            embed = Embed(title="You do not have the required permissions to do that!", colour=red)
+            await ctx.send(embed=embed, delete_after=5)
+        return
 
     @commands.command(name="nickname", aliases=["nick"])
     async def _Nickname(self, ctx, member: discord.Member, *,nick):

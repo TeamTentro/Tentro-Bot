@@ -1,11 +1,22 @@
 from discord.ext import commands
 from discord import Embed, Member, User, utils
 import asyncio, discord
+red = 0xff0000
+green = 0x34eb40
 
 class Channel(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+
+
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            embed = Embed(title="You do not have the required permissions to do that!", colour=red)
+            await ctx.send(embed=embed, delete_after=5)
+        return
+        
 
 
     @commands.command(name="createchannel", aliases=["createch"])
@@ -41,7 +52,7 @@ class Channel(commands.Cog):
         embed = discord.Embed(title = "Messages purged", description=f"{ctx.author.mention}, purged {amount} message(s)", colour=0xff0000)
         await ctx.send(embed=embed, delete_after=5)
 
-    @commands.command(name="resetsm", aliases=["rsm"])
+    @commands.command(name="resetslowmode", aliases=["rsm"])
     async def _ResetSlowmode(self, ctx):
         if ctx.author.guild_permissions.manage_messages:
             await ctx.channel.edit(slowmode_delay=0)
@@ -71,17 +82,6 @@ class Channel(commands.Cog):
         else:
             embed = discord.Embed(title=f"You do not have the required permissions to do that!", color=0xff0000)
             await ctx.send(embed=embed, delete_after=4)
-
-
-
-
-
-
-
-
-
-
-
 
 
 

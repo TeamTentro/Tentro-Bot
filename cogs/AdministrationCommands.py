@@ -22,6 +22,7 @@ class Admin(commands.Cog):
             embed = Embed(title="You do not have the required permissions to do that!", colour=red)
             await ctx.send(embed=embed, delete_after=5)
         return
+        
 
     @commands.command(name="timedmute", aliases=["tm"])
     async def _Mute(self, ctx, member: Member, time, *, reason=None):
@@ -84,10 +85,11 @@ class Admin(commands.Cog):
 
     @commands.command(name="warn")
     async def warn(self, ctx, member: Member, *, reason=None):
-      embed = Embed(title="Warn", description=f"{member.mention} has been succesfully warned." )
-      await ctx.send(embed=embed)
-      embed = Embed(title=f"You have been warned in {ctx.guild.name}. Reason: {reason}." )
-      await member.send(embed=embed)
+        if ctx.author.guild_permissions.manage_messages:
+            embed = Embed(title="Warn", description=f"{member.mention} has been succesfully warned." )
+            await ctx.send(embed=embed)
+            embed = Embed(title=f"You have been warned in {ctx.guild.name}. Reason: {reason}." )
+            await member.send(embed=embed)
     
 
     @commands.command(name="mute", aliases=['m', 'shut'])
@@ -123,15 +125,17 @@ class Admin(commands.Cog):
 
         if ctx.author.guild_permissions.kick_members:
             
-
+            await member.kick(reason=reason)
             embed = Embed(title="Kicked", description=f"{member.mention} has been kicked from the server.", colour=red)
             embed.add_field(name="Reason:", value=reason, inline=False)
             embed.set_footer(text="Kick")
             embed.timestamp = ctx.message.created_at
             await ctx.send(embed=embed)
             embed = discord.Embed(title=f"You have been kicked from {guild.name}\nReason: {reason}", colour=red)
-            await member.send(embed=embed)
-            await member.kick(reason=reason)
+            try:
+                await member.send(embed=embed)
+            except:()
+            
 
             # Not needed
             #embed = Embed(title = (f"You have been kicked from: {ctx.guild.name}.\n**Reason:** {reason}."), colour=red)
@@ -147,14 +151,17 @@ class Admin(commands.Cog):
 
         if ctx.author.guild_permissions.administrator: ## and not same perms FIX
             if time==None: 
+                await member.ban(reason=reason) 
                 embed = Embed(title="Banned", description=f"{member.mention} has been banned from the server indefinitely.", colour=red)
                 embed.add_field(name="Reason:", value=reason, inline=False)
                 embed.set_footer(text="Ban")
                 embed.timestamp = ctx.message.created_at
                 await ctx.send(embed=embed)  
                 embed = discord.Embed(title=f"You have been banned from {guild.name}\nReason: {reason}\nTime period: indefinitely", colour=red)
-                await member.send(embed=embed)
-                await member.ban(reason=reason) 
+                try: 
+                   await member.send(embed=embed)
+                except:()
+                
 
 
             
@@ -167,10 +174,11 @@ class Admin(commands.Cog):
                 embed.timestamp = ctx.message.created_at
                 await ctx.send(embed=embed)               
                 embed = discord.Embed(title=f"You have been banned from {guild.name}\nReason: {reason}\nTime period:{time}", colour=red)
-        
-                await member.send(embed=embed)
+                try:
+                    await member.send(embed=embed)
+                except:
              
-                await ctx.send("Member is not in any mutual server or has dm's blocked!")
+                    await ctx.send("Member is not in any mutual server or has dm's blocked!")
 
                 
                 duration = float(time[0: -1]) * time_convert[time[-1]]

@@ -3,12 +3,22 @@ from discord import Embed, Member, User, utils
 import asyncio
 import discord
 from discord.ext.commands import bot
+red = 0xff0000
+green = 0x34eb40
 
 
 class Info(commands.Cog):
 
     def __init__(self, bot): 
         self.bot = bot
+
+
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
+        if isinstance(error, commands.MissingPermissions):
+            embed = Embed(title="You do not have the required permissions to do that!", colour=red)
+            await ctx.send(embed=embed, delete_after=5)
+        return
     
     @commands.command(name="servername", aliases=["sn"])
     async def ServerName(self, ctx):
@@ -39,12 +49,10 @@ class Info(commands.Cog):
     async def _Help(self, ctx):
 
         embed = discord.Embed(title="These are all the commands", color=0xFF0000)
-        embed.add_field(name="Moderation", value="`t!clear, t!ban, t!kick, t!mutet, !timedmute, t!unmute, t!ban, t!unban, t!slowmode, t!slowmodecheck, t!slowmodereset, t!createchannel, t!deletechannel, t!giverole, t!takerole, t!nickname, t!lockdown`", inline=False)
-        embed.add_field(name="Information", value="`avatar, servername`", inline=False)
-        embed.add_field(name="Misc", value="`8ball`", inline=False)
-        embed.add_field(name="System", value="`help, ping, invite, server`", inline=False)
+        embed.add_field(name="Moderation commands:", value="t!ban, t!kick, t!mute, t!unban, t!unmute, t!timedmute, t!lockdown, t!giverole, t!takerole t!slowmode, t!checkslowmode, t!resetslowmode", inline=False)
+        embed.add_field(name="Miscellaneous", value="t!8ball")
         embed.add_field(name="Bot version:", value="v1.0", inline=False)
-        embed.add_field(name="Date released:", value="July 6th, 2021", inline=False)
+        embed.add_field(name="Date released:", value="July 6th 2021", inline=False)
         embed.set_footer(text="Still in progress!")
         embed.set_author(name=ctx.author.name)
         embed.timestamp = ctx.message.created_at

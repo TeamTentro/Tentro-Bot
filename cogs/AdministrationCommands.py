@@ -74,9 +74,9 @@ class Admin(commands.Cog):
 
     @commands.command(name="warn")
     async def warn(self, ctx, member: Member, *, reason=None):
-      embed = Embed(title="Warn", description=f"{member.mention} has been succesfully warned." )
+      embed = Embed(title="Warn", description=f"{member.mention} has been succesfully warned.", colour=red)
       await ctx.send(embed=embed)
-      embed = Embed(title=f"You have been warned in {ctx.guild.name}. Reason: {reason}." )
+      embed = Embed(title=f"You have been warned in {ctx.guild.name}. Reason: {reason}.", colour=red)
       await member.send(embed=embed)
     
 

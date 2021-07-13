@@ -1,1 +1,1 @@
-worker: py Tentro.py
+worker: python Tentro.py

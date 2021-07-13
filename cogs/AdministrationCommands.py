@@ -72,6 +72,14 @@ class Admin(commands.Cog):
         else:
             await ctx.send("You dont have the required permissions to do that!", delete_after=5)
 
+    @commands.command(name="warn")
+    async def warn(self, ctx, member: Member, *, reason=None):
+      embed = Embed(title="Warn", description=f"{member.mention} has been succesfully warned." )
+      await ctx.send(embed=embed)
+      embed = Embed(title=f"You have been warned in {ctx.guild.name}. Reason: {reason}." )
+      await member.send(embed=embed)
+    
+
     @commands.command(name="mute", aliases=['m', 'shut'])
     async def mute(self, ctx, member: Member, *, reason=None):
 

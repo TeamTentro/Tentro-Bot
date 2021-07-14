@@ -12,12 +12,7 @@ class User(commands.Cog):
         self.bot = bot
 
 
-    @commands.Cog.listener()
-    async def on_command_error(self, ctx, error):
-        if isinstance(error, commands.MissingPermissions):
-            embed = Embed(title="You do not have the required permissions to do that!", colour=red)
-            await ctx.send(embed=embed, delete_after=5)
-        return
+  
 
     @commands.command(name="nickname", aliases=["nick"])
     async def _Nickname(self, ctx, member: discord.Member, *,nick):

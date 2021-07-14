@@ -15,14 +15,7 @@ class Admin(commands.Cog):
         self.bot = bot
 
 
-    
-    @commands.Cog.listener()
-    async def on_command_error(self, ctx, error):
-        if isinstance(error, commands.MissingPermissions):
-            embed = Embed(title="You do not have the required permissions to do that!", colour=red)
-            await ctx.send(embed=embed, delete_after=5)
-        return
-        
+          
 
     @commands.command(name="timedmute", aliases=["tm"])
     async def _Mute(self, ctx, member: Member, time, *, reason=None):
@@ -191,9 +184,7 @@ class Admin(commands.Cog):
             # Not needed
             #embed = Embed(title = (f"You have been banned from: {ctx.guild.name}.\n**Reason:** {reason}."), colour=red)
             #await member.send(embed=embed)
-        else:
-            embed = Embed(title="You do not have the required permissions to do that!", colour=red)
-            await ctx.send(embed=embed, delete_after=5)
+        
 
 def setup(bot):
     bot.add_cog(Admin(bot)) 

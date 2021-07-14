@@ -16,14 +16,16 @@ class User(commands.Cog):
 
     @commands.command(name="nickname", aliases=["nick"])
     async def _Nickname(self, ctx, member: discord.Member, *,nick):
-        await member.edit(nick=nick)
-        embed = discord.Embed(title=f"Name changed", description=f"Succesfully changed {member.mention}'s name.", colour=0xff0000)
-        await ctx.send(embed=embed)
+        if ctx.author.guild_permission.manage_messages and member.guild_permissions!=ctx.author.guild_permissions:
+            await member.edit(nick=nick)
+            embed = discord.Embed(title=f"Name changed", description=f"Succesfully changed {member.mention}'s name.", colour=0xff0000)
+            await ctx.send(embed=embed)
     
 
     @commands.command(name="giverole", aliases=["gr"])
     async def _GiveRole(self, ctx, user : discord.Member, *, role : discord.Role):
-        if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator:
+        member = Member
+        if ctx.author.guild_permissions.manage_messages and member.guild_permissions!=ctx.author.guild_permissions:
             await user.add_roles(role)
             embed = discord.Embed(title="Success!", description=f"Given {role.mention} to {user.mention}.", colour=0xff0000)
             embed.set_footer(text="Role Given")
@@ -36,7 +38,8 @@ class User(commands.Cog):
 
     @commands.command(name="takerole", aliases=["tr"])
     async def _TakeRole(self, ctx, user : discord.Member, *, role : discord.Role):
-        if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator:
+        member = Member
+        if ctx.author.guild_permissions.administrator and member.guild_permissions!=ctx.author.guild_permissions:
             await user.remove_roles(role)
             embed = discord.Embed(title="Success!", description=f"Taken {role.mention} from {user.mention}.", colour=0xff0000)
             embed.set_footer(text="Role Taken")

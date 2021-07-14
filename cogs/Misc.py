@@ -40,6 +40,30 @@ class Misc(commands.Cog):
             embed.add_field(name = f"8ball:\n" ,value = f"{random.choice(responses)}")
             await ctx.send(embed=embed)
 
+    @commands.command(name='say')
+    async def say(self, ctx, *, text):
+        if ctx.author.guild_permissions.administrator:
+        
+            message = ctx.message
+            await message.delete()           
+            await ctx.send(text)
+        else:
+            await ctx.send('lol mate what u doin that isn\'t a real command')
+        
+        
+
+
+    @commands.command(name='rule')
+    async def rule(self, ctx, *, text):
+        if ctx.author.guild_permissions.administrator:
+            message = ctx.message
+            await message.delete()
+
+            
+            embed = Embed(title=f"     Rules", description=f"{text}", color=red)
+            await ctx.send(embed=embed)
+        
+
    
 
     

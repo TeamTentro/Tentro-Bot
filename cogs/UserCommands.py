@@ -16,7 +16,7 @@ class User(commands.Cog):
 
     @commands.command(name="nickname", aliases=["nick"])
     async def _Nickname(self, ctx, member: discord.Member, *,nick):
-        if ctx.author.guild_permission.manage_messages and member.guild_permissions!=ctx.author.guild_permissions:
+        if ctx.author.guild_permissions.manage_messages and member.guild_permissions!=ctx.author.guild_permissions:
             await member.edit(nick=nick)
             embed = discord.Embed(title=f"Name changed", description=f"Succesfully changed {member.mention}'s name.", colour=0xff0000)
             await ctx.send(embed=embed)

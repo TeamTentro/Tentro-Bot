@@ -72,11 +72,11 @@ class Admin(commands.Cog):
                 await member.send(embed=embed)
           
             
-                
-
-
+            
         else:
             await ctx.send("You dont have the required permissions to do that!", delete_after=5)
+
+            
 
     @commands.command(name="unban", aliases=["ub", "bebis4u"])
     async def _Unban(self, ctx, *, user: User):

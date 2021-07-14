@@ -2,7 +2,6 @@
 A team making a bot
 
 contributors : 
-codesize, aksy, tonyg(da baby)
+codex oculus imperus desuz, judus helpus informus, linus tipus, aksus versus extrus, tonus gusus exvodious
 
-code stealers : 
-boom ;-;
+

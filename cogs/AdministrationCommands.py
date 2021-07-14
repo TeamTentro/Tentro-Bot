@@ -1,3 +1,4 @@
+from operator import is_not, not_
 from discord.ext import commands
 from discord import Embed, Member, User, client, utils
 import asyncio, discord
@@ -13,17 +14,47 @@ class Admin(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+    
+    
+    @commands.Cog.listener()
+    async def on_command_error(self, ctx, error):
+        if isinstance(error, MissingPermissions):
+            try:
+                await ctx.send("No permissions to do that")
+            except:
+        
+                embed = discord.Embed(title="You dont have the required permissions to do that!", color=green)
+                await ctx.send(embed=embed)
 
 
           
 
     @commands.command(name="timedmute", aliases=["tm"])
-    async def _Mute(self, ctx, member: Member, time, *, reason=None):
+    async def _Mute(self, ctx, member: Member, reason=None, *, time=None):
 
         if ctx.author.guild_permissions.manage_messages:
             guild = ctx.guild
             mutedRole = utils.get(guild.roles, name="Muted")
-            if not mutedRole:
+            if time==None:
+                guild = ctx.guild
+                mutedRole = utils.get(guild.roles, name="Muted")
+                if not mutedRole:
+                    mutedRole = await guild.create_role(name="Muted", colour=green)
+                    for channel in guild.channels:
+                        await channel.set_permissions(mutedRole, speak=False, read_messages=False)
+                else:
+                    await member.add_roles(mutedRole, reason=reason)
+                    muted_role = utils.get(ctx.guild.roles, name="Muted")
+                    await member.add_roles(muted_role)
+
+                    embed = Embed(description=f"**{member.mention} has been muted indefinitely.\nReason:{reason}**", color=red)
+                    embed.timestamp = ctx.message.created_at
+                    await ctx.send(embed=embed)
+
+                    embed = Embed(title=f"You have been muted in: {guild.name}.\n**Time period:** indefinitely.\n**Reason:**{reason}", colour=red)
+                    await member.send(embed=embed)
+
+            elif time!=None and not mutedRole:
                 mutedRole = await guild.create_role(name="Muted", colour=green)
                 for channel in guild.channels:
                     await channel.set_permissions(mutedRole, speak=False, read_messages=False)
@@ -45,6 +76,11 @@ class Admin(commands.Cog):
 
                 embed = Embed(title=f"You have been unmuted in: {guild.name}.", colour=red)
                 await member.send(embed=embed)
+          
+            
+                
+
+
         else:
             await ctx.send("You dont have the required permissions to do that!", delete_after=5)
 
@@ -79,39 +115,13 @@ class Admin(commands.Cog):
     @commands.command(name="warn")
     async def warn(self, ctx, member: Member, *, reason=None):
         if ctx.author.guild_permissions.manage_messages:
-            embed = Embed(title="Warn", description=f"{member.mention} has been succesfully warned." )
+            embed = Embed(title="Warn", description=f"{member.mention} has been succesfully warned.", color=red )
             await ctx.send(embed=embed)
-            embed = Embed(title=f"You have been warned in {ctx.guild.name}. Reason: {reason}." )
+            embed = Embed(title=f"You have been warned in {ctx.guild.name}. Reason: {reason}.", color=red )
             await member.send(embed=embed)
     
 
-    @commands.command(name="mute", aliases=['m', 'shut'])
-    async def mute(self, ctx, member: Member, *, reason=None):
-
-        permissions = ctx.message.author.guild_permissions
-        if permissions.kick_members or permissions.administrator:
-            guild = ctx.guild
-
-            mutedRole = utils.get(guild.roles, name="Muted")
-            if not mutedRole:
-                mutedRole = await guild.create_role(name="Muted", colour=green)
-                for channel in guild.channels:
-                    await channel.set_permissions(mutedRole, speak=False, read_messages=False)
-
-            await member.add_roles(mutedRole, reason=reason)
-
-            embed = Embed(title="Muted", description=f"{member.mention} has been muted indefinitely.", colour=red)
-            embed.add_field(name="Reason:", value=reason, inline=False)
-            embed.set_footer(text="Mute")
-            embed.timestamp = ctx.message.created_at
-            await ctx.send(embed=embed)
-
-            embed = Embed(title=f"You have been muted in: {guild.name}.\n**Reason:** {reason}.", colour=red)
-            await member.send(embed=embed)
-        else:
-            embed = Embed(title="You do not have the required permissions to do that!", colour=red)
-            await ctx.send(embed=embed, delete_after=5)
-
+    
     @commands.command(name="kick", aliases=["k", "yeet"])
     async def kick(self, ctx, member: Member, *, reason=None):
         guild = ctx.guild
@@ -133,9 +143,8 @@ class Admin(commands.Cog):
             # Not needed
             #embed = Embed(title = (f"You have been kicked from: {ctx.guild.name}.\n**Reason:** {reason}."), colour=red)
             #await member.send(embed=embed)
-        else:
-            embed = Embed(title="You do not have the required permissions to do that!", colour=red)
-            await ctx.send(embed=embed, delete_after=5)
+      
+            
 
     @commands.command(name="ban", aliases=["b", "nobebis4u"])
     async def ban(self, ctx, member: Member, *,time=None, reason=None):

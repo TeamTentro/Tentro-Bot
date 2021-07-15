@@ -5,6 +5,7 @@ from discord import *
 from discord.ext import commands
 import os, random
 from pathlib import Path
+import sqlite3
 
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
@@ -15,10 +16,13 @@ print(f"{cwd}\n-----")
 bot = commands.Bot(command_prefix="t!")
 print('Officially working!')
 
+
 # le status
 
 @bot.event
 async def on_ready():
+    
+
     general_channel = bot.get_channel(745925853229350975)
     await general_channel.send("Bot is online!")
     await bot.change_presence(activity=discord.Game(name="t!help for Help!"))

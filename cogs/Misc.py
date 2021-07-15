@@ -8,6 +8,7 @@ from discord import *
 from discord.ext import commands
 import os, random
 from pathlib import Path
+import sqlite3
 red = 0xff0000
 green = 0x34eb40
 
@@ -16,6 +17,32 @@ class Misc(commands.Cog):
 
     def __init__(self, bot): 
         self.bot = bot
+
+
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        
+        db = sqlite3.connect('tentro.sqlite')
+        cursor = db.cursor()
+        cursor.execute(f"SELECT channel_id FROM main WHERE guild_id = {member.guild.id}")
+        result = cursor.fetchone()
+        mention = member.mention
+        user = member.name
+        if result is None:
+            return
+        else:
+            cursor.execute(f"SELECT msg FROM tentro WHERE guild_id = {member.guild.id}")
+            result1 = cursor.fetchone()
+
+            embed = Embed(color=red, description=f"Welcome to the discord server!")
+            embed.set_thumbnail(url=f"{member.avatar_url}")
+            embed.set_author(name=f"{member.name}", icon_url=f"{member.avatar_url}")
+            embed.set_footer(text=f"{member.guild}", icon_url=f"{member.guild.icon_url}")         
+            embed.timestamp = message.created_at
+
+            channel = self.bot.get_channel(id=int(result=[0]))
+
+            await channel.send(embed=embed)
 
 
 
@@ -74,24 +101,50 @@ class Misc(commands.Cog):
         
     
 
-    @commands.command(name='welcome')
+    @commands.group(invoke_without_command=True)
     async def welcome(self, ctx):
-        guild = ctx.guild
-        member_join = discord.on.member_join
-        welcome_channel = bot.get_channel("Welcome")
-        if ctx.author.has_permissions.administrator:
-            await guild.create_text_channel("Welcome")
-            embed = discord.Embed(title=f"Channel  has been created! Members who join will now be welcomed there.")
-            embed.timestamp = ctx.message.created_at
-            await ctx.send(embed=embed)
+        await ctx.send('Setup commands:\nwelcome channel <channel>\nwelcome text <message>')
 
-        else:
-            embed = Embed(title="You do not have the required permissions to do that!", colour=(0xff0000))
-            await ctx.send(embed=embed, delete_after=5)
 
-        if member_join:
-            embed = discord.Embed(title=f"{member.mention} has joined the server!")
-            await welcome_channel.send(embed=embed)
+    @welcome.command()
+    async def extrachannel(self, ctx, channel: discord.TextChannel):
+        if ctx.message.author.guild_permissions.administrator:
+            db = sqlite3.connect('tentro.sqlite')
+            cursor = db.cursor()
+            cursor.execute(f"SELECT channel_id FROM tentro WHERE guild_id = {ctx.guild.id}")
+            result = cursor.fetchone()
+            if result is None:
+                sql = ("INSERT INTO tentro(guild_id, channel_id) VALUES(?,?)")
+                val = (ctx.guild.id, channel.id)
+                await ctx.send(f"Channel has been set to {channel.mention}")
+            elif result is not None:
+                sql = ("UPDATE tentro SET channel_id = ? WHERE guild_id = ?")
+                val = (channel.id, ctx.guild.id)
+                await ctx.send(f"Channel has been updated to {channel.mention}") 
+            cursor.execute(sql, val)
+            db.commit()
+            cursor.close()
+            db.close()
+
+    @welcome.command()
+    async def text(self, ctx, *, text):
+         if ctx.message.author.guild_permissions.administrator:
+            db = sqlite3.connect('tentro.sqlite')
+            cursor = db.cursor()
+            cursor.execute(f"SELECT msg FROM tentro WHERE guild_id = {ctx.guild.id}")
+            result = cursor.fetchone()
+            if result is None:
+                sql = ("INSERT INTO tentro(guild_id, msg) VALUES(?,?)")
+                val = (ctx.guild.id, text)
+                await ctx.send(f"Text has been set to {text}")
+            elif result is not None:
+                sql = ("UPDATE tentro SET msg = ? WHERE guild_id = ?")
+                val = (text, ctx.guild.id)
+                await ctx.send(f"Message has been updated to {text}") 
+            cursor.execute(sql, val)
+            db.commit()
+            cursor.close()
+            db.close()
     
             
 

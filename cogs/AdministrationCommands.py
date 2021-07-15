@@ -116,7 +116,10 @@ class Admin(commands.Cog):
             embed.timestamp = ctx.message.created_at
             await ctx.send(embed=embed)
             embed = Embed(title=f"You have been warned in {ctx.guild.name}. Reason: {reason}.", color=red )
-            await member.send(embed=embed)
+            try:              
+               await member.send(embed=embed)
+            except:
+                pass
         else:
             embed = Embed(title="You do not have the required permissions to do that!", colour=red)
             await ctx.send(embed=embed, delete_after=5)

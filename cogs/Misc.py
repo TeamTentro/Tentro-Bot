@@ -48,7 +48,10 @@ class Misc(commands.Cog):
             await message.delete()           
             await ctx.send(text)
         else:
-            await ctx.send('lol mate what u doin that isn\'t a real command')
+            embed = Embed(title="You do not have the required permissions to do that!", colour=(0xff0000))
+            await ctx.send(embed=embed, delete_after=5)
+
+
         
         
 

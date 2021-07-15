@@ -38,6 +38,7 @@ class Info(commands.Cog):
     async def _Server(self, ctx):
         embed = discord.Embed(title="Our amazing server", description = "Click [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ) to join our server!", colour=0xff0000)
         await ctx.channel.send(embed=embed)
+    
 
 
     @commands.command(name="help")
@@ -55,7 +56,7 @@ class Info(commands.Cog):
         embed.timestamp = ctx.message.created_at
 
         await ctx.send(embed=embed)
-        await ctx.send(embed=embed)
+        
 
   
 

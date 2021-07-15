@@ -112,6 +112,8 @@ class Admin(commands.Cog):
     async def warn(self, ctx, member: Member, *, reason=None):
         if ctx.author.guild_permissions.manage_messages and member.guild_permissions!=ctx.author.guild_permissions:
             embed = Embed(title="Warn", description=f"{member.mention} has been succesfully warned.", color=red )
+            embed.set_footer(text="Warn")
+            embed.timestamp = ctx.message.created_at
             await ctx.send(embed=embed)
             embed = Embed(title=f"You have been warned in {ctx.guild.name}. Reason: {reason}.", color=red )
             await member.send(embed=embed)

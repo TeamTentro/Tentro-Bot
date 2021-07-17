@@ -7,13 +7,17 @@ import os, random
 from pathlib import Path
 import sqlite3
 
+intents = discord.Intents.default()
+
+intents.members = True
+
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
 print(f"{cwd}\n-----")
 
 # Bot
 
-bot = commands.Bot(command_prefix="t!")
+bot = commands.Bot(command_prefix="t!", intents = intents)
 print('Officially working!')
 
 

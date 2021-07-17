@@ -9,9 +9,13 @@ from discord.ext import commands
 import os, random
 from pathlib import Path
 import sqlite3
+
 red = 0xff0000
 green = 0x34eb40
 
+intents = discord.Intents.default()
+
+intents.members = True
 
 class Misc(commands.Cog):
 
@@ -24,7 +28,7 @@ class Misc(commands.Cog):
         
         db = sqlite3.connect('tentro.sqlite')
         cursor = db.cursor()
-        cursor.execute(f"SELECT channel_id FROM main WHERE guild_id = {member.guild.id}")
+        cursor.execute(f"SELECT channel_id FROM tentro WHERE guild_id = {member.guild.id}")
         result = cursor.fetchone()
         
         if result is None:
@@ -36,12 +40,47 @@ class Misc(commands.Cog):
             mention = member.mention
             user = member.name
             guild = member.guild
+            
 
             embed = Embed(color=red, description=str(result1[0]).format(members=members, mention=mention, user=user, guild=guild))
-            embed.set_thumbnail(url=f"{member.avatar_url}")
-            embed.set_author(name=f"{member.name}", icon_url=f"{member.avatar_url}")
-            embed.set_footer(text=f"{member.guild}", icon_url=f"{member.guild.icon_url}")         
-            embed.timestamp = message.created_at
+            embed.set_thumbnail(url=f"{member.avatar_url}")  
+            embed.set_author(name=f"{member.name}", icon_url=f"{member.avatar_url}")          
+            embed.set_footer(text=f"{member.guild}", icon_url=f"{member.guild.icon_url}")  
+            embed.timestamp = datetime.datetime.now()                        ## F I X  T I M E S T A M P ! !
+            
+
+            channel = self.bot.get_channel(id=int(result[0]))
+
+            await channel.send(embed=embed)
+
+
+    @commands.Cog.listener()
+    async def on_member_leave(self, member):
+        print('This works?!')
+        db = sqlite3.connect('tentro.sqlite')
+        cursor = db.cursor()
+        cursor.execute(f"SELECT channel1_id FROM tentro WHERE guild1_id = {member.guild.id}")
+        result = cursor.fetchone()
+        
+        
+        if result is None:
+            return
+        else:
+            cursor.execute(f"SELECT msg1 FROM tentro WHERE guild1_id = {member.guild.id}")
+            result1 = cursor.fetchone()
+            members = len(list(member.guild.members))
+            mention = member.mention
+            user = member.name
+            guild = member.guild
+
+        
+
+            embed = Embed(color=red, description=str(result1[0]).format(members=members, mention=mention, user=user, guild=guild))
+            embed.set_thumbnail(url=f"{member.avatar_url}")  
+            embed.set_author(name=f"{member.name}", icon_url=f"{member.avatar_url}")          
+            embed.set_footer(text=f"{member.guild}", icon_url=f"{member.guild.icon_url}")  
+            embed.timestamp = datetime.datetime.now()                        ## F I X  T I M E S T A M P ! !
+            
 
             channel = self.bot.get_channel(id=int(result[0]))
 
@@ -83,9 +122,7 @@ class Misc(commands.Cog):
 
 
         
-        
-
-
+    
     @commands.command(name='rule')
     async def rule(self, ctx, *, text):
         if ctx.author.guild_permissions.administrator:
@@ -96,13 +133,6 @@ class Misc(commands.Cog):
             embed = Embed(title=f"     Rules", description=f"{text}", color=red)
             await ctx.send(embed=embed)
         
-
-   
-
-    
-
-        
-    
 
     @commands.group(invoke_without_command=True)
     async def welcome(self, ctx):
@@ -131,7 +161,7 @@ class Misc(commands.Cog):
 
     @welcome.command()
     async def text(self, ctx, *, text):
-         if ctx.message.author.guild_permissions.administrator:
+        if ctx.message.author.guild_permissions.administrator:
             db = sqlite3.connect('tentro.sqlite')
             cursor = db.cursor()
             cursor.execute(f"SELECT msg FROM tentro WHERE guild_id = {ctx.guild.id}")
@@ -148,6 +178,54 @@ class Misc(commands.Cog):
             db.commit()
             cursor.close()
             db.close()
+
+
+
+    @commands.group(invoke_without_command=True)
+    async def leave(self, ctx):
+        await ctx.send('Setup commands:\nleave channel <channel>\nleave text <message>')
+
+
+    @leave.command()
+    async def channel(self, ctx, channel: discord.TextChannel):
+        if ctx.message.author.guild_permissions.administrator:
+            db = sqlite3.connect('tentro.sqlite')
+            cursor = db.cursor()
+            cursor.execute(f"SELECT channel1_id FROM tentro WHERE guild1_id = {ctx.guild.id}")
+            result = cursor.fetchone()
+            if result is None:
+                sql = ("INSERT INTO tentro(guild1_id, channel1_id) VALUES(?,?)")
+                val = (ctx.guild.id, channel.id)
+                await ctx.send(f"Channel has been set to {channel.mention}")
+            elif result is not None:
+                sql = ("UPDATE tentro SET channel1_id = ? WHERE guild1_id = ?")
+                val = (channel.id, ctx.guild.id)
+                await ctx.send(f"Channel has been updated to {channel.mention}") 
+            cursor.execute(sql, val)
+            db.commit()
+            cursor.close()
+            db.close()
+
+    @leave.command()
+    async def text(self, ctx, *, text):
+        if ctx.message.author.guild_permissions.administrator:
+            db = sqlite3.connect('tentro.sqlite')
+            cursor = db.cursor()
+            cursor.execute(f"SELECT msg1 FROM tentro WHERE guild1_id = {ctx.guild.id}")
+            result = cursor.fetchone()
+            if result is None:
+                sql = ("INSERT INTO tentro(guild1_id, msg1) VALUES(?,?)")
+                val = (ctx.guild.id, text)
+                await ctx.send(f"Message has been set to {text}")
+            elif result is not None:
+                sql = ("UPDATE tentro SET msg1 = ? WHERE guild1_id = ?")
+                val = (text, ctx.guild.id)
+                await ctx.send(f"Message has been updated to {text}") 
+            cursor.execute(sql, val)
+            db.commit()
+            cursor.close()
+            db.close()
+
     
             
 

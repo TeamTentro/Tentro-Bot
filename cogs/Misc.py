@@ -55,9 +55,9 @@ class Misc(commands.Cog):
 
 
     @commands.Cog.listener()
-    async def on_member_leave(self, member):
+    async def on_member_remove(self, member):
         print('This works?!')
-        db = sqlite3.connect('leavecmd.sqlite')
+        db = sqlite3.connect('tentro.sqlite')
         cursor = db.cursor()
         cursor.execute(f"SELECT channel_id FROM leavecmd WHERE guild_id = {member.guild.id}")
         result = cursor.fetchone()
@@ -66,7 +66,7 @@ class Misc(commands.Cog):
         if result is None:
             return
         else:
-            cursor.execute(f"SELECT msg FROM tentro WHERE guild_id = {member.guild.id}")
+            cursor.execute(f"SELECT msg FROM leavecmd WHERE guild_id = {member.guild.id}")
             result1 = cursor.fetchone()
             members = len(list(member.guild.members))
             mention = member.mention
@@ -189,7 +189,7 @@ class Misc(commands.Cog):
     @leave.command()
     async def channel(self, ctx, channel: discord.TextChannel):
         if ctx.message.author.guild_permissions.administrator:
-            db = sqlite3.connect('leavecmd.sqlite')
+            db = sqlite3.connect('tentro.sqlite')
             cursor = db.cursor()
             cursor.execute(f"SELECT channel_id FROM leavecmd WHERE guild_id = {ctx.guild.id}")
             result = cursor.fetchone()
@@ -210,7 +210,7 @@ class Misc(commands.Cog):
     @leave.command()
     async def text(self, ctx, *, text):
         if ctx.message.author.guild_permissions.administrator:
-            db = sqlite3.connect('leavecmd.sqlite')
+            db = sqlite3.connect('tentro.sqlite')
             cursor = db.cursor()
             cursor.execute(f"SELECT msg FROM leavecmd WHERE guild_id = {ctx.guild.id}")
             result = cursor.fetchone()
@@ -232,14 +232,6 @@ class Misc(commands.Cog):
             
 
         
-
-
-
-
-
-
-
-
 
 
 

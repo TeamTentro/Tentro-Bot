@@ -5,11 +5,13 @@ from discord import *
 from discord.ext import commands
 import os, random
 from pathlib import Path
-import sqlite3
+import sqlite3, json, asyncio
 
 intents = discord.Intents.default()
 
 intents.members = True
+
+
 
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
@@ -17,7 +19,8 @@ print(f"{cwd}\n-----")
 
 # Bot
 
-bot = commands.Bot(command_prefix="t!", intents = intents)
+
+bot = commands.Bot(command_prefix = "t!", intents = intents)
 print('Officially working!')
 
 
@@ -35,15 +38,19 @@ async def on_ready():
 async def on_message(message):
 
     if message.content =="!t":
-     await message.channel.send("This is the default prefix")
-    elif message.content == "hi":
-        await message.channel.send("Hello There")
+        await message.channel.send("This is the default prefix")
+    
 
     await bot.process_commands(message)
+         
 
 # C O M M A N D S
 
 @bot.remove_command("help")
+
+
+
+
 
 
 
@@ -56,7 +63,6 @@ async def _ActivatePremium(ctx):
 async def _Invite(ctx):
     embed = discord.Embed(title="Invite Tentro", description="Click [here](https://discord.com/oauth2/authorize?bot_id=861919315506495508&scope=bot&permissions=8589934591) to invite Tentro to your server!", colour=0xff0000)
     await ctx.channel.send(embed=embed)
-
 
 
 

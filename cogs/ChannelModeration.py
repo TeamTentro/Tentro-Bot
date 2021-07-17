@@ -1,5 +1,5 @@
 from discord.ext import commands
-from discord import Embed, Member, User, utils
+from discord import Embed, Member, User, channel, utils
 import asyncio, discord
 red = 0xff0000
 green = 0x34eb40
@@ -9,10 +9,18 @@ class Channel(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
-
     
-        
-
+    @commands.command(name="hide", aliases=["h"])
+    async def _hide(self, ctx, member: Member):
+        if ctx.author.guild_permissions.manage_messages:
+           channel = ctx.channel
+           guild = ctx.message.guild
+           await channel.set_permissions(target=member, view_channel = False)
+           embed = Embed(title='Success!', description=f"Hid {channel.mention} from {member.mention}. ", colour=red)
+           await ctx.send(embed=embed)
+        else:
+            embed = discord.Embed(title=f"You do not have the required permissions to do that!", colour=0xff0000)
+            await ctx.send(embed=embed, delete_after=5)
 
     @commands.command(name="createchannel", aliases=["createch"])
     async def _CreateChannel(self, ctx, name=None):

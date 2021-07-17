@@ -26,21 +26,24 @@ class Misc(commands.Cog):
         cursor = db.cursor()
         cursor.execute(f"SELECT channel_id FROM main WHERE guild_id = {member.guild.id}")
         result = cursor.fetchone()
-        mention = member.mention
-        user = member.name
+        
         if result is None:
             return
         else:
             cursor.execute(f"SELECT msg FROM tentro WHERE guild_id = {member.guild.id}")
             result1 = cursor.fetchone()
+            members = len(list(member.guild.members))
+            mention = member.mention
+            user = member.name
+            guild = member.guild
 
-            embed = Embed(color=red, description=f"Welcome to the discord server!")
+            embed = Embed(color=red, description=str(result1[0]).format(members=members, mention=mention, user=user, guild=guild))
             embed.set_thumbnail(url=f"{member.avatar_url}")
             embed.set_author(name=f"{member.name}", icon_url=f"{member.avatar_url}")
             embed.set_footer(text=f"{member.guild}", icon_url=f"{member.guild.icon_url}")         
             embed.timestamp = message.created_at
 
-            channel = self.bot.get_channel(id=int(result=[0]))
+            channel = self.bot.get_channel(id=int(result[0]))
 
             await channel.send(embed=embed)
 
@@ -107,7 +110,7 @@ class Misc(commands.Cog):
 
 
     @welcome.command()
-    async def extrachannel(self, ctx, channel: discord.TextChannel):
+    async def channel(self, ctx, channel: discord.TextChannel):
         if ctx.message.author.guild_permissions.administrator:
             db = sqlite3.connect('tentro.sqlite')
             cursor = db.cursor()
@@ -136,7 +139,7 @@ class Misc(commands.Cog):
             if result is None:
                 sql = ("INSERT INTO tentro(guild_id, msg) VALUES(?,?)")
                 val = (ctx.guild.id, text)
-                await ctx.send(f"Text has been set to {text}")
+                await ctx.send(f"Message has been set to {text}")
             elif result is not None:
                 sql = ("UPDATE tentro SET msg = ? WHERE guild_id = ?")
                 val = (text, ctx.guild.id)

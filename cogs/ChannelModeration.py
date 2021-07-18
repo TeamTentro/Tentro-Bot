@@ -10,6 +10,19 @@ class Channel(commands.Cog):
         self.bot = bot
 
     
+    @commands.command(name="show", aliases=["s"])
+    async def _show(self, ctx, member: Member):
+        if ctx.author.guild_permissions.manage_messages:
+           channel = ctx.channel
+           guild = ctx.message.guild
+           await channel.set_permissions(target=member, view_channel = True)
+           embed = Embed(title='Success!', description=f"Revealed {channel.mention} to {member.mention}. ", colour=red)
+           await ctx.send(embed=embed)
+        else:
+            embed = discord.Embed(title=f"You do not have the required permissions to do that!", colour=0xff0000)
+            await ctx.send(embed=embed, delete_after=5)
+    
+    
     @commands.command(name="hide", aliases=["h"])
     async def _hide(self, ctx, member: Member):
         if ctx.author.guild_permissions.manage_messages:

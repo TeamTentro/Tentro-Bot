@@ -49,7 +49,6 @@ class Info(commands.Cog):
         embed.add_field(name="Misc", value="`8ball`", inline=False)
         embed.add_field(name="System", value="`help, ping, invite, server`", inline=False)
         embed.add_field(name="Bot version:", value="v1.0", inline=False)
-        embed.add_field(name="Date released:", value="July 6th", inline=False)
         embed.add_field(name="Date released:", value="July 6th, 2021", inline=False)
         embed.set_footer(text="Still in progress!")
         embed.set_author(name=ctx.author.name)

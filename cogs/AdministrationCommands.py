@@ -1,8 +1,9 @@
 from operator import is_not, not_
 from discord.ext import commands
-from discord import Embed, Member, User, client, utils
+from discord import Embed, Member, User, client, message, utils
 import asyncio, discord
 from discord.ext.commands.errors import MissingPermissions
+import random
 
 
 red = 0xff0000
@@ -17,11 +18,7 @@ class Admin(commands.Cog):
     
     
     
-
-
    
-
-          
 
     @commands.command(name="mute", aliases=["m"])
     async def _Mute(self, ctx,  member: Member, time=None, *, reason=None):
@@ -76,7 +73,25 @@ class Admin(commands.Cog):
         else:
             await ctx.send("You dont have the required permissions to do that!", delete_after=5)
 
-            
+    @commands.command(name="giveaway", aliases=["gw"])
+    async def _Giveaway(self, ctx, time, *, prize):
+
+        author = ctx.author
+        embed = Embed(title=":tada:Giveaway:tada:", description = f"{author.mention} is giving away {prize}! The giveaway will end in {time}. To participate react to the message with :tada:", color = green)
+        embed.set_footer(text=":four_leaf_clover:Good luck:four_leaf_clover:")
+        embed.timestamp = ctx.message.created_at
+        msg = await ctx.send(embed=embed)
+        await msg.add_reaction(':tada:')
+        await msg.pin()
+        duration = float(time[0: -1]) * time_convert[time[-1]]
+        await asyncio.sleep(duration)
+        await ctx.fetch_message(msg)
+        await asyncio.sleep(duration)
+        users = await msg.reactions[0].users().flatten()
+        print(users)
+
+        winner = random.choice(users)
+        embed = Embed(title = f"{winner.mention} has won the giveaway!")
 
     @commands.command(name="unban", aliases=["ub", "bebis4u"])
     async def _Unban(self, ctx, *, user: User):

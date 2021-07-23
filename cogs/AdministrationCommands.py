@@ -1,6 +1,6 @@
 from operator import is_not, not_
 from discord.ext import commands
-from discord import Embed, Member, User, client, message, utils
+from discord import Embed, Member, User, channel, client, guild, message, utils
 import asyncio, discord
 from discord.ext.commands.errors import MissingPermissions
 import random
@@ -75,24 +75,30 @@ class Admin(commands.Cog):
 
     @commands.command(name="giveaway", aliases=["gw"])
     async def _Giveaway(self, ctx, time, *, prize):
-
+        channel = ctx.channel
         author = ctx.author
         embed = Embed(title="🎉Giveaway🎉", description = f"{author.mention} is giving away {prize}! The giveaway will end in {time}. To participate react to the message with 🎉", color = green)
-        embed.set_footer(text="🍀:Good luck🍀:")
+        embed.set_footer(text="🍀Good luck🍀")
         embed.timestamp = ctx.message.created_at
         msg = await ctx.send(embed=embed)
         await msg.add_reaction('🎉')
         await msg.pin()
         duration = float(time[0: -1]) * time_convert[time[-1]]
         await asyncio.sleep(duration)
-        await ctx.fetch_message(msg)
-        await asyncio.sleep(duration)
-        users = await msg.reactions[0].users().flatten()
-        print(users)
+        new_msg = await channel.fetch_message(msg.id)
+        users = await new_msg.reactions[0].users().flatten()
+        try:
+            users.pop(users.index(ctx.message.author.id))
+        except ValueError:
+            pass
 
         winner = random.choice(users)
-        embed = Embed(title = f"{winner.mention} has won the giveaway!")
+        embedwin = Embed(title = f"🎉Winner🎉", description = f"{winner.mention} has won the giveaway!")
+        await ctx.send(embed=embedwin)
+       
 
+
+       
     @commands.command(name="unban", aliases=["ub", "bebis4u"])
     async def _Unban(self, ctx, *, user: User):
         member = Member

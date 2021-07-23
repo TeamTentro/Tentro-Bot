@@ -1,7 +1,8 @@
 from operator import is_not, not_
 from discord.ext import commands
-from discord import Embed, Member, User, channel, client, colour, guild, message, utils
+from discord import Embed, Member, User, channel, client, colour, guild, message, user, utils
 import asyncio, discord
+from discord.ext.commands import bot
 from discord.ext.commands.errors import MissingPermissions
 import random
 
@@ -72,6 +73,8 @@ class Admin(commands.Cog):
             
         else:
             await ctx.send("You dont have the required permissions to do that!", delete_after=5)
+  
+
 
     @commands.command(name="giveaway", aliases=["gw"])
     async def _Giveaway(self, ctx, time, *, prize):
@@ -91,11 +94,20 @@ class Admin(commands.Cog):
             users.pop(users.index(ctx.message.author.id))
         except ValueError:
             pass
-
+       
+        for user in users:
+           if user.bot:
+        #remove the user from the users array  if its a bot
+             users.remove(user)
         winner = random.choice(users)
+
+
         embedwin = Embed(title = f"🎉Winner🎉", description = f"{winner.mention} has won the giveaway!", color = green)
         await ctx.send(embed=embedwin)
-       
+        await msg.unpin()
+        winnerdm = Embed(title = f"🎉Congratulations🎉", description =  f"You won a giveaway in {ctx.guild.name}! Your prize is: ``{prize}``. Contact {ctx.author} for more info.", color = green)
+        await winner.send(embed = winnerdm)
+        
 
 
        

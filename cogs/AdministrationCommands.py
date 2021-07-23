@@ -1,6 +1,6 @@
 from operator import is_not, not_
 from discord.ext import commands
-from discord import Embed, Member, User, channel, client, guild, message, utils
+from discord import Embed, Member, User, channel, client, colour, guild, message, utils
 import asyncio, discord
 from discord.ext.commands.errors import MissingPermissions
 import random
@@ -77,7 +77,7 @@ class Admin(commands.Cog):
     async def _Giveaway(self, ctx, time, *, prize):
         channel = ctx.channel
         author = ctx.author
-        embed = Embed(title="🎉Giveaway🎉", description = f"{author.mention} is giving away {prize}! The giveaway will end in {time}. To participate react to the message with 🎉", color = green)
+        embed = Embed(title="🎉Giveaway🎉", description = f"{author.mention} is giving away ``{prize}``! The giveaway will end in {time}. To participate react to the message with 🎉", color = green)
         embed.set_footer(text="🍀Good luck🍀")
         embed.timestamp = ctx.message.created_at
         msg = await ctx.send(embed=embed)
@@ -93,7 +93,7 @@ class Admin(commands.Cog):
             pass
 
         winner = random.choice(users)
-        embedwin = Embed(title = f"🎉Winner🎉", description = f"{winner.mention} has won the giveaway!")
+        embedwin = Embed(title = f"🎉Winner🎉", description = f"{winner.mention} has won the giveaway!", color = green)
         await ctx.send(embed=embedwin)
        
 

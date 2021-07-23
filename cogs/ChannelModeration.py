@@ -80,25 +80,23 @@ class Channel(commands.Cog):
 
 
     @commands.command(name="slowmode", aliases=["sm"])
-    async def _Slowmode(self, ctx, seconds : int):
+    async def _Slowmode(self, ctx, seconds : int = None):
+        smtime = ctx.channel.slowmode_delay
         if ctx.author.guild_permissions.manage_messages:
-            await ctx.channel.edit(slowmode_delay=seconds)
-            embed = discord.Embed(title=f"Slowmode set to {seconds}s.", colour=0xff0000)
-            await ctx.send(embed=embed)
+            if seconds == None:
+               embed = discord.Embed(title=f"The current slowmode is {smtime}s.", colour=0xff0000)
+               await ctx.send(embed=embed)
+            else:
+               await ctx.channel.edit(slowmode_delay=seconds)
+               embed = discord.Embed(title=f"Slowmode set to {seconds}s.", colour=0xff0000)
+               await ctx.send(embed=embed)
         else:
             embed = discord.Embed(title=f"You do not have the required permissions to do that!", colour=0xff0000)
             await ctx.send(embed=embed, delete_after=5)
-
-    @commands.command(name="slowmodecheck", aliases=["checksm"])
-    async def _SlowmodeCheck(self, ctx):
-        seconds = ctx.channel.slowmode_delay
-        if ctx.author.guild_permissions.manage_messages:
-            embed = discord.Embed(title=f"Slowmode is {seconds}s.", colour=0xff0000)
-            await ctx.send(embed=embed)
-        else:
-            embed = discord.Embed(title=f"You do not have the required permissions to do that!", color=0xff0000)
-            await ctx.send(embed=embed, delete_after=4)
-
+            if int == 0:
+               embed = discord.Embed(title=f"Slowmode succesfully reset.", colour=0xff0000)
+               await ctx.send(embed=embed)
+   
 
 
 def setup(bot):

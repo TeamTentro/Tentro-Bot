@@ -77,11 +77,11 @@ class Admin(commands.Cog):
     async def _Giveaway(self, ctx, time, *, prize):
 
         author = ctx.author
-        embed = Embed(title=":tada:Giveaway:tada:", description = f"{author.mention} is giving away {prize}! The giveaway will end in {time}. To participate react to the message with :tada:", color = green)
-        embed.set_footer(text=":four_leaf_clover:Good luck:four_leaf_clover:")
+        embed = Embed(title="🎉Giveaway🎉", description = f"{author.mention} is giving away {prize}! The giveaway will end in {time}. To participate react to the message with 🎉", color = green)
+        embed.set_footer(text="🍀:Good luck🍀:")
         embed.timestamp = ctx.message.created_at
         msg = await ctx.send(embed=embed)
-        await msg.add_reaction(':tada:')
+        await msg.add_reaction('🎉')
         await msg.pin()
         duration = float(time[0: -1]) * time_convert[time[-1]]
         await asyncio.sleep(duration)

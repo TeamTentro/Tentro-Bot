@@ -21,7 +21,7 @@ class Admin(commands.Cog):
     
    
 
-    @commands.command(name="mute", aliases=["m"])
+    @commands.command(name="mute", aliases=["m, sus"])
     async def _Mute(self, ctx,  member: Member, time=None, *, reason=None):
 
         if ctx.author.guild_permissions.manage_messages and member.guild_permissions!=ctx.author.guild_permissions:

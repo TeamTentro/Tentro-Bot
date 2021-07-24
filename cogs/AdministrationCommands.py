@@ -97,14 +97,21 @@ class Admin(commands.Cog):
        
         for user in users:
            if user.bot:
-        #remove the user from the users array  if its a bot
              users.remove(user)
         winner = random.choice(users)
-
-
+        
+        #anounces the winner
         embedwin = Embed(title = f"🎉Winner🎉", description = f"{winner.mention} has won the giveaway!", color = green)
         await ctx.send(embed=embedwin)
+        #edits the old message
         await msg.unpin()
+        afterembed = Embed(title="🎉Giveaway🎉", color = green)
+        afterembed.add_field(name=f"Winner:", value=f"{winner.mention}", inline=False)
+        afterembed.add_field(name=f"Hosted by:", value=f"{author.mention}", inline=False)
+        afterembed.set_footer(text="The giveaway has ended")
+        afterembed.timestamp = ctx.message.created_at
+        await msg.edit(embed=afterembed)
+        #dms the winner
         winnerdm = Embed(title = f"🎉Congratulations🎉", description =  f"You won a giveaway in {ctx.guild.name}! Your prize is: ``{prize}``. Contact {ctx.author} for more info.", color = green)
         await winner.send(embed = winnerdm)
         

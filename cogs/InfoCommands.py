@@ -1,5 +1,5 @@
 from discord.ext import commands
-from discord import Embed, Member, User, utils
+from discord import Embed, Member, User, member, utils
 import asyncio
 import discord
 from discord.ext.commands import bot
@@ -59,20 +59,34 @@ class Info(commands.Cog):
 
 
     @commands.command(name="help")
-    async def _Help(self, ctx):
-        embed = discord.Embed(title="These are all the commands", color=0xFF0000)
-        embed.add_field(name="Moderation", value="`t!clear, t!ban, t!kick, t!mutet, !timedmute, t!unmute, t!ban, t!unban, t!slowmode, t!slowmodecheck, t!slowmodereset, t!createchannel, t!deletechannel, t!giverole, t!takerole, t!nickname, t!lockdown`", inline=False)
-        embed.add_field(name="Information", value="`avatar, servername`", inline=False)
-        embed.add_field(name="Misc", value="`8ball`", inline=False)
-        embed.add_field(name="System", value="`help, ping, invite, server`", inline=False)
-        embed.add_field(name="Bot version:", value="v1.0", inline=False)
-        embed.add_field(name="Date released:", value="July 6th, 2021", inline=False)
-        embed.set_footer(text="Still in progress!")
-        embed.set_author(name=ctx.author.name)
-        embed.timestamp = ctx.message.created_at
+    async def _Help(self, ctx, dm = None):
+        author = ctx.author
+        if dm == None or dm != "-dm":
+          embed = discord.Embed(title="These are all the commands", color=0xFF0000)
+          embed.add_field(name="Moderation", value="`t!clear, t!ban, t!kick, t!mutet, !timedmute, t!unmute, t!ban, t!unban, t!slowmode, t!slowmodecheck, t!slowmodereset, t!createchannel, t!deletechannel, t!giverole, t!takerole, t!nickname, t!lockdown`", inline=False)
+          embed.add_field(name="Information", value="`avatar, servername`", inline=False)
+          embed.add_field(name="Misc", value="`8ball`", inline=False)
+          embed.add_field(name="System", value="`help, ping, invite, server`", inline=False)
+          embed.add_field(name="Bot version:", value="v1.0", inline=False)
+          embed.add_field(name="Date released:", value="July 6th, 2021", inline=False)
+          embed.set_footer(text="Still in progress!")
+          embed.set_author(name=ctx.author.name)
+          embed.timestamp = ctx.message.created_at
 
-        await ctx.send(embed=embed)
-        
+          await ctx.send(embed=embed)
+        elif dm == "-dm":
+          embed1 = discord.Embed(title="These are all the commands", color=0xFF0000)
+          embed1.add_field(name="Moderation", value="`t!clear, t!ban, t!kick, t!mutet, !timedmute, t!unmute, t!ban, t!unban, t!slowmode, t!slowmodecheck, t!slowmodereset, t!createchannel, t!deletechannel, t!giverole, t!takerole, t!nickname, t!lockdown`", inline=False)
+          embed1.add_field(name="Information", value="`avatar, servername`", inline=False)
+          embed1.add_field(name="Misc", value="`8ball`", inline=False)
+          embed1.add_field(name="System", value="`help, ping, invite, server`", inline=False)
+          embed1.add_field(name="Bot version:", value="v1.0", inline=False)
+          embed1.add_field(name="Date released:", value="July 6th, 2021", inline=False)
+          embed1.set_footer(text="Still in progress!")
+          embed1.set_author(name=ctx.author.name)
+          embed1.timestamp = ctx.message.created_at
+          await author.send(embed=embed1)
+
 
   
 

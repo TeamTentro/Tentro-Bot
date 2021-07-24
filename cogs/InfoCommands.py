@@ -3,9 +3,11 @@ from discord import Embed, Member, User, utils
 import asyncio
 import discord
 from discord.ext.commands import bot
+import time
+import datetime
 red = 0xff0000
 green = 0x34eb40
-
+start_time = time.time()
 
 class Info(commands.Cog):
 
@@ -39,6 +41,21 @@ class Info(commands.Cog):
         embed = discord.Embed(title="Our amazing server", description = "Click [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ) to join our server!", colour=0xff0000)
         await ctx.channel.send(embed=embed)
     
+
+    
+    @commands.command(name="uptime", aliases=["ut"])
+    async def _Uptime(self, ctx):
+        current_time = time.time()
+        difference = int(round(current_time - start_time))
+        text = str(datetime.timedelta(seconds=difference))
+        embed = discord.Embed(title="Uptime", description=f"Tentro has been running for {text}" ,colour=red)
+       
+       
+        try:
+            await ctx.send(embed=embed)
+        except discord.HTTPException:
+            uptime = Embed(title="Uptime", description=f"Tentro has been running for {text}", colour=red)
+            await ctx.send(embed=uptime)
 
 
     @commands.command(name="help")

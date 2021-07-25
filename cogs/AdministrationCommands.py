@@ -202,7 +202,7 @@ class Admin(commands.Cog):
         guild = ctx.guild
         user = User
 
-        if ctx.author.guild_permissions.administrator and member.guild_permissions!=ctx.author.guild_permissions: ## and not same perms FIX
+        if ctx.author.guild_permissions.ban_members and member.guild_permissions!=ctx.author.guild_permissions: ## and not same perms FIX
             if time==None: 
                 await member.ban(reason=reason) 
                 embed = Embed(title="Banned", description=f"{member.mention} has been banned from the server indefinitely.", colour=red)

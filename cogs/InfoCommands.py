@@ -76,7 +76,7 @@ class Info(commands.Cog):
           await ctx.send(embed=embed)
         elif dm == "-dm":
           embed1 = discord.Embed(title="These are all the commands", color=0xFF0000)
-          embed1.add_field(name="Moderation", value="`t!clear, t!ban, t!kick, t!mutet, !timedmute, t!unmute, t!ban, t!unban, t!slowmode, t!slowmodecheck, t!slowmodereset, t!createchannel, t!deletechannel, t!giverole, t!takerole, t!nickname, t!lockdown`", inline=False)
+          embed1.add_field(name="Moderation", value="`t!clear, t!ban, t!kick, t!mute, !timedmute, t!unmute, t!ban, t!unban, t!slowmode, t!slowmodecheck, t!slowmodereset, t!createchannel, t!deletechannel, t!giverole, t!takerole, t!nickname, t!lockdown`", inline=False)
           embed1.add_field(name="Information", value="`avatar, servername`", inline=False)
           embed1.add_field(name="Misc", value="`8ball`", inline=False)
           embed1.add_field(name="System", value="`help, ping, invite, server`", inline=False)

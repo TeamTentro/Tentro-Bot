@@ -61,7 +61,7 @@ async def _ActivatePremium(ctx):
 
 @bot.command(name="invite", aliases=["inv"])
 async def _Invite(ctx):
-    embed = discord.Embed(title="Invite Tentro", description="Click [here](https://discord.com/oauth2/authorize?bot_id=861919315506495508&scope=bot&permissions=8589934591) to invite Tentro to your server!", colour=0xff0000)
+    embed = discord.Embed(title="Invite Tentro", description="Click [here](https://discord.com/oauth2/authorize?client_id=861919315506495508&permissions=8&redirect_uri=https%3A%2F%2Fdiscord.com%2Foauth2%2Fauthorize%3Fclient_id%3D861919315506495508%26scope%3Dbot%26permissions%3D8589934591&scope=bot) to invite Tentro to your server!", colour=0xff0000)
     await ctx.channel.send(embed=embed)
 
 

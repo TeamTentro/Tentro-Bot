@@ -76,49 +76,7 @@ class Admin(commands.Cog):
   
 
 
-    @commands.command(name="giveaway", aliases=["gw"])
-    async def _Giveaway(self, ctx, time, *, prize):
-        if ctx.author.guild_permissions.administrator:
-          channel = ctx.channel
-          author = ctx.author
-          embed = Embed(title="🎉Giveaway🎉", description = f"{author.mention} is giving away ``{prize}``! The giveaway will end in {time}. To participate react to the message with 🎉", color = green)
-          embed.set_footer(text="🍀Good luck🍀")
-          embed.timestamp = ctx.message.created_at
-          msg = await ctx.send(embed=embed)
-          await msg.add_reaction('🎉')
-          await msg.pin()
-          duration = float(time[0: -1]) * time_convert[time[-1]]
-          await asyncio.sleep(duration)
-          new_msg = await channel.fetch_message(msg.id)
-          users = await new_msg.reactions[0].users().flatten()
-          try:
-              users.pop(users.index(ctx.message.author.id))
-          except ValueError:
-              pass
-       
-          for user in users:
-             if user.bot:
-               users.remove(user)
-          winner = random.choice(users)
-        
-          #anounces the winner
-          embedwin = Embed(title = f"🎉Winner🎉", description = f"{winner.mention} has won the giveaway!", color = green)
-          await ctx.send(embed=embedwin)
-          #edits the old message
-          await msg.unpin()
-          afterembed = Embed(title="🎉Giveaway🎉", color = green)
-          afterembed.add_field(name=f"Winner:", value=f"{winner.mention}", inline=False)
-          afterembed.add_field(name=f"Hosted by:", value=f"{author.mention}", inline=False)
-          afterembed.set_footer(text="The giveaway has ended")
-          afterembed.timestamp = ctx.message.created_at
-          await msg.edit(embed=afterembed)
-          #dms the winner
-          winnerdm = Embed(title = f"🎉Congratulations🎉", description =  f"You won a giveaway in {ctx.guild.name}! Your prize is: ``{prize}``. Contact {ctx.author} for more info.", color = green)
-          await winner.send(embed = winnerdm)
-        else:
-            embed = Embed(title="You do not have the required permissions to do that!", colour=red)
-            await ctx.send(embed=embed, delete_after=5)
-
+    
 
 
        
@@ -187,8 +145,9 @@ class Admin(commands.Cog):
                 await member.send(embed=embed)
             except:()
 
-        embed = Embed(title="You do not have the required permissions to do that!", colour=red)
-        await ctx.send(embed=embed, delete_after=5)
+        else:
+            embed = Embed(title="You do not have the required permissions to do that!", colour=red)
+            await ctx.send(embed=embed, delete_after=5)
             
 
             # Not needed
@@ -202,7 +161,9 @@ class Admin(commands.Cog):
         guild = ctx.guild
         user = User
 
-        if ctx.author.guild_permissions.ban_members and member.guild_permissions!=ctx.author.guild_permissions: ## and not same perms FIX
+        if ctx.author.guild_permissions.ban_members or ctx.author.guild_permissions.administrator and member.guild_permissions!=ctx.author.guild_permissions: ## and not same perms FIX
+
+        
             if time==None: 
                 await member.ban(reason=reason) 
                 embed = Embed(title="Banned", description=f"{member.mention} has been banned from the server indefinitely.", colour=red)
@@ -212,7 +173,7 @@ class Admin(commands.Cog):
                 await ctx.send(embed=embed)  
                 embed = discord.Embed(title=f"You have been banned from {guild.name}\nReason: {reason}\nTime period: indefinitely", colour=red)
                 try: 
-                   await member.send(embed=embed)
+                    await member.send(embed=embed)
                 except:()
         
 
@@ -237,9 +198,11 @@ class Admin(commands.Cog):
                 duration = float(time[0: -1]) * time_convert[time[-1]]
                 await asyncio.sleep(duration)
                 await ctx.guild.unban(user=member)
+        else:
+            embed = Embed(title="You do not have the required permissions to do that!", colour=red)
+            await ctx.send(embed=embed, delete_after=5)
 
-        embed = Embed(title="You do not have the required permissions to do that!", colour=red)
-        await ctx.send(embed=embed, delete_after=5)
+        
             
  
 

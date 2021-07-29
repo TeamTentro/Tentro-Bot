@@ -136,7 +136,7 @@ class Misc(commands.Cog):
 
     @commands.group(invoke_without_command=True)
     async def welcome(self, ctx):
-        await ctx.send('Setup commands:\nwelcome channel <channel>\nwelcome text <message>')
+        await ctx.send('Setup commands:\nwelcome channel <channel>\nwelcome message <message>')
 
 
     @welcome.command()
@@ -160,7 +160,7 @@ class Misc(commands.Cog):
             db.close()
 
     @welcome.command()
-    async def text(self, ctx, *, text):
+    async def message(self, ctx, *, text):
         if ctx.message.author.guild_permissions.administrator:
             db = sqlite3.connect('tentro.sqlite')
             cursor = db.cursor()
@@ -227,6 +227,52 @@ class Misc(commands.Cog):
             cursor.close()
             db.close()
             print('hello world')
+
+
+
+
+    @commands.command(name="giveaway", aliases=["gw"])
+    async def _Giveaway(self, ctx, time, *, prize):
+        if ctx.author.guild_permissions.administrator:
+          channel = ctx.channel
+          author = ctx.author
+          embed = Embed(title="🎉Giveaway🎉", description = f"{author.mention} is giving away ``{prize}``! The giveaway will end in {time}. To participate react to the message with 🎉", color = green)
+          embed.set_footer(text="🍀Good luck🍀")
+          embed.timestamp = ctx.message.created_at
+          msg = await ctx.send(embed=embed)
+          await msg.add_reaction('🎉')
+          await msg.pin()
+          duration = float(time[0: -1]) * time_convert[time[-1]]
+          await asyncio.sleep(duration)
+          new_msg = await channel.fetch_message(msg.id)
+          users = await new_msg.reactions[0].users().flatten()
+          try:
+              users.pop(users.index(ctx.message.author.id))
+          except ValueError:
+              pass
+       
+          for user in users:
+             if user.bot:
+               users.remove(user)
+          winner = random.choice(users)
+        
+          #anounces the winner
+          embedwin = Embed(title = f"🎉Winner🎉", description = f"{winner.mention} has won the giveaway!", color = green)
+          await ctx.send(embed=embedwin)
+          #edits the old message
+          await msg.unpin()
+          afterembed = Embed(title="🎉Giveaway🎉", color = green)
+          afterembed.add_field(name=f"Winner:", value=f"{winner.mention}", inline=False)
+          afterembed.add_field(name=f"Hosted by:", value=f"{author.mention}", inline=False)
+          afterembed.set_footer(text="The giveaway has ended")
+          afterembed.timestamp = ctx.message.created_at
+          await msg.edit(embed=afterembed)
+          #dms the winner
+          winnerdm = Embed(title = f"🎉Congratulations🎉", description =  f"You won a giveaway in {ctx.guild.name}! Your prize is: ``{prize}``. Contact {ctx.author} for more info.", color = green)
+          await winner.send(embed = winnerdm)
+        else:
+            embed = Embed(title="You do not have the required permissions to do that!", colour=red)
+            await ctx.send(embed=embed, delete_after=5)
 
     
             

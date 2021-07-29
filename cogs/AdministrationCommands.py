@@ -21,10 +21,10 @@ class Admin(commands.Cog):
     
    
 
-    @commands.command(name="mute", aliases=["m", "sus"])
+    @commands.command(name="mute", aliases=["m"])
     async def _Mute(self, ctx,  member: Member, time=None, *, reason=None):
 
-        if ctx.author.guild_permissions.manage_messages and member.guild_permissions!=ctx.author.guild_permissions:
+        if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator and ctx.author.guild_permissions!=ctx.member.guild_permissions:
             guild = ctx.guild
             mutedRole = utils.get(guild.roles, name="Muted")
             if time==None:
@@ -67,10 +67,7 @@ class Admin(commands.Cog):
                 await member.remove_roles(muted_role)
 
                 embed = Embed(title=f"You have been unmuted in: {guild.name}.", colour=red)
-                await member.send(embed=embed)
-          
-            
-            
+                await member.send(embed=embed)                     
         else:
             await ctx.send("You dont have the required permissions to do that!", delete_after=5)
   
@@ -84,7 +81,7 @@ class Admin(commands.Cog):
     async def _Unban(self, ctx, *, user: User):
         member = Member
 
-        if ctx.author.guild_permissions.administrator and member.guild_permissions!=ctx.author.guild_permissions:
+        if ctx.author.guild_permissions.administrator:
             await ctx.guild.unban(user=user)
             embed = Embed(title="Success!", description=f"{user} has been sucessfully unbanned!", colour=red)
             await ctx.send(embed=embed)
@@ -95,7 +92,7 @@ class Admin(commands.Cog):
     @commands.command(description="Unmutes a specified user.")
     async def unmute(self, ctx, member: Member):
 
-        if ctx.author.guild_permissions.manage_messages and member.guild_permissions!=ctx.author.guild_permissions:
+        if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator and ctx.member.guild_permissions!=ctx.author.guild_permissions:
             mutedRole = utils.get(ctx.guild.roles, name="Muted")
             await member.remove_roles(mutedRole)
 
@@ -112,7 +109,7 @@ class Admin(commands.Cog):
 
     @commands.command(name="warn")
     async def warn(self, ctx, member: Member, *, reason=None):
-        if ctx.author.guild_permissions.manage_messages and member.guild_permissions!=ctx.author.guild_permissions:
+        if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator and ctx.author.guild_permissions!=ctx.member.guild_permissions:
             embed = Embed(title="Warn", description=f"{member.mention} has been succesfully warned.", color=red )
             embed.set_footer(text="Warn")
             embed.timestamp = ctx.message.created_at
@@ -131,8 +128,7 @@ class Admin(commands.Cog):
     @commands.command(name="kick", aliases=["k", "yeet"])
     async def kick(self, ctx, member: Member, *, reason=None):
         guild = ctx.guild
-
-        if ctx.author.guild_permissions.kick_members and member.guild_permissions!=ctx.author.guild_permissions:
+        if ctx.author.guild_permissions.kick_members or ctx.author.guild_permissions.administrator:
             
             await member.kick(reason=reason)
             embed = Embed(title="Kicked", description=f"{member.mention} has been kicked from the server.", colour=red)
@@ -143,11 +139,11 @@ class Admin(commands.Cog):
             embed = discord.Embed(title=f"You have been kicked from {guild.name}\nReason: {reason}", colour=red)
             try:
                 await member.send(embed=embed)
-            except:()
+            except:
+                pass
+            
 
-        else:
-            embed = Embed(title="You do not have the required permissions to do that!", colour=red)
-            await ctx.send(embed=embed, delete_after=5)
+        
             
 
             # Not needed
@@ -161,7 +157,7 @@ class Admin(commands.Cog):
         guild = ctx.guild
         user = User
 
-        if ctx.author.guild_permissions.ban_members or ctx.author.guild_permissions.administrator and member.guild_permissions!=ctx.author.guild_permissions: ## and not same perms FIX
+        if ctx.author.guild_permissions.ban_members or ctx.author.guild_permissions.administrator and ctx.author.guild_permissions!=ctx.member.guild_permissions:
 
         
             if time==None: 
@@ -174,7 +170,8 @@ class Admin(commands.Cog):
                 embed = discord.Embed(title=f"You have been banned from {guild.name}\nReason: {reason}\nTime period: indefinitely", colour=red)
                 try: 
                     await member.send(embed=embed)
-                except:()
+                except:
+                    pass
         
 
 
@@ -203,11 +200,7 @@ class Admin(commands.Cog):
             await ctx.send(embed=embed, delete_after=5)
 
         
-            
- 
-
-
-            # Not needed
+           # Not needed
             #embed = Embed(title = (f"You have been banned from: {ctx.guild.name}.\n**Reason:** {reason}."), colour=red)
             #await member.send(embed=embed)
         

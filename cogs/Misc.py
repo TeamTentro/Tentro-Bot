@@ -10,6 +10,8 @@ import os, random
 from pathlib import Path
 import sqlite3
 
+time_convert = {"s":1, "m":60, "h":3600,"d":86400}
+
 red = 0xff0000
 green = 0x34eb40
 
@@ -139,8 +141,8 @@ class Misc(commands.Cog):
         await ctx.send('Setup commands:\nwelcome channel <channel>\nwelcome message <message>')
 
 
-    @welcome.command()
-    async def channel(self, ctx, channel: discord.TextChannel):
+    @welcome.command(name='channel')
+    async def _channel(self, ctx, channel: discord.TextChannel):
         if ctx.message.author.guild_permissions.administrator:
             db = sqlite3.connect('tentro.sqlite')
             cursor = db.cursor()

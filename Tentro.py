@@ -50,15 +50,6 @@ async def on_message(message):
 
 
 
-
-
-
-
-@bot.command(name="activate_premium", aliases=["ap"])
-async def _ActivatePremium(ctx):
-    embed = discord.Embed(title="Premium", description="Click here [https://discord.com/oauth2/authorize?bot_id=861919315506495508&scope=bot&permissions=8589934591](https://tenor.com/view/stick-bug-stick-bugged-bug-dancing-bug-dancing-gif-18059923) to activate premium! You will get redirected to invite the premium version of the bot. Don't forget to give it the perms!", colour=discord.Color(0xff0000))
-    await ctx.channel.send(embed=embed)
-
 @bot.command(name="invite", aliases=["inv"])
 async def _Invite(ctx):
     embed = discord.Embed(title="Invite Tentro", description="Click [here](https://discord.com/oauth2/authorize?bot_id=861919315506495508&scope=bot&permissions=8589934591) to invite Tentro to your server!", colour=0xff0000)

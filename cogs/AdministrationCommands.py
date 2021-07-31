@@ -24,7 +24,7 @@ class Admin(commands.Cog):
     @commands.command(name="mute", aliases=["m"])
     async def _Mute(self, ctx,  member: Member, time=None, *, reason=None):
 
-        if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator and ctx.author.guild_permissions!=ctx.member.guild_permissions:
+        if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator:
             guild = ctx.guild
             mutedRole = utils.get(guild.roles, name="Muted")
             if time==None:
@@ -192,7 +192,7 @@ class Admin(commands.Cog):
                     await ctx.send("Member is not in any mutual server or has dm's blocked!", delete_after=4)
 
                 
-                duration = float(time[0: -1]) * time_convert[time[-1]]
+                duration = int(time[0: -1]) * time_convert[time[-1]]
                 await asyncio.sleep(duration)
                 await ctx.guild.unban(user=member)
         else:

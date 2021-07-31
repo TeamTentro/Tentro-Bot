@@ -115,7 +115,7 @@ class Misc(commands.Cog):
 
     @commands.command(name='say')
     async def say(self, ctx, *, text):
-        if ctx.author.guild_permissions.administrator:
+        if ctx.author.guild_permissions.kick_members:
         
             message = ctx.message
             await message.delete()           
@@ -279,6 +279,15 @@ class Misc(commands.Cog):
         else:
             embed = Embed(title="You do not have the required permissions to do that!", colour=red)
             await ctx.send(embed=embed, delete_after=5)
+
+    @commands.command(name='emoji', aliases=['em'])
+    async def emoji(self, ctx):
+        self.bot.get_emoji(id=Emoji.id)
+        await ctx.send(discord.Emoji.url)
+
+
+    
+
 
     
             

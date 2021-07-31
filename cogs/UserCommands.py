@@ -6,6 +6,10 @@ from discord.ext.commands import bot
 red = 0xff0000
 green = 0x34eb40
 
+intents = discord.Intents.default()
+
+intents.members = True
+
 class User(commands.Cog):
 
     def __init__(self, bot):
@@ -14,7 +18,7 @@ class User(commands.Cog):
 
 
     @commands.Cog.listener()
-    async def on_member_join(self, member):
+    async def on_member_join(self, member : Member):
         db = sqlite3.connect('tentro.sqlite')
         cursor = db.cursor()
         cursor.execute(f"SELECT role_id FROM rolejoin WHERE guild_id = {member.guild.id}")
@@ -23,17 +27,12 @@ class User(commands.Cog):
         if result is None:
             return
         else:
-                  
-            role = member.guild.get_role(f"SELECT role_id FROM rolejoin") 
+
+            role = member.guild.get_role(f"SELECT role_id FROM rolejoin WHERE guild_id = {member.guild.id}")
             await member.add_roles(role)
 
 
-            
-        
-            
-
-
-  
+             
 
     @commands.command(name="nickname", aliases=["nick"])
     async def _Nickname(self, ctx, member: discord.Member, *,nick):
@@ -78,7 +77,7 @@ class User(commands.Cog):
         await ctx.send('Setup commands:\nrolejoin role <role.id> or <role.mention>')
 
     @rolejoin.command()
-    async def role(self, ctx, *, role):
+    async def role(self, ctx, *, role: discord.Role):
         if ctx.message.author.guild_permissions.administrator:
             db = sqlite3.connect('tentro.sqlite')
             cursor = db.cursor()

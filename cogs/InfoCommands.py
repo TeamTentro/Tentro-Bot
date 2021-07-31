@@ -38,7 +38,7 @@ class Info(commands.Cog):
 
     @commands.command(name="server")
     async def _Server(self, ctx):
-        embed = discord.Embed(title="Our amazing server", description = "Click [here](https://www.youtube.com/watch?v=dQw4w9WgXcQ) to join our server!", colour=0xff0000)
+        embed = discord.Embed(title="Our amazing server", description = "Click [here](https://discord.gg/86g5WPjF) to join our server!", colour=0xff0000)
         await ctx.channel.send(embed=embed)
     
 

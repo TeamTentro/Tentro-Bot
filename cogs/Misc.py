@@ -23,7 +23,9 @@ class Misc(commands.Cog):
 
     def __init__(self, bot): 
         self.bot = bot
+    
 
+   
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -160,6 +162,8 @@ class Misc(commands.Cog):
             db.commit()
             cursor.close()
             db.close()
+
+    
 
     @welcome.command()
     async def message(self, ctx, *, text):

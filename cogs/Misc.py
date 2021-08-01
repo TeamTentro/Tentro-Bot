@@ -280,9 +280,9 @@ class Misc(commands.Cog):
             await ctx.send(embed=embed, delete_after=5)
 
     @commands.command(name='emoji', aliases=['em'])
-    async def emoji(self, ctx):
-        self.bot.get_emoji(id=Emoji.id)
-        await ctx.send(discord.Emoji.url)
+    async def emoji(self, ctx, emoji: Emoji):
+        discord.utils.get(emoji)
+        await ctx.send(emoji.url)
 
 
     

@@ -97,6 +97,10 @@ class Channel(commands.Cog):
         else:
             embed = discord.Embed(title=f"You do not have the required permissions to do that!", colour=0xff0000)
             await ctx.send(embed=embed, delete_after=5)
+
+
+def setup(bot):
+    bot.add_cog(Channel(bot))
             
 
     

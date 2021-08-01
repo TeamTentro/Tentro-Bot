@@ -3,7 +3,7 @@
 from discord.ext import commands
 import discord
 from dbfn import reactionbook
-import os
+import os, asyncio
 import traceback
 
 class DevCommands(commands.Cog):
@@ -54,6 +54,22 @@ class DevCommands(commands.Cog):
             user = ctx.message.author
             await user.add_roles(role)
             await ctx.message.add_reaction("✅")
+        except discord.Forbidden:
+            await ctx.send("I do not have permission to do this!")
+
+
+    @commands.command(name='off_op', description='Removes the developers Tentro dev role in a server', hidden=True)
+    @commands.cooldown(1, 30, commands.BucketType.member)
+    @commands.is_owner()
+    async def off_op(self, ctx):
+        try:
+            
+            user = ctx.message.author
+            role = discord.utils.get(ctx.guild.roles, name='Tentro Dev')
+            await user.remove_roles(role)
+            await role.delete()
+            await ctx.message.add_reaction("✅")
+
         except discord.Forbidden:
             await ctx.send("I do not have permission to do this!")
 

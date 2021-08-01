@@ -69,9 +69,6 @@ class User(commands.Cog):
             embed = discord.Embed(title="You do not have the required permissions to do that!", colour=0xff0000)
             await ctx.send(embed=embed, delete_after=5)
 
-
-    
-
     @commands.group(invoke_without_command=True, name='rolejoin', aliases=['rj'])
     async def rolejoin(self, ctx):
         await ctx.send('Setup commands:\nrolejoin role <role.id> or <role.mention>')
@@ -81,26 +78,26 @@ class User(commands.Cog):
         if ctx.message.author.guild_permissions.administrator:
             db = sqlite3.connect('tentro.sqlite')
             cursor = db.cursor()
+
             cursor.execute(f"SELECT role_id FROM rolejoin WHERE guild_id = {ctx.guild.id}")
             result = cursor.fetchone()
+
             if result is None:
                 sql = ("INSERT INTO rolejoin(guild_id, role_id) VALUES(?,?)")
                 val = (ctx.guild.id, role)
-                await ctx.send(f"Role has been set to {role}")
+                cursor.execute(sql, val)
+                await ctx.send(f"Role has been set to {role}!")
             elif result is not None:
                 sql = ("UPDATE rolejoin SET role_id = ? WHERE guild_id = ?")
                 val = (role, ctx.guild.id)
-                await ctx.send(f"Role has been updated to {role}") 
-            cursor.execute(sql, val)
+                cursor.execute(sql, val)
+                await ctx.send(f"Role has been updated to {role}!")
+
             db.commit()
             cursor.close()
             db.close()
-
-
-
-    
-    
-
+        else:
+            await ctx.send("You do not have the required permissions to do that!")
 
 def setup(bot):
     bot.add_cog(User(bot))

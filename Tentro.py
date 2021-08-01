@@ -6,12 +6,9 @@ from discord.ext import commands
 import os, random
 from pathlib import Path
 import sqlite3, json, asyncio
+import lib.database as db
 
-intents = discord.Intents.default()
-
-intents.members = True
-
-
+intents = discord.Intents.all()
 
 cwd = Path(__file__).parents[0]
 cwd = str(cwd)
@@ -19,8 +16,9 @@ print(f"{cwd}\n-----")
 
 # Bot
 
-
-bot = commands.Bot(command_prefix = "t!", intents = intents)
+owners = [668423998777982997, 391936025598885891, 620690744897699841, 804970459561066537, 216260005827969024, 671791003065384987] # Allows us to run commands with the @commands.is_owner() decorator.
+bot = commands.Bot(command_prefix = "t!", owner_ids = owners, intents = intents)
+db.setup()
 print('Officially working!')
 
 

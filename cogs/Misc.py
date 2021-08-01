@@ -60,7 +60,6 @@ class Misc(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_remove(self, member):
-        print('This works?!')
         db = sqlite3.connect('tentro.sqlite')
         cursor = db.cursor()
         cursor.execute(f"SELECT channel_id FROM leavecmd WHERE guild_id = {member.guild.id}")

@@ -1,14 +1,18 @@
 from discord.ext import commands
 from discord import Embed, Member, User, channel, utils
 import asyncio, discord
+from typing import Dict, List, Pattern, Set, Tuple, Union
+import re
 red = 0xff0000
 green = 0x34eb40
+
 
 class Channel(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
+   
     
     @commands.command(name="show", aliases=["s"])
     async def _show(self, ctx, member: Member):
@@ -94,8 +98,6 @@ class Channel(commands.Cog):
             embed = discord.Embed(title=f"You do not have the required permissions to do that!", colour=0xff0000)
             await ctx.send(embed=embed, delete_after=5)
             
-   
 
+    
 
-def setup(bot):
-    bot.add_cog(Channel(bot)) 

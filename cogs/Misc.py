@@ -231,7 +231,6 @@ class Misc(commands.Cog):
             db.commit()
             cursor.close()
             db.close()
-            print('hello world')
 
 
 

@@ -5,7 +5,6 @@ from discord import *
 from discord.ext import commands
 import os, random
 from pathlib import Path
-import sqlite3, json, asyncio
 import lib.database as db
 
 intents = discord.Intents.all()
@@ -20,7 +19,6 @@ owners = [668423998777982997, 391936025598885891, 620690744897699841, 8049704595
 bot = commands.Bot(command_prefix = "t!", owner_ids = owners, intents = intents)
 db.setup()
 print('Officially working!')
-
 
 # le status
 

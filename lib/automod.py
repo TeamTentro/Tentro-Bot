@@ -3,12 +3,10 @@
 Utilities to provide a powerful blacklist
 """
 
-
 from typing import Dict, List, Pattern, Set, Tuple, Union
 import re
 import math
 import unicodedata
-
 
 PUNCTUATION: List[str] = [".", ",", "'",
                           ";", '"', "`", ":", "!", "?", "-", "_"]
@@ -129,6 +127,16 @@ def create_single_censor(words: List[str]) -> List[str]:
             copy_word[character] = r"*"
             censored.append("".join(copy_word))
     return censored
+
+def message_to_ascii(message: str) -> str:
+    """
+    Converts unicode characters to their ASCII equivalents
+    Letters with like à become a
+    """
+    text = unicodedata.normalize('NFD', message)
+    text = text.encode('ascii', 'ignore')
+    text = text.decode("utf-8")
+    return str(text)
 
 
 def __get_all_replacements(word: str, replacement_dict: Dict[str, List[str]]) -> List[str]:
@@ -257,7 +265,7 @@ def check_bl(message: str, bl_words: List[str], bl_algorithms: List[int],
     All BL words must be lower case\n
     Returns None if there are no blacklisted words or returns a list of blacklisted words
     """
-    check_message: str = message.content.lower()
+    check_message: str = message.lower()
     tokens: List[str] = __tokenize(check_message)
 
     found_words: List[str] = []
@@ -368,3 +376,4 @@ def __test():
 
 if __name__ == "__main__":
     __test()
+    

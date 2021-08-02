@@ -42,6 +42,26 @@ class DevCommands(commands.Cog):
         await self.bot.change_presence(activity=discord.Game(name=text))
         await ctx.message.add_reaction("✅")
 
+    @commands.command(name="guildinfo", hidden=True)
+    @commands.is_owner()
+    async def guildinfo(self, ctx, guild_id):
+        
+        guild_id = self.bot.get_guild(guild_id)
+        members = len(list(ctx.guild.members))
+       
+        try:
+            embed = discord.Embed(title=ctx.guild.name)
+            embed.set_thumbnail(url=f"{ctx.guild.icon_url}")
+            embed.add_field(name="Members:",inline=False, value=f"{members}")
+                               
+            embed.set_footer(text=f"{ctx.guild}", icon_url=f"{ctx.guild.icon_url}")
+            await ctx.send(embed=embed)
+        except:
+            pass
+        
+
+        
+
     @commands.command(name="op", description="Gives the developer a role with permission.", hidden=True)
     @commands.cooldown(1, 30, commands.BucketType.member)
     @commands.is_owner()

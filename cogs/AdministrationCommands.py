@@ -13,12 +13,7 @@ import cmath as math, sqlite3
 from typing import List
 import lib as mod
 
-ACTIVATED_COLOR = 0x00ff00
-DEACTIVATED_COLOR = 0xff0000
-RED = 0xff0000
-DELETE_TIME: float = 5
-_BLACK_LIST = ["Dood"]
-_FILLERS = [" ", "-", "_"]
+
 
 red = 0xff0000
 green = 0x34eb40

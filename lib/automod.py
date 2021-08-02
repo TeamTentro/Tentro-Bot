@@ -257,7 +257,7 @@ def check_bl(message: str, bl_words: List[str], bl_algorithms: List[int],
     All BL words must be lower case\n
     Returns None if there are no blacklisted words or returns a list of blacklisted words
     """
-    check_message: str = message.lower()
+    check_message: str = message.content.lower()
     tokens: List[str] = __tokenize(check_message)
 
     found_words: List[str] = []

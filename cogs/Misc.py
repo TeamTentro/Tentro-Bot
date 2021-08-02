@@ -188,11 +188,11 @@ class Misc(commands.Cog):
 
     @commands.group(invoke_without_command=True)
     async def leave(self, ctx):
-        await ctx.send('Setup commands:\nleave channel <channel>\nleave text <message>')
+        await ctx.send('Setup commands:\nleave channel <channel>\nleave text <message>') 
 
 
     @leave.command()
-    async def channel(self, ctx, channel: discord.TextChannel):
+    async def channel(self, ctx, channel: discord.TextChannel):  
         if ctx.message.author.guild_permissions.administrator:
             db = sqlite3.connect('tentro.sqlite')
             cursor = db.cursor()
@@ -231,6 +231,7 @@ class Misc(commands.Cog):
             db.commit()
             cursor.close()
             db.close()
+            print('hello world')
 
 
 

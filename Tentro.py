@@ -5,7 +5,6 @@ from discord import *
 from discord.ext import commands
 import os, random
 from pathlib import Path
-import sqlite3, json, asyncio
 import lib.database as db
 
 intents = discord.Intents.all()
@@ -22,7 +21,6 @@ print(f"Tentro is connecting..\n-----")
 print("Tentro Database setting up.. please hold.\n-----")
 db.setup()
 print(f'Tentro has connected successfully.')
-
 
 # le status
 

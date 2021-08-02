@@ -35,6 +35,23 @@ def setup():
                         message string NOT NULL
                     );""")
 
+    c.execute("""CREATE TABLE IF NOT EXISTS rolejoin (
+                        guild_id integer NOT NULL,
+                        role_id integer NOT NULL
+                    );""")
+
+    c.execute("""CREATE TABLE IF NOT EXISTS leavecmd (
+                        guild_id integer NOT NULL,
+                        msg string NOT NULL,
+                        channel_id integer NOT NULL
+                    );""")
+
+    c.execute("""CREATE TABLE IF NOT EXISTS joincmd (
+                        guild_id integer NOT NULL,
+                        msg string NOT NULL,
+                        channel_id integer NOT NULL
+                    );""")
+
     conn.commit()
 
 def checkguilds(guilds):

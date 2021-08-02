@@ -1,16 +1,33 @@
 from operator import is_not, not_
-from discord.ext import commands
 from discord import Embed, Member, User, channel, client, colour, guild, message, user, utils
+
+from discord.ext import commands
 import asyncio, discord
 from discord.ext.commands import bot
 from discord.ext.commands.errors import MissingPermissions
 import random
+from typing import Dict, List, Tuple, Union
+from typing import Dict, List, Pattern, Set, Tuple, Union
+import re, unicodedata
+import cmath as math, sqlite3
+from typing import List
+import lib as mod
 
+ACTIVATED_COLOR = 0x00ff00
+DEACTIVATED_COLOR = 0xff0000
+RED = 0xff0000
+DELETE_TIME: float = 5
+_BLACK_LIST = ["Dood"]
+_FILLERS = [" ", "-", "_"]
 
 red = 0xff0000
 green = 0x34eb40
 
 time_convert = {"s":1, "m":60, "h":3600,"d":86400}
+
+__MINUTES = 60
+__HOURS = __MINUTES * 60
+__DAYS = __HOURS * 24
 
 class Admin(commands.Cog):
 
@@ -23,51 +40,53 @@ class Admin(commands.Cog):
 
     @commands.command(name="mute", aliases=["m"])
     async def _Mute(self, ctx,  member: Member, time=None, *, reason=None):
-
+#this is where the shit mute command is
+    
         if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator:
             guild = ctx.guild
-            mutedRole = utils.get(guild.roles, name="Muted")
-            if time==None:
+            mutedRole = utils.get(guild.roles, name="Muted")## this gets a role named muted if there is one
+            if time is None:  # if there is no time it will do:
                 guild = ctx.guild
-                mutedRole = utils.get(guild.roles, name="Muted")
-                if not mutedRole:
+                mutedRole = utils.get(guild.roles, name="Muted") #this gets a role named muted if there is one
+                if not mutedRole: #if there is no mutedrole
                     mutedRole = await guild.create_role(name="Muted", colour=green)
                     for channel in guild.channels:
-                        await channel.set_permissions(mutedRole, speak=False, read_messages=False)
+                        await channel.set_permissions(mutedRole, speak=False, read_messages=False) #it will set permissions to this
                 else:
-                    await member.add_roles(mutedRole, reason=reason)
-                    muted_role = utils.get(ctx.guild.roles, name="Muted")
+                    await member.add_roles(mutedRole, reason=reason) #adds muted role to user
+                    muted_role = utils.get(ctx.guild.roles, name="Muted") 
                     await member.add_roles(muted_role)
 
-                    embed = Embed(description=f"**{member.mention} has been muted indefinitely.\nReason:{reason}**", color=red)
+                    embed = Embed(description=f"**{member.mention} has been muted indefinitely.\nReason:{reason}**", color=red) #embed of the information
                     embed.timestamp = ctx.message.created_at
                     await ctx.send(embed=embed)
 
                     embed = Embed(title=f"You have been muted in: {guild.name}.\n**Time period:** indefinitely.\n**Reason:**{reason}", colour=red)
                     await member.send(embed=embed)
 
-            elif time!=None and not mutedRole:
-                mutedRole = await guild.create_role(name="Muted", colour=green)
+            elif time is not None and not mutedRole: # if there is time specified and there is not mutedrole
+                mutedRole = await guild.create_role(name="Muted", colour=green) #creates mutedrole
                 for channel in guild.channels:
-                    await channel.set_permissions(mutedRole, speak=False, read_messages=False)
+                    await channel.set_permissions(mutedRole, speak=False, read_messages=False) #sets permissions
             else:
                 await member.add_roles(mutedRole, reason=reason)
                 muted_role = utils.get(ctx.guild.roles, name="Muted")
-                await member.add_roles(muted_role)
+                await member.add_roles(muted_role) #adds it to user
 
                 embed = Embed(description=f"**{member.mention} has been muted for {time}.\nReason:{reason}**", color=red)
                 embed.timestamp = ctx.message.created_at
-                await ctx.send(embed=embed)
+                await ctx.send(embed=embed)  
+                 #aall this here is info in embed
 
-                embed = Embed(title=f"You have been muted in: {guild.name}.\n**Time period:** {time}.\n**Reason:**{reason}", colour=red)
+                embed = Embed(title=f"You have been muted in: {guild.name}.\n**Time period:** {time}.\n**Reason:**{reason}", colour=red) 
                 await member.send(embed=embed)
 
-                duration = float(time[0: -1]) * time_convert[time[-1]]
-                await asyncio.sleep(duration)
-                await member.remove_roles(muted_role)
+                duration = float(time[0: -1]) * time_convert[time[-1]]  #now this is the time cmd
+                await asyncio.sleep(duration) # asyncio.sleep duration = specified time
+                await member.remove_roles(muted_role) #after time is over remove user's roles
 
                 embed = Embed(title=f"You have been unmuted in: {guild.name}.", colour=red)
-                await member.send(embed=embed)                     
+                await member.send(embed=embed)                     #more info
         else:
             await ctx.send("You dont have the required permissions to do that!", delete_after=5)
   
@@ -201,6 +220,18 @@ class Admin(commands.Cog):
            # Not needed
             #embed = Embed(title = (f"You have been banned from: {ctx.guild.name}.\n**Reason:** {reason}."), colour=red)
             #await member.send(embed=embed)
+
+
+
+
+
+
+
+
+
+
+
+
         
 
 def setup(bot):

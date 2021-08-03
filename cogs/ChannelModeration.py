@@ -40,11 +40,26 @@ class Channel(commands.Cog):
             await ctx.send(embed=embed, delete_after=5)
 
     @commands.command(name="createchannel", aliases=["createch"])
-    async def _CreateChannel(self, ctx, name=None):
+    async def _CreateChannel(self, ctx, *, name=None):
         guild = ctx.message.guild
         if ctx.author.guild_permissions.administrator:
-            await guild.create_text_channel(name=name)
-            embed = discord.Embed(title=f"Channel {name} has been created!")
+            cat = ctx.channel.category     
+            discord.utils.get(ctx.guild.categories, id=cat)
+
+            await guild.create_text_channel(name=name, category=cat)
+            embed = discord.Embed(title=f"Channel {name} has been created!", colour=red)
+            embed.timestamp = ctx.message.created_at
+            await ctx.send(embed=embed)
+        else:
+            embed = discord.Embed(title=f"You do not have the required permissions to do that!", colour=0xff0000)
+            await ctx.send(embed=embed, delete_after=5)
+
+    @commands.command(name="deletechannel", aliases=["deletech"])
+    async def _DeleteChannel(self, ctx, textchannel: discord.TextChannel):
+        guild = ctx.message.guild
+        if ctx.author.guild_permissions.administrator:
+            await textchannel.delete()
+            embed = discord.Embed(title=f"Channel {textchannel} has been deleted!", colour=red)
             embed.timestamp = ctx.message.created_at
             await ctx.send(embed=embed)
         else:

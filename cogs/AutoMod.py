@@ -47,20 +47,24 @@ class AutoMod(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
 
-        message = message
-        bl_words = mod.check_bl(str(message.content), _BLACK_LIST, bl_algorithms=[
-        mod.check_bl_direct(), mod.check_bl_fillers()], fillers=_FILLERS)
-        if bl_words:
-            embed = discord.Embed(title = "You said a blacklisted word.", description=("").join(bl_words))
-            await message.channel.send(embed=embed)
-            #await message.delete()
+        try:
+            message = message
+            bl_words = mod.check_bl(str(message.content), _BLACK_LIST, bl_algorithms=[
+            mod.check_bl_direct(), mod.check_bl_fillers()], fillers=_FILLERS)
+            if bl_words:
+                embed = discord.Embed(title = "You said a blacklisted word.")
+                await message.channel.send(embed=embed, delete_after=3)
+                await message.delete()
 
 
-        spam_probability = mod.get_spam_probability(str(message.content), spam_algorithms=[mod.check_spam_alternating_cases(
-        ), mod.check_spam_by_repetition(), mod.check_spam_repeating_letters(), mod.check_spam_caps()])
-        if spam_probability > 0.5:
-            embed = discord.Embed(title="You dare spam!", description=":angry:")
-            await message.channel.send(embed=embed)
+            spam_probability = mod.get_spam_probability(str(message.content), spam_algorithms=[mod.check_spam_alternating_cases(
+            ), mod.check_spam_by_repetition(), mod.check_spam_repeating_letters(), mod.check_spam_caps()])
+            if spam_probability > 0.5:
+                embed = discord.Embed(title="Dont spam in this channel!")
+                await message.channel.send(embed=embed, delete_after=3)
+                await message.delete()
+        except:
+            pass
         
         
 

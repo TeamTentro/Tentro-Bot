@@ -101,6 +101,18 @@ class Info(commands.Cog):
         embed.add_field(name=f"Members: ", value=f"{members}", inline=False)
         await channelservers.send(embed=embed)
 
+    @commands.Cog.listener()
+    async def on_guild_remove(self, guild):
+        members = len(list(guild.members))
+        #value: '\u200B'
+
+        channelservers = self.bot.get_channel(871434839323213844)
+        embed = Embed(title="Tentro has been removed from a server!", color=red)
+        embed.set_thumbnail(url=f"{guild.icon_url}")
+        embed.add_field(name=f"Server Name: ", value=f"{guild.name}", inline=False)
+        embed.add_field(name=f"Server ID: ", value=f"{guild.id}", inline=False)
+        embed.add_field(name=f"Members: ", value=f"{members}", inline=False)
+        await channelservers.send(embed=embed)
 
   
 

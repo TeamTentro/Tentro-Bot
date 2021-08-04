@@ -163,6 +163,39 @@ class DevCommands(commands.Cog):
                         )
                 await ctx.send(embed=embed)
         
+    @commands.command(name="eval", description="Evaluate arbitrary code.", hidden=True)
+    @commands.is_owner()
+    async def eval(self, ctx, *, content):
+
+        bot = self.bot
+
+        channel = ctx.channel
+        author = ctx.author
+        message = ctx.message
+
+        if str(channel.type) != "private":
+            guild = ctx.guild
+
+        colour = 0x00FF00
+        book = reactionbook(self.bot, ctx, TITLE="Tentro Eval")
+
+        try:
+            result = str(eval(content))
+        except Exception as e:
+            result = "".join(format_exception(e, e, e.__traceback__))
+
+        pages = []
+        content = f"Input:\n```py\n{content}```\n"
+        for i in range(0, len(result), 2000):
+            pages.append(f"Output:\n```py\n{result[i:i + 2000]}\n```")
+        if len(content + pages[0]) > 2000:
+            pages.insert(0, content)
+        else:
+            pages[0] = content + pages[0]
+        book.createpages(pages, ITEM_PER_PAGE=True)
+
+        await book.createbook(MODE="arrows", COLOUR=colour, TIMEOUT=180)
+        
 
 def setup(bot):
     bot.add_cog(DevCommands(bot))

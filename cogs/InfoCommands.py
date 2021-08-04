@@ -5,6 +5,7 @@ import discord
 from discord.ext.commands import bot
 import time
 import datetime
+
 red = 0xff0000
 green = 0x34eb40
 start_time = time.time()
@@ -13,6 +14,8 @@ class Info(commands.Cog):
 
     def __init__(self, bot): 
         self.bot = bot
+
+    
 
 
     

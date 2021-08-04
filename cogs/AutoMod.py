@@ -54,7 +54,7 @@ class AutoMod(commands.Cog):
             if bl_words:
                 embed = discord.Embed(title = "You said a blacklisted word.")
                 await message.channel.send(embed=embed, delete_after=3)
-                await message.delete()
+                
 
 
             spam_probability = mod.get_spam_probability(str(message.content), spam_algorithms=[mod.check_spam_alternating_cases(
@@ -62,7 +62,7 @@ class AutoMod(commands.Cog):
             if spam_probability > 0.5:
                 embed = discord.Embed(title="Dont spam in this channel!")
                 await message.channel.send(embed=embed, delete_after=3)
-                await message.delete()
+                
         except:
             pass
         

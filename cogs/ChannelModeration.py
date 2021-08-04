@@ -3,6 +3,7 @@ from discord import Embed, Member, User, channel, utils
 import asyncio, discord
 from typing import Dict, List, Pattern, Set, Tuple, Union
 import re
+from googlesearch import search
 red = 0xff0000
 green = 0x34eb40
 
@@ -11,6 +12,19 @@ class Channel(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+
+    @commands.command()
+    async def google(self, ctx, *, target):
+        
+        searchContent = ""
+        text = str(target).split(' ')
+ 
+        for i in range(2, len(text)):
+            searchContent = searchContent + text[i]
+
+        for j in search(searchContent, tld="co.in", num=1, stop=1, pause=2):
+            await ctx.channel.send(j)
+
 
    
     

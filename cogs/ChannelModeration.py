@@ -2,7 +2,7 @@ from discord.ext import commands
 from discord import Embed, Member, User, channel, utils
 import asyncio, discord
 from typing import Dict, List, Pattern, Set, Tuple, Union
-import re, scrapy
+
 from googlesearch import search
 
 red = 0xff0000

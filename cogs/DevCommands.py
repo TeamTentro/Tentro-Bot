@@ -5,6 +5,8 @@ import discord
 from dbfn import reactionbook
 import os, asyncio
 import traceback
+import sys
+from traceback import format_exception
 
 class DevCommands(commands.Cog):
     def __init__(self, bot):

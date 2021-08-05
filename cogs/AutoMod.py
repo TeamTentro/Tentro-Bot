@@ -13,6 +13,8 @@ from typing import List
 import lib.automod as mod
 
 
+
+
 ACTIVATED_COLOR = 0x00ff00
 DEACTIVATED_COLOR = 0xff0000
 RED = 0xff0000
@@ -30,42 +32,57 @@ class AutoMod(commands.Cog):
 
     activated: bool
     blacklist: List[str]
+
+
     
 
 
+   
 
+    
     @commands.command(name="automod")
     async def _automod(self, ctx):
-        self.activated = False
+        
+      
+        global Toggle
+        Toggle = True
+        
         author = ctx.author
         
         if not eligible(ctx.author):
             return
         await ctx.message.add_reaction("✅")
         bot_activation(self.activated, ctx)
+        Toggle = not Toggle
+        
+        
 
     @commands.Cog.listener()
     async def on_message(self, message):
-
-        try:
-            message = message
-            bl_words = mod.check_bl(str(message.content), _BLACK_LIST, bl_algorithms=[
-            mod.check_bl_direct(), mod.check_bl_fillers()], fillers=_FILLERS)
-            if bl_words:
-                embed = discord.Embed(title = "You said a blacklisted word.")
-                await message.channel.send(embed=embed, delete_after=3)
-                
-
-
-            spam_probability = mod.get_spam_probability(str(message.content), spam_algorithms=[mod.check_spam_alternating_cases(
-            ), mod.check_spam_by_repetition(), mod.check_spam_repeating_letters(), mod.check_spam_caps()])
-            if spam_probability > 0.5:
-                embed = discord.Embed(title="Dont spam in this channel!")
-                await message.channel.send(embed=embed, delete_after=3)
-                
-        except:
-            pass
+ 
         
+        if Toggle:
+            try:
+                message = message
+                bl_words = mod.check_bl(str(message.content), _BLACK_LIST, bl_algorithms=[
+                mod.check_bl_direct(), mod.check_bl_fillers()], fillers=_FILLERS)
+                if bl_words:
+                    embed = discord.Embed(title = "You said a blacklisted word.")
+                    await message.channel.send(embed=embed, delete_after=3)
+                
+
+
+                spam_probability = mod.get_spam_probability(str(message.content), spam_algorithms=[mod.check_spam_alternating_cases(
+                ), mod.check_spam_by_repetition(), mod.check_spam_repeating_letters(), mod.check_spam_caps()])
+                if spam_probability > 0.5:
+                    embed = discord.Embed(title="Dont spam in this channel!")
+                    await message.channel.send(embed=embed, delete_after=3)
+                
+            except:
+                pass
+        if not Toggle:
+            
+            pass
         
 
         

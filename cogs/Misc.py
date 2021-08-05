@@ -9,7 +9,8 @@ from discord.ext import commands
 import os, random
 from pathlib import Path
 import sqlite3
-
+from random import randint
+sussy = "<:susimpostor:863852686600699904>"
 time_convert = {"s":1, "m":60, "h":3600,"d":86400}
 
 red = 0xff0000
@@ -111,6 +112,18 @@ class Misc(commands.Cog):
             embed = discord.Embed(title=f"Question:\n", description = f"{question}", color=0xff0000)
             embed.add_field(name = f"8ball:\n" ,value = f"{random.choice(responses)}")
             await ctx.send(embed=embed)
+
+
+
+    @commands.command(name="sus")
+    async def sus(self, ctx, member: discord.Member = None):
+        sus_precentage = randint(1,101)
+        if member == None:
+           embed = Embed(title=f"{ctx.author.name} is {sus_precentage}% sus.", colour = red)
+           await ctx.send(embed = embed)
+        else:
+           embed = Embed(title=f"{member.name} is {sus_precentage}% sus.", colour = red)
+           await ctx.send(embed = embed)
 
     @commands.command(name='say')
     async def say(self, ctx, *, text):

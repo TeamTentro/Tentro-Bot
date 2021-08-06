@@ -15,7 +15,7 @@ class Channel(commands.Cog):
         self.bot = bot
 
 
-    @commands.command()
+    @commands.command(name="google", alases=["g"])
     async def google(self, ctx, *, text):
         if ctx.author.guild_permissions.manage_messages or ctx.author.guild_permissions.administrator:
             searchContent = f"{text}"

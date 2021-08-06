@@ -53,12 +53,15 @@ class AutoMod(commands.Cog):
             return
         await ctx.message.add_reaction("✅")
         bot_activation(self.activated, ctx)
-        Toggle = not Toggle
+        Toggle = False
         
         
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        global Toggle
+
+
  
         
         if Toggle:
@@ -77,10 +80,18 @@ class AutoMod(commands.Cog):
                 if spam_probability > 0.5:
                     embed = discord.Embed(title="Dont spam in this channel!")
                     await message.channel.send(embed=embed, delete_after=3)
+
+                
+                Toggle = False
+
+
+
+
+                
                 
             except:
                 pass
-        if not Toggle:
+        if Toggle==False:
             
             pass
         
@@ -89,7 +100,7 @@ class AutoMod(commands.Cog):
 
         
 
-
+ 
 async def bot_activation(self, activated: bool, ctx):
     color, activation_text = (ACTIVATED_COLOR, "Activated") if activated else (
     DEACTIVATED_COLOR, "Deactivated")

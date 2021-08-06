@@ -294,8 +294,12 @@ class Misc(commands.Cog):
 
     @commands.command(name='emoji', aliases=['em'])
     async def emoji(self, ctx, emoji: Emoji):
-        discord.utils.get(emoji)
-        await ctx.send(emoji.url)
+        if ctx.author.guild_permissions.manage_messages:
+            discord.utils.get(emoji)
+            await ctx.send(emoji.url)
+            await ctx.message.delete()
+
+
 
 
     

@@ -23,6 +23,7 @@ DELETE_TIME: float = 5
 _BLACK_LIST = ["dood"]
 _FILLERS = [" ", "\-", "_"]
 
+
 class AutoMod(commands.Cog):
     
 
@@ -33,37 +34,33 @@ class AutoMod(commands.Cog):
     activated: bool
     blacklist: List[str]
 
-
     
-
-
-   
-
-    
+ 
+    Toggle = True
     @commands.command(name="automod")
     async def _automod(self, ctx):
         
-      
         global Toggle
-        Toggle = True
+
+        if not eligible(ctx.author):
+            return
+            
+        Toggle = not Toggle
+       
+
         
         author = ctx.author
         
-        if not eligible(ctx.author):
-            return
+        
         await ctx.message.add_reaction("✅")
         bot_activation(self.activated, ctx)
-        Toggle = False
+        
+  
         
         
 
     @commands.Cog.listener()
-    async def on_message(self, message):
-        global Toggle
-
-
- 
-        
+    async def on_message(self, message):     
         if Toggle:
             try:
                 message = message
@@ -79,26 +76,14 @@ class AutoMod(commands.Cog):
                 ), mod.check_spam_by_repetition(), mod.check_spam_repeating_letters(), mod.check_spam_caps()])
                 if spam_probability > 0.5:
                     embed = discord.Embed(title="Dont spam in this channel!")
-                    await message.channel.send(embed=embed, delete_after=3)
-
-                
-                Toggle = False
-
-
-
-
-                
+                    await message.channel.send(embed=embed, delete_after=3)               
                 
             except:
                 pass
-        if Toggle==False:
-            
+
+        if Toggle==False:           
             pass
-        
-
-        
-
-        
+            
 
  
 async def bot_activation(self, activated: bool, ctx):

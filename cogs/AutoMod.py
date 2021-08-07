@@ -24,6 +24,8 @@ _BLACK_LIST = ["dood"]
 _FILLERS = [" ", "\-", "_"]
 
 
+
+
 class AutoMod(commands.Cog):
     
 
@@ -33,35 +35,30 @@ class AutoMod(commands.Cog):
 
     activated: bool
     blacklist: List[str]
+    Toggle: bool
 
-    
- 
-    Toggle = True
+    Toggle = False
     @commands.command(name="automod")
     async def _automod(self, ctx):
-        
-        global Toggle
+        if not eligible(ctx.author):
+            return
+
+        global Toggle       
+        Toggle = True
+    
 
         if not eligible(ctx.author):
             return
+        
             
-        Toggle = not Toggle
-       
-
-        
-        author = ctx.author
-        
         
         await ctx.message.add_reaction("✅")
-        bot_activation(self.activated, ctx)
-        
-  
-        
-        
+               
 
     @commands.Cog.listener()
-    async def on_message(self, message):     
-        if Toggle:
+    async def on_message(self, message):
+  
+        if Toggle == True:
             try:
                 message = message
                 bl_words = mod.check_bl(str(message.content), _BLACK_LIST, bl_algorithms=[
@@ -69,6 +66,7 @@ class AutoMod(commands.Cog):
                 if bl_words:
                     embed = discord.Embed(title = "You said a blacklisted word.")
                     await message.channel.send(embed=embed, delete_after=3)
+                    await message.delete()
                 
 
 
@@ -76,29 +74,18 @@ class AutoMod(commands.Cog):
                 ), mod.check_spam_by_repetition(), mod.check_spam_repeating_letters(), mod.check_spam_caps()])
                 if spam_probability > 0.5:
                     embed = discord.Embed(title="Dont spam in this channel!")
-                    await message.channel.send(embed=embed, delete_after=3)               
+                    await message.channel.send(embed=embed, delete_after=3)  
+                    await message.delete()             
                 
             except:
                 pass
-
-        if Toggle==False:           
-            pass
-            
-
- 
-async def bot_activation(self, activated: bool, ctx):
-    color, activation_text = (ACTIVATED_COLOR, "Activated") if activated else (
-    DEACTIVATED_COLOR, "Deactivated")
-    embed = Embed(title=f"Automod {activation_text}", color=color)
-    await bot_activation(self.activated, ctx)  
-    await ctx.send(embed=embed, delete_after=DELETE_TIME)
        
 
 def eligible(member: Member) -> bool:
     return member.guild_permissions.administrator
 
 
-    
+   
         
 
     

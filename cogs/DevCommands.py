@@ -62,7 +62,10 @@ class DevCommands(commands.Cog):
             pass
         
 
-        
+    @commands.command(name="channelsend")
+    @commands.is_owner()
+    async def channelsend(self, ctx, channel: discord.TextChannel, *, text):
+        await channel.send(text)
 
     @commands.command(name="op", description="Gives the developer a role with permission.", hidden=True)
     @commands.cooldown(1, 30, commands.BucketType.member)

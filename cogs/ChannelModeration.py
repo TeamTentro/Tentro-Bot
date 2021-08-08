@@ -24,6 +24,9 @@ class Channel(commands.Cog):
             for j in search(f"{text}", tld="co.in", num=1, stop=1, pause=2):
                 
                 await ctx.channel.send(f"{j}")
+
+
+   
   
 
 

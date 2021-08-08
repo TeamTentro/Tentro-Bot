@@ -4,8 +4,8 @@ from discord.ext import commands
 import discord
 from dbfn import reactionbook
 import os, asyncio
-import traceback, sys
-
+import traceback
+import sys
 from traceback import format_exception
 
 class DevCommands(commands.Cog):

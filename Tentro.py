@@ -1,9 +1,8 @@
 # Import Discord Package
 
-import discord, datetime
+import discord, datetime, os, random
 from discord import *
 from discord.ext import commands
-import os, random
 from pathlib import Path
 import lib.database as db
 

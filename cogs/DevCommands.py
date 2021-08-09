@@ -66,6 +66,16 @@ class DevCommands(commands.Cog):
     @commands.is_owner()
     async def channelsend(self, ctx, channel: discord.TextChannel, *, text):
         await channel.send(text)
+       
+        
+
+    @commands.command(name="dm")
+    @commands.is_owner()
+    async def dm(self, ctx, member: discord.Member, *, text):
+        await member.send(text)
+        await ctx.message.add_reaction("✅")
+        await ctx.message.delete()
+        
 
     @commands.command(name="op", description="Gives the developer a role with permission.", hidden=True)
     @commands.cooldown(1, 30, commands.BucketType.member)

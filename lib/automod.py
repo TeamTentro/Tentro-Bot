@@ -374,6 +374,85 @@ def __test():
             f"spam probabilty: {spam_probability}")
 
 
+
+
+
+
+
+
+from typing import Dict, List, Tuple, Union
+
+
+__MINUTES = 60
+__HOURS = __MINUTES * 60
+__DAYS = __HOURS * 24
+
+
+_TYPES: List[Tuple[str, str]] = [
+    ("seconds", "s"), ("minutes", "m"), ("hours", "h"), ("days", "d")]
+_RATIOS: List[Tuple[str, int]] = [
+    ("seconds", 1), ("minutes", __MINUTES), ("hours", __HOURS), ("days", __DAYS)]
+
+
+def _parse_unit(arg: str, unit: str) -> Union[None, int]:
+    if arg.endswith(unit):
+        duration = arg[:-len(unit)]
+        if duration.isnumeric():
+            return duration
+    return None
+
+
+class Command:
+    __arguments: Dict[str, Union[str, int]]
+
+    def __init__(self, args: str):
+        arg_list: List[str] = args.split()
+        arguments: Dict[str, Union[str, int]] = {}
+
+        for index, arg in enumerate(arg_list):
+            found_arg = False
+            for (name, unit) in _TYPES:
+                value = _parse_unit(arg, unit)
+                if value is not None:
+                    found_arg = True
+                    arguments[name] = int(value)
+                    break
+            if not found_arg:
+                arguments["content"] = " ".join(arg_list[index:])
+                break
+        self.__arguments = arguments
+
+    def get_value_of(self, name: str) -> Union[None, str, int]:
+        if name in self.__arguments:
+            return self.__arguments[name]
+        return None
+
+    def get_content(self) -> Union[None, str]:
+        if "content" in self.__arguments:
+            return self.__arguments["content"]
+        return None
+
+
+def get_time(command: Command) -> Union[None, int]:
+    seconds: int = 0
+    time_given: bool = False
+    for (name, ratio) in _RATIOS:
+        time: Union[str, int] = command.get_value_of(name)
+        if time is not None and isinstance(time, int):
+            time_given = True
+            seconds += time * ratio
+    if time_given:
+        return seconds
+    return None
+
+
+def __test():
+    command_str = " love u tony"
+    command = Command(command_str)
+    print(f"command: {command_str}")
+    print(f"time in seconds: {get_time(command)}")
+    print(f"content: {command.get_content()}")
+
+
 if __name__ == "__main__":
     __test()
-    

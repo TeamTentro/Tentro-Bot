@@ -97,7 +97,7 @@ class Misc(commands.Cog):
     async def _8ball(self, ctx, *, question=None):
         responses = ["Definitely.", "It is certain", "Does 2 + 2 equal to 4?", "I don't think so chief.",
                 "Perhaps.",
-                "Maybe, ehhh don't take my word for it.",
+                "Maybe, ehhh don't take my word for it."
                 "Ask again.",
                 "How do you not know this.", "I don't know, im just a discord bot.",
                 "No clue bro.",

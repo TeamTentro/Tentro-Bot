@@ -10,19 +10,25 @@ intents = discord.Intents.default()
 
 intents.members = True
 
+path = "./data/Tentro.db"
+conn = sqlite3.connect(path)
+
+
 class User(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
 
+    
+
 
 
     @commands.Cog.listener()
     async def on_member_join(self, member : Member):
-        db = sqlite3.connect('tentro.sqlite')
-        cursor = db.cursor()
-        cursor.execute(f"SELECT role_id FROM rolejoin WHERE guild_id = {member.guild.id}")
-        result = cursor.fetchone()
+        conn
+        c = conn.cursor()
+        c.execute(f"SELECT role_id FROM rolejoin WHERE guild_id = {member.guild.id}")
+        result = c.fetchone()
         
         if result is None:
             return
@@ -76,28 +82,31 @@ class User(commands.Cog):
     @rolejoin.command()
     async def role(self, ctx, *, role: discord.Role):
         if ctx.message.author.guild_permissions.administrator:
-            db = sqlite3.connect('tentro.sqlite')
-            cursor = db.cursor()
+            conn
+            c = conn.cursor()
 
-            cursor.execute(f"SELECT role_id FROM rolejoin WHERE guild_id = {ctx.guild.id}")
-            result = cursor.fetchone()
+            c.execute(f"SELECT role_id FROM rolejoin WHERE guild_id = {ctx.guild.id}")
+            result = c.fetchone()
 
             if result is None:
                 sql = ("INSERT INTO rolejoin(guild_id, role_id) VALUES(?,?)")
-                val = (ctx.guild.id, role)
-                cursor.execute(sql, val)
+                val = (ctx.guild.id, role.id)
+                c.execute(sql, val)
                 await ctx.send(f"Role has been set to {role}!")
             elif result is not None:
                 sql = ("UPDATE rolejoin SET role_id = ? WHERE guild_id = ?")
-                val = (role, ctx.guild.id)
-                cursor.execute(sql, val)
+                val = (role.id, ctx.guild.id)
+                c.execute(sql, val)
                 await ctx.send(f"Role has been updated to {role}!")
 
-            db.commit()
-            cursor.close()
-            db.close()
+            conn.commit()
+            conn.close()
+            conn.close()
         else:
             await ctx.send("You do not have the required permissions to do that!")
 
+
+
 def setup(bot):
     bot.add_cog(User(bot))
+

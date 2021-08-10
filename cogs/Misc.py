@@ -20,7 +20,7 @@ intents = discord.Intents.default()
 
 intents.members = True
 
-class Misc(commands.Cog):
+class misc(commands.Cog):
 
     def __init__(self, bot): 
         self.bot = bot
@@ -223,7 +223,7 @@ class Misc(commands.Cog):
             db.commit()
             cursor.close()
             db.close()
-            print('hi world')
+      
 
     @leave.command()
     async def text(self, ctx, *, text):
@@ -244,7 +244,7 @@ class Misc(commands.Cog):
             db.commit()
             cursor.close()
             db.close()
-            print('hello world')
+ 
 
 
 
@@ -313,4 +313,4 @@ class Misc(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Misc(bot))
+    bot.add_cog(misc(bot))

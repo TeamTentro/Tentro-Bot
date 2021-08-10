@@ -8,7 +8,7 @@ import traceback
 import sys
 from traceback import format_exception
 
-class DevCommands(commands.Cog):
+class devcommands(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
 
@@ -213,4 +213,4 @@ class DevCommands(commands.Cog):
         
 
 def setup(bot):
-    bot.add_cog(DevCommands(bot))
+    bot.add_cog(devcommands(bot))

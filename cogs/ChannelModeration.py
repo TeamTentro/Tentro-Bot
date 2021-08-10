@@ -9,7 +9,7 @@ red = 0xff0000
 green = 0x34eb40
 
 
-class Channel(commands.Cog):
+class channel(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -133,7 +133,7 @@ class Channel(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Channel(bot))
+    bot.add_cog(channel(bot))
             
 
     

@@ -14,7 +14,7 @@ path = "./data/Tentro.db"
 conn = sqlite3.connect(path)
 
 
-class User(commands.Cog):
+class user(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -108,5 +108,5 @@ class User(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(User(bot))
+    bot.add_cog(user(bot))
 

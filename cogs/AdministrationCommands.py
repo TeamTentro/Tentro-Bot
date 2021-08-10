@@ -55,7 +55,7 @@ def get_time(command: Command) -> Union[None, int]:
 def eligible(member: Member) -> bool:
     return member.guild_permissions.administrator or member.guild_permissions.manage_messages
 
-class Admin(commands.Cog):
+class admin(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
@@ -284,5 +284,5 @@ _RATIOS: List[Tuple[str, int]] = [
         
 
 def setup(bot):
-    bot.add_cog(Admin(bot)) 
+    bot.add_cog(admin(bot)) 
     

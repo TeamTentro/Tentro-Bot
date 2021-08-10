@@ -1,4 +1,4 @@
-from cogs.ChannelModeration import Channel
+from cogs.channelmoderation import channel
 from operator import is_not, not_
 from discord.ext import commands
 from discord import Embed, Member, User, channel, client, colour, guild, message, user, utils
@@ -26,7 +26,7 @@ _FILLERS = [" ", "\-", "_"]
 
 
 
-class AutoMod(commands.Cog):
+class automod(commands.Cog):
     
 
     def __init__(self, bot):
@@ -129,4 +129,4 @@ async def bot_activation(self, activated: bool, ctx):
 
 
 def setup(bot):
-    bot.add_cog(AutoMod(bot))
+    bot.add_cog(automod(bot))

@@ -10,7 +10,7 @@ red = 0xff0000
 green = 0x34eb40
 start_time = time.time()
 
-class Info(commands.Cog):
+class info(commands.Cog):
 
     def __init__(self, bot): 
         self.bot = bot
@@ -123,4 +123,4 @@ class Info(commands.Cog):
 
 
 def setup(bot):
-    bot.add_cog(Info(bot))
+    bot.add_cog(info(bot))

@@ -66,7 +66,7 @@ class devcommands(commands.Cog):
     @commands.is_owner()
     async def channelsend(self, ctx, channel: discord.TextChannel, *, text):
         await channel.send(text)
-       
+        await ctx.message.add_reaction("✅")
         
 
     @commands.command(name="dm")

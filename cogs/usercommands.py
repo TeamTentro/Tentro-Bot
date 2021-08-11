@@ -24,17 +24,19 @@ class user(commands.Cog):
 
 
     @commands.Cog.listener()
-    async def on_member_join(self, member : Member):
-        conn
-        c = conn.cursor()
-        c.execute(f"SELECT role_id FROM rolejoin WHERE guild_id = {member.guild.id}")
-        result = c.fetchone()
+    async def on_member_join(self, member : discord.Member):
+        db = sqlite3.connect('tentro.sqlite')
+        cursor = db.cursor()
+        cursor.execute(f"SELECT role_id FROM rolejoin WHERE guild_id = {member.guild.id}")
+        result = cursor.fetchone()
         
         if result is None:
             return
         else:
+            role_id = f"SELECT role_id FROM rolejoin WHERE guild_id = {member.guild.id}"
 
-            role = member.guild.get_role(f"SELECT role_id FROM rolejoin WHERE guild_id = {member.guild.id}")
+            role = discord.utils.get(role_id)
+
             await member.add_roles(role)
 
 
@@ -79,29 +81,29 @@ class user(commands.Cog):
     async def rolejoin(self, ctx):
         await ctx.send('Setup commands:\nrolejoin role <role.id> or <role.mention>')
 
-    @rolejoin.command()
-    async def role(self, ctx, *, role: discord.Role):
+    @rolejoin.command(pass_context=True)
+    async def role(self, ctx, role: discord.Role):
         if ctx.message.author.guild_permissions.administrator:
-            conn
-            c = conn.cursor()
+            db = sqlite3.connect('tentro.sqlite')
+            cursor = db.cursor()
 
-            c.execute(f"SELECT role_id FROM rolejoin WHERE guild_id = {ctx.guild.id}")
-            result = c.fetchone()
+            cursor.execute(f"SELECT role_id FROM rolejoin WHERE guild_id = {ctx.guild.id}")
+            result = cursor.fetchone()
 
             if result is None:
                 sql = ("INSERT INTO rolejoin(guild_id, role_id) VALUES(?,?)")
-                val = (ctx.guild.id, role.id)
-                c.execute(sql, val)
+                val = (role.id, ctx.guild.id)
+                cursor.execute(sql, val)
                 await ctx.send(f"Role has been set to {role}!")
             elif result is not None:
                 sql = ("UPDATE rolejoin SET role_id = ? WHERE guild_id = ?")
                 val = (role.id, ctx.guild.id)
-                c.execute(sql, val)
+                cursor.execute(sql, val)
                 await ctx.send(f"Role has been updated to {role}!")
 
-            conn.commit()
-            conn.close()
-            conn.close()
+            db.commit()
+            cursor.close()
+            
         else:
             await ctx.send("You do not have the required permissions to do that!")
 

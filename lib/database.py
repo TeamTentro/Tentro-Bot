@@ -36,8 +36,8 @@ def setup():
                     );""")
 
     c.execute("""CREATE TABLE IF NOT EXISTS rolejoin (
-                        guild_id integer NOT NULL,
-                        role_id integer NOT NULL
+                        guild_id string NOT NULL,
+                        role_id string NOT NULL
                     );""")
 
     c.execute("""CREATE TABLE IF NOT EXISTS leavecmd (

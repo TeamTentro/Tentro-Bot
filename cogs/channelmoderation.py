@@ -1,3 +1,4 @@
+
 from discord.ext import commands
 from discord import Embed, Member, User, channel, utils
 import asyncio, discord
@@ -130,6 +131,34 @@ class channel(commands.Cog):
         else:
             embed = discord.Embed(title=f"You do not have the required permissions to do that!", colour=0xff0000)
             await ctx.send(embed=embed, delete_after=5)
+
+
+
+
+
+
+
+
+
+
+
+    @commands.command(name="help_tickets")
+    async def help_ticket(self, ctx):
+        embed = Embed(title="Tickets", description="ticket_add: Creates a ticket channel and category\nticket_remove: Deletes the ticket channel and category\nticket_addrole: Adds a role that will be able to see the tickets\nticket_removerole: Removes the role's permissions  to view tickets", colour=0xff0000)
+        await ctx.send(embed=embed)
+
+
+
+    @commands.command(name="tickets_add")
+    async def tickets_add(self, ctx):
+        cat = ctx.channel.category
+        await ctx.guild.create_text_channel(name="tickets", category=cat)
+        ticketchannel = discord.utils.get(ctx.guild.text_channels, name="tickets")
+        default_role = ctx.guild.default_role
+        await ticketchannel.set_permissions(target=default_role, speak=False, send_messages=False, read_message_history=True, read_messages=True)
+        embedticketchannel = Embed(title="react to open le tivket", color=red)
+        await ticketchannel.send(embed=embedticketchannel)
+        await self.bot.add_reaction(embedticketchannel, "✅")
 
 
 def setup(bot):

@@ -77,12 +77,11 @@ class automod(commands.Cog):
     @commands.Cog.listener()
     async def on_message(self, message):
 
-        if eligible(message.author):
-            return
+        
  
         if Toggle == True:
             try:
-                
+                member: discord.Member
                 message = message
                 bl_words = mod.check_bl(str(message.content), _BLACK_LIST, bl_algorithms=[
                 mod.check_bl_direct(), mod.check_bl_fillers()], fillers=_FILLERS)
@@ -95,10 +94,19 @@ class automod(commands.Cog):
 
                 spam_probability = mod.get_spam_probability(str(message.content), spam_algorithms=[mod.check_spam_alternating_cases(
                 ), mod.check_spam_by_repetition(), mod.check_spam_repeating_letters(), mod.check_spam_caps()])
-                if spam_probability > 0.5:
+                if spam_probability > 0.5 and spam_probability < 0.7: 
                     embed = discord.Embed(title="Don't spam in this channel!")
                     await message.channel.send(embed=embed, delete_after=3)  
-                    await message.delete()             
+                    await message.delete()  
+                if spam_probability > 0.8:
+                    embed = discord.Embed(title="Don't spam or you'll get muted!")
+                    await message.channel.send(embed=embed, delete_after=3)
+                    mutedRole = utils.get(guild.roles, name="Muted")
+                    if not mutedRole:
+                        mutedRole = await guild.create_role(name="Muted")
+                    await member.add_roles(mutedRole)
+                    muted_role = utils.get(message.guild.roles, name="Muted")
+                    await member.add_roles(muted_role)           
                 
             except:
                 pass

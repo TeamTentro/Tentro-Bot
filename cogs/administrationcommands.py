@@ -70,7 +70,7 @@ class admin(commands.Cog):
     async def _Mute(self, ctx,  member: Member, time=None, *, reason=None):
 #this is where the shit mute command is
         
-        if not eligible(ctx.author):
+        if ctx.author.guild_permissions.manage_messages == False:
             await ctx.send("You dont have the required permissions to do that!", delete_after=5)
             return
 

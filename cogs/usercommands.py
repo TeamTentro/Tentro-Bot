@@ -6,7 +6,7 @@ from discord.ext.commands import bot
 red = 0xff0000
 green = 0x34eb40
 
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 
 intents.members = True
 
@@ -24,7 +24,7 @@ class user(commands.Cog):
 
 
     @commands.Cog.listener()
-    async def on_member_join(self, member : discord.Member):
+    async def on_member_join(self, member):
         db = sqlite3.connect('tentro.sqlite')
         cursor = db.cursor()
         cursor.execute(f"SELECT role_id FROM rolejoin WHERE guild_id = {member.guild.id}")
@@ -35,7 +35,7 @@ class user(commands.Cog):
         else:
             role_id = f"SELECT role_id FROM rolejoin WHERE guild_id = {member.guild.id}"
 
-            role = discord.utils.get(role_id)
+            role = member.guild.get_role(role_id)
 
             await member.add_roles(role)
 

@@ -1,3 +1,4 @@
+
 from operator import is_not, not_
 from discord import Embed, Member, User, channel, client, colour, guild, message, user, utils
 
@@ -35,10 +36,22 @@ class tickets(commands.Cog):
         ticketchannel = discord.utils.get(ctx.guild.text_channels, name="tickets")
         default_role = ctx.guild.default_role
         await ticketchannel.set_permissions(target=default_role, speak=False, send_messages=False, read_message_history=True, read_messages=True)
-        embedticketchannel = Embed(title="react to open le tivket", color=0xff000)
+        embedticketchannel = Embed(title="react to open le tivket", color=0xc4f21d)
         ticketmsg = await ticketchannel.send(embed=embedticketchannel)
         await ticketmsg.add_reaction("🎫")
         await ctx.guild.create_category(name="🎫-Tickets")
+
+
+    @commands.command(name="tickets_remove")
+    async def tickets_remove(self, ctx):
+        ticketchannel = discord.utils.get(ctx.guild.text_channels, name="tickets")
+        ticketcategory = discord.utils.get(ctx.guild.categories, name="🎫-Tickets")
+        await ticketchannel.delete()
+        await ticketcategory.delete()
+        await ctx.reply("Successfully removed the ticket utilites from this server.")
+        if ticketchannel == None:
+            await ctx.send("there is no ticket channel bozo")
+   
 
 
     

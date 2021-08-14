@@ -50,7 +50,7 @@ class tickets(commands.Cog):
         ticketmsg = await ticketchannel.send(embed=embedticketchannel)
         await ticketmsg.add_reaction("🎫")
 
-        addedembed = Embed(title="✅| Succesfully added the Tentro ticket system to this server. Run t!help_tickets for mor info.", colour = 0x00ff00)
+        addedembed = Embed(title="✅| Succesfully added the Tentro ticket system to this server. Run t!help_tickets for more info.", colour = 0x00ff00)
         await ctx.reply(embed=addedembed)
 
 

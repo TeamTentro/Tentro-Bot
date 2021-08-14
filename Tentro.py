@@ -54,12 +54,16 @@ async def _Invite(ctx):
 
 
 
+        
+
+
 
 for file in os.listdir(cwd+"/cogs"):
     if file.endswith(".py") and not file.startswith("_"):
         bot.load_extension(f"cogs.{file[:-3]}")
 
 with open("token.0", "r", encoding="utf-8") as f:
+
     TOKEN = f.read()
 
 bot.run(TOKEN)

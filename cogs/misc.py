@@ -113,6 +113,9 @@ class misc(commands.Cog):
             embed.add_field(name = f"8ball:\n" ,value = f"{random.choice(responses)}")
             await ctx.send(embed=embed)
 
+        
+
+
 
 
     @commands.command(name="sus")

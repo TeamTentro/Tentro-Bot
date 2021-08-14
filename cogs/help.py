@@ -1,0 +1,83 @@
+import discord, datetime, os, random
+from discord import *
+from discord.ext import commands
+from pathlib import Path
+import lib.database as db
+
+intents = discord.Intents.all()
+embed_8ball = Embed(title="Help command for 8ball", description="Usage: t!8ball (question)")
+red = 0xff0000
+
+embed_clear = Embed(title="Help command for clear", color=red)
+embed_clear.add_field(name="Description: ", value="You ask questions to the bot and it responds!", inline=False)
+embed_clear.add_field(name="Usage: ", value="t!8ball <question>", inline=False)
+
+
+embed_dictionary = {
+"8ball" : embed_8ball,
+"clear" : embed_clear,
+}
+
+
+class help(commands.Cog):
+
+    def __init__(self, bot): 
+        self.bot = bot
+    
+
+
+    
+
+    @commands.command(name="help")
+    async def _Help(self, ctx, cmd=None, dm = None):
+        author = ctx.author
+        if cmd == None and (dm == None or dm != "dm"):
+
+            embed = discord.Embed(title="These are all the commands", color=0xFF0000)
+            embed.add_field(name="Moderation", value="`t!clear, t!ban, t!kick, t!mutet, !timedmute, t!unmute, t!ban, t!unban, t!slowmode, t!slowmodecheck, t!slowmodereset, t!createchannel, t!deletechannel, t!giverole, t!takerole, t!nickname, t!lockdown`", inline=False)
+            embed.add_field(name="Information", value="`avatar, servername`", inline=False)
+            embed.add_field(name="Misc", value="`8ball`", inline=False)
+            embed.add_field(name="System", value="`help, ping, invite, server`", inline=False)
+            embed.add_field(name="Bot version:", value="v1.0", inline=False)
+            embed.add_field(name="Date released:", value="July 6th, 2021", inline=False)
+            embed.set_footer(text="Still in progress!")
+            embed.set_author(name=ctx.author.name)
+            embed.timestamp = ctx.message.created_at
+            await ctx.send(embed=embed)
+
+        elif cmd == "-dm":
+            embed1 = discord.Embed(title="These are all the commands", color=0xFF0000)
+            embed1.add_field(name="Moderation", value="`t!clear, t!ban, t!kick, t!mute, !timedmute, t!unmute, t!ban, t!unban, t!slowmode, t!slowmodecheck, t!slowmodereset, t!createchannel, t!deletechannel, t!giverole, t!takerole, t!nickname, t!lockdown`", inline=False)
+            embed1.add_field(name="Information", value="`avatar, servername`", inline=False)
+            embed1.add_field(name="Misc", value="`8ball`", inline=False)
+            embed1.add_field(name="System", value="`help, ping, invite, server`", inline=False)
+            embed1.add_field(name="Bot version:", value="v1.0", inline=False)
+            embed1.add_field(name="Date released:", value="July 6th, 2021", inline=False)
+            embed1.set_footer(text="Still in progress!")
+            embed1.set_author(name=ctx.author.name)
+            embed1.timestamp = ctx.message.created_at
+            await author.send(embed=embed1)
+
+
+        elif cmd in embed_dictionary.keys():
+            await(ctx.send(embed = embed_dictionary[cmd]))
+        else:
+            embed = discord.Embed(title="These are all the commands", color=0xFF0000)
+            embed.add_field(name="Moderation", value="`t!clear, t!ban, t!kick, t!mutet, !timedmute, t!unmute, t!ban, t!unban, t!slowmode, t!slowmodecheck, t!slowmodereset, t!createchannel, t!deletechannel, t!giverole, t!takerole, t!nickname, t!lockdown`", inline=False)
+            embed.add_field(name="Information", value="`avatar, servername`", inline=False)
+            embed.add_field(name="Misc", value="`8ball`", inline=False)
+            embed.add_field(name="System", value="`help, ping, invite, server`", inline=False)
+            embed.add_field(name="Bot version:", value="v1.0", inline=False)
+            embed.add_field(name="Date released:", value="July 6th, 2021", inline=False)
+            embed.set_footer(text="Still in progress!")
+            embed.set_author(name=ctx.author.name)
+            embed.timestamp = ctx.message.created_at
+            await ctx.send(embed=embed)
+            print("That's not a valid help command!")
+
+
+
+
+
+def setup(bot):
+    bot.add_cog(help(bot))

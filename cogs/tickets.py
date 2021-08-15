@@ -1,19 +1,6 @@
-
-from asyncio.windows_events import NULL
-from operator import is_not, not_
-from discord import Embed, Member, User, channel, client, colour, guild, message, user, utils
-
+from discord import Embed
 from discord.ext import commands
-import asyncio, discord
-from discord.ext.commands import bot
-from discord.ext.commands.errors import MissingPermissions
-import random
-from typing import Dict, List, Pattern, Set, Tuple, Union
-import re, unicodedata
-import cmath as math, sqlite3
-from typing import List
-
-from typing import Dict, List, Tuple, Union
+import discord.utils
 
 class tickets(commands.Cog):
 

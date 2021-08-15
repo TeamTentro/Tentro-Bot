@@ -200,7 +200,7 @@ class admin(commands.Cog):
       
             
 
-    @commands.command(name="ban", aliases=["b", "nobebis4u"])
+    @commands.command(name="ban", aliases=["b", "nobebis4u", "daban"])
     async def ban(self, ctx, member: Member, *,time=None, reason=None):
         guild = ctx.guild
         user = User

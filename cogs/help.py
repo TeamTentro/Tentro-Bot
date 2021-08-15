@@ -11,11 +11,36 @@ red = 0xff0000
 embed_clear = Embed(title="Help command for clear", color=red)
 embed_clear.add_field(name="Description: ", value="You ask questions to the bot and it responds!", inline=False)
 embed_clear.add_field(name="Usage: ", value="t!8ball <question>", inline=False)
+embed_clear.set_footer(text="<> - required; [] - optional")
+
+embed_ban = Embed(title="Help command for ban", color=red)
+embed_ban.add_field(name="Description: ", value="You can ban users temporary and indefinitely!", inline=False)
+embed_ban.add_field(name="Usage: ", value="t!ban <user id or ping user> [time] [reason]", inline=False)
+embed_ban.set_footer(text="<> - required; [] - optional")
+
+embed_kick = Embed(title="Help command for kick", color=red)
+embed_kick.add_field(name="Description: ", value="You can kick users from the server!", inline=False)
+embed_kick.add_field(name="Usage: ", value="t!kick <user id or ping user> [reason]", inline=False)
+embed_kick.set_footer(text="<> - required; [] - optional")
+
+embed_mute = Embed(title="Help command for mute", color=red)
+embed_mute.add_field(name="Description: ", value="You can mute users in the server!", inline=False)
+embed_mute.add_field(name="Usage: ", value="t!mute <user id or ping user> [time] [reason]", inline=False)
+embed_mute.set_footer(text="<> - required; [] - optional")
+
+embed_warn = Embed(title="Help command for mute", color=red)
+embed_warn.add_field(name="Description: ", value="You can warn users in the server! Next time you check someones logs you can see what they got warned for!", inline=False)
+embed_warn.add_field(name="Usage: ", value="t!warn <user id or ping user> [reason]", inline=False)
+embed_warn.set_footer(text="<> - required; [] - optional")
 
 
 embed_dictionary = {
 "8ball" : embed_8ball,
 "clear" : embed_clear,
+"ban" : embed_ban,
+"kick" : embed_kick,
+"mute" : embed_mute,
+"warn" : embed_warn,
 }
 
 

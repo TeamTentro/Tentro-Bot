@@ -5,32 +5,42 @@ from pathlib import Path
 import lib.database as db
 
 intents = discord.Intents.all()
-embed_8ball = Embed(title="Help command for 8ball", description="Usage: t!8ball (question)")
+
 red = 0xff0000
 
-embed_clear = Embed(title="Help command for clear", color=red)
-embed_clear.add_field(name="Description: ", value="You ask questions to the bot and it responds!", inline=False)
-embed_clear.add_field(name="Usage: ", value="t!8ball <question>", inline=False)
+embed_8ball = Embed(title="8ball", color=red)
+embed_8ball.add_field(name="Description: ", value="Ask tentro anything!", inline=False)
+embed_8ball.add_field(name="Usage: ", value="t!8ball <question>", inline=False)
+embed_8ball.set_footer(text="<> - required; [] - optional")
+
+embed_clear = Embed(title="Clear", color=red)
+embed_clear.add_field(name="Description: ", value="le clear", inline=False)
+embed_clear.add_field(name="Usage: ", value="t!clear <amount of messages you want to clear>", inline=False)
 embed_clear.set_footer(text="<> - required; [] - optional")
 
-embed_ban = Embed(title="Help command for ban", color=red)
+embed_ban = Embed(title="Ban", color=red)
 embed_ban.add_field(name="Description: ", value="You can ban users temporary and indefinitely!", inline=False)
-embed_ban.add_field(name="Usage: ", value="t!ban <user id or ping user> [time] [reason]", inline=False)
+embed_ban.add_field(name="Usage: ", value="t!ban <@someone/member id> [time] [reason]", inline=False)
 embed_ban.set_footer(text="<> - required; [] - optional")
 
-embed_kick = Embed(title="Help command for kick", color=red)
+embed_kick = Embed(title="Kick", color=red)
 embed_kick.add_field(name="Description: ", value="You can kick users from the server!", inline=False)
 embed_kick.add_field(name="Usage: ", value="t!kick <user id or ping user> [reason]", inline=False)
 embed_kick.set_footer(text="<> - required; [] - optional")
 
-embed_mute = Embed(title="Help command for mute", color=red)
-embed_mute.add_field(name="Description: ", value="You can mute users in the server!", inline=False)
-embed_mute.add_field(name="Usage: ", value="t!mute <user id or ping user> [time] [reason]", inline=False)
+embed_mute = Embed(title="Mute", color=red)
+embed_mute.add_field(name="Description: ", value="Give someone a break from breaking the rules by muting them. When the command is ran, a new role called 'muted' is created. ", inline=False)
+embed_mute.add_field(name="Usage: ", value="t!mute <@someone/member id> [time] [reason]", inline=False)
 embed_mute.set_footer(text="<> - required; [] - optional")
 
-embed_warn = Embed(title="Help command for mute", color=red)
+embed_nickname = Embed(title="Nickname", color=red)
+embed_nickname.add_field(name="Description: ", value="Change the nickname of a server member. ", inline=False)
+embed_nickname.add_field(name="Usage: ", value="t!nickname <@someone/member id> <new nickname>", inline=False)
+embed_nickname.set_footer(text="<> - required; [] - optional")
+
+embed_warn = Embed(title="Warn", color=red)
 embed_warn.add_field(name="Description: ", value="You can warn users in the server! Next time you check someones logs you can see what they got warned for!", inline=False)
-embed_warn.add_field(name="Usage: ", value="t!warn <user id or ping user> [reason]", inline=False)
+embed_warn.add_field(name="Usage: ", value="t!warn <@someone/member id> [reason]", inline=False)
 embed_warn.set_footer(text="<> - required; [] - optional")
 
 
@@ -41,6 +51,7 @@ embed_dictionary = {
 "kick" : embed_kick,
 "mute" : embed_mute,
 "warn" : embed_warn,
+"nickname" : embed_nickname
 }
 
 

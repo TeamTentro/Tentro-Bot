@@ -1,3 +1,4 @@
+from cogs.automod import _BLACK_LIST
 from discord import Embed
 from discord.ext import commands
 import discord.utils
@@ -39,7 +40,6 @@ class tickets(commands.Cog):
 
         addedembed = Embed(title="✅| Succesfully added the Tentro ticket system to this server. Run t!help_tickets for more info.", colour = 0x00ff00)
         await ctx.reply(embed=addedembed)
-
 
     @commands.command(name="tickets_remove")
     @commands.is_owner()

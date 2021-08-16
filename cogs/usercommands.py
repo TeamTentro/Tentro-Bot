@@ -33,10 +33,11 @@ class user(commands.Cog):
         if result is None:
             return
         else:
-            role_id = f"SELECT role_id FROM rolejoin WHERE guild_id = {member.guild.id}"
+            cursor.execute=(f"SELECT role_id FROM rolejoin WHERE guild_id = {member.guild.id}")
+            result_2 = cursor.fetchone()
 
-            role = member.guild.get_role(role_id)
-
+            
+            role = discord.utils.get(result_2)
             await member.add_roles(role)
 
 

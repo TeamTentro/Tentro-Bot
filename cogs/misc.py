@@ -302,9 +302,65 @@ class misc(commands.Cog):
             await ctx.send(emoji.url)
             await ctx.message.delete()
 
+    @commands.group()
+    async def embed(self, ctx):
+
+        await ctx.send("To use this command you have to give a few parameters:"
+        "title: <random text that you can choose>"
+        "description: <random text that you can choose>") 
+
+    @embed.command(name="title")
+    async def title(self, ctx, *, text):
+        db = sqlite3.connect('tentro.sqlite')
+        cursor = db.cursor()
+        cursor.execute(f"SELECT text FROM embed WHERE guild_id = {ctx.guild.id}")
+        result = cursor.fetchone()
+        if result is None:
+            sql = ("INSERT INTO embed(guild_id, text) VALUES(?,?)")
+            val = (ctx.guild.id, text)
+            await ctx.send(f"Title has been set to {text}")
+        elif result is not None:
+            sql = ("UPDATE embed SET text = ? WHERE guild_id = ?")
+            val = (text, ctx.guild.id)
+            await ctx.send(f"Title has been updated to {text}") 
+        cursor.execute(sql, val)
+        db.commit()
+        cursor.close()
+        db.close()
+
+    @embed.command(name="description")
+    async def description(self, ctx, *, text):
+        db = sqlite3.connect('tentro.sqlite')
+        cursor = db.cursor()
+        cursor.execute(f"SELECT description FROM embed WHERE guild_id = {ctx.guild.id}")
+        result = cursor.fetchone()
+        if result is None:
+            sql = ("INSERT INTO embed(guild_id, description) VALUES(?,?)")
+            val = (ctx.guild.id, text)
+            await ctx.send(f"Description has been set to {text}")
+        elif result is not None:
+            sql = ("UPDATE embed SET description = ? WHERE guild_id = ?")
+            val = (text, ctx.guild.id)
+            await ctx.send(f"Description has been updated to {text}") 
+        cursor.execute(sql, val)
+        db.commit()
+        cursor.close()
+        db.close()
 
 
 
+    @embed.command(name="send")
+    async def send(self, ctx):
+        db = sqlite3.connect('tentro.sqlite')
+        cursor = db.cursor()
+        cursor.execute(f"SELECT text FROM embed WHERE guild_id = {ctx.guild.id}")
+        result_1 = cursor.fetchone()
+        cursor.execute(f"SELECT description FROM embed WHERE guild_id = {ctx.guild.id}")
+        result_2 = cursor.fetchone()
+        
+
+        embed = Embed(title=f"{result_1}", description=f"{result_2}")
+        await ctx.send(embed=embed)
     
 
 

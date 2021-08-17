@@ -1,4 +1,4 @@
-from discord import Embed
+from discord import Embed, channel, message
 from discord.ext import commands
 import discord.utils
 
@@ -6,6 +6,12 @@ class tickets(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
+
+
+   
+
+
+
 
     @commands.command(name="help_tickets")
     async def help_ticket(self, ctx):
@@ -40,6 +46,8 @@ class tickets(commands.Cog):
         addedembed = Embed(title="✅| Succesfully added the Tentro ticket system to this server. Run t!help_tickets for more info.", colour = 0x00ff00)
         await ctx.reply(embed=addedembed)
 
+      
+
 
     @commands.command(name="tickets_remove")
     @commands.is_owner()
@@ -56,5 +64,10 @@ class tickets(commands.Cog):
           embed = Embed(title="✅| Successfully removed the ticket utilities from this server", colour = 0x00ff00)
           await ctx.reply(embed=embed)
 
+
+    
+
 def setup(bot):
     bot.add_cog(tickets(bot))
+
+    

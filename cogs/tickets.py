@@ -1,7 +1,22 @@
-from discord import Embed, channel, message
+from discord import Embed
 from discord.ext import commands
 import discord.utils
 
+
+from operator import is_not, not_
+from discord import Embed, Member, User, channel, client, colour, guild, message, user, utils
+
+from discord.ext import commands
+import asyncio, discord
+from discord.ext.commands import bot
+from discord.ext.commands.errors import MissingPermissions
+import random
+from typing import Dict, List, Pattern, Set, Tuple, Union
+import re, unicodedata
+import cmath as math, sqlite3
+from typing import List
+import lib as mod
+from typing import Dict, List, Tuple, Union
 class tickets(commands.Cog):
 
     def __init__(self, bot):
@@ -52,17 +67,16 @@ class tickets(commands.Cog):
     @commands.command(name="tickets_remove")
     @commands.is_owner()
     async def tickets_remove(self, ctx):
-
+        
+        ticketcategory = discord.utils.get(ctx.guild.categories, name="🎫 Tickets")
         ticketchannel = discord.utils.get(ctx.guild.text_channels, name="tickets")
-        ticketcategory = discord.utils.get(ctx.guild.categories, name="🎫-Tickets")
-        if ticketchannel or ticketcategory is None:
-            embed = Embed(title="❌| Couldn't find the ticket utilities on this server. To add them run t!tickets_add.", colour = 0xff0000)
-            await ctx.send(embed=embed)
-        else:
-          await ticketchannel.delete()
-          await ticketcategory.delete()
-          embed = Embed(title="✅| Successfully removed the ticket utilities from this server", colour = 0x00ff00)
-          await ctx.reply(embed=embed)
+        
+        
+        
+        await ticketcategory.delete()
+        await ticketchannel.delete()
+        embed = Embed(title="✅| Successfully removed the ticket utilities from this server", colour = 0x00ff00)
+        await ctx.reply(embed=embed)
 
 
     

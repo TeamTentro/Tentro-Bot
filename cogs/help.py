@@ -43,6 +43,19 @@ embed_warn.add_field(name="Description: ", value="You can warn users in the serv
 embed_warn.add_field(name="Usage: ", value="t!warn <@someone/member id> [reason]", inline=False)
 embed_warn.set_footer(text="<> - required; [] - optional")
 
+embed_createchannel = Embed(title="Create Channel", color=red)
+embed_createchannel.add_field(name="Description: ", value="Create a new channel for the server with this simple command.", inline=False)
+embed_createchannel.add_field(name="Usage: ", value="t!createchannel <name>", inline=False)
+embed_createchannel.set_footer(text="<> - required; [] - optional")
+
+#TEMPlATE
+"""embed_ = Embed(title="", color=red)
+embed_.add_field(name="Description: ", value="", inline=False)
+embed_.add_field(name="Usage: ", value="", inline=False)
+embed_.set_footer(text="<> - required; [] - optional")"""
+
+
+
 
 embed_dictionary = {
 "8ball" : embed_8ball,

@@ -1,3 +1,4 @@
+from cogs.automod import _BLACK_LIST
 from discord import Embed
 from discord.ext import commands
 import discord.utils

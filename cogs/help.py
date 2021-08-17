@@ -48,6 +48,12 @@ embed_createchannel.add_field(name="Description: ", value="Create a new channel 
 embed_createchannel.add_field(name="Usage: ", value="t!createchannel <name>", inline=False)
 embed_createchannel.set_footer(text="<> - required; [] - optional")
 
+embed_sus = Embed(title="Sus", color=red)
+embed_sus.add_field(name="Description: ", value="Mesure your sus!", inline=False)
+embed_sus.add_field(name="Usage: ", value="t!sus [@someone/user id]", inline=False)
+embed_sus.set_footer(text="<> - required; [] - optional")
+
+
 #TEMPlATE
 """embed_ = Embed(title="", color=red)
 embed_.add_field(name="Description: ", value="", inline=False)

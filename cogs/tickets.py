@@ -1,4 +1,4 @@
-from cogs.automod import _BLACK_LIST
+
 from discord import Embed
 from discord.ext import commands
 import discord.utils
@@ -16,7 +16,7 @@ from typing import Dict, List, Pattern, Set, Tuple, Union
 import re, unicodedata
 import cmath as math, sqlite3
 from typing import List
-import lib as mod
+
 from typing import Dict, List, Tuple, Union
 class tickets(commands.Cog):
 
@@ -39,11 +39,11 @@ class tickets(commands.Cog):
     async def tickets_add(self, ctx):
 
         # Check if the category already exists
-        ticketcat_e = discord.utils.get(ctx.guild.categories, name="🎫 Tickets")
+        ticketcat_e = discord.utils.get(ctx.guild.categories, name="🎫-Tickets")
         if ticketcat_e:
             return await ctx.send("Ticket category already exists, setup aborted.")
         else:
-            ticketcat = await ctx.guild.create_category(name="🎫 Tickets")
+            ticketcat = await ctx.guild.create_category(name="🎫-Tickets")
 
         # Check if the text channel already exists
         ticketchannel_e = discord.utils.get(ctx.guild.text_channels, name="tickets")
@@ -69,15 +69,34 @@ class tickets(commands.Cog):
     @commands.is_owner()
     async def tickets_remove(self, ctx):
         
-        ticketcategory = discord.utils.get(ctx.guild.categories, name="🎫 Tickets")
+        ticketcategory = discord.utils.get(ctx.guild.categories, name="🎫-Tickets")
         ticketchannel = discord.utils.get(ctx.guild.text_channels, name="tickets")
+        if ticketcategory == None or ticketchannel == None:
+            embed = Embed(title="✅| There are no ticket utils", colour = 0x00ff00)
+            await ctx.reply(embed=embed)
         
-        
-        
-        await ticketcategory.delete()
-        await ticketchannel.delete()
-        embed = Embed(title="✅| Successfully removed the ticket utilities from this server", colour = 0x00ff00)
-        await ctx.reply(embed=embed)
+        else:
+          await ticketcategory.delete()
+          await ticketchannel.delete()
+          embed = Embed(title="✅| Successfully removed the ticket utilities from this server", colour = 0x00ff00)
+          await ctx.reply(embed=embed)
+
+
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload):
+
+        guild_id = payload.guild_id
+        guild = self.client.get_guild(guild_id)
+
+        user_id = payload.user_id
+        user = self.client.get_user(user_id)
+
+        channel_id = payload.channel_id
+        channel = self.client.get_channel(channel_id)
+
+        message_id = payload.message_id
+        emoji = payload.emoji.name
+
 
 
     

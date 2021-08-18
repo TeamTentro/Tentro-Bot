@@ -15,7 +15,7 @@ print(f"{cwd}\n-----")
 # Bot
 
 owners = [668423998777982997, 391936025598885891, 620690744897699841, 804970459561066537, 216260005827969024, 671791003065384987] # Allows us to run commands with the @commands.is_owner() decorator.
-bot = commands.Bot(command_prefix = "t!", owner_ids = owners, intents = intents)
+bot = commands.Bot(command_prefix = "t!", owner_ids = owners, intents = intents, case_insensitive = True)
 print(f"Tentro is connecting..\n-----")
 print("Tentro Database setting up.. please hold.\n-----")
 db.setup()

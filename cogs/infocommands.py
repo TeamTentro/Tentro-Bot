@@ -17,8 +17,7 @@ class info(commands.Cog):
 
     
 
-
-    
+   
     
     @commands.command(name="servername", aliases=["sn"])
     async def ServerName(self, ctx):

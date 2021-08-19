@@ -82,21 +82,9 @@ class tickets(commands.Cog):
           await ctx.reply(embed=embed)
 
 
-    @commands.Cog.listener()
-    async def on_raw_reaction_add(self, payload):
 
-        guild_id = payload.guild_id
-        guild = self.client.get_guild(guild_id)
-
-        user_id = payload.user_id
-        user = self.client.get_user(user_id)
-
-        channel_id = payload.channel_id
-        channel = self.client.get_channel(channel_id)
-
-        message_id = payload.message_id
-        emoji = payload.emoji.name
-
+    
+   
 
 
     

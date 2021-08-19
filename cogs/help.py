@@ -53,6 +53,10 @@ embed_sus.add_field(name="Description: ", value="Mesure your sus!", inline=False
 embed_sus.add_field(name="Usage: ", value="t!sus [@someone/user id]", inline=False)
 embed_sus.set_footer(text="<> - required; [] - optional")
 
+embed_invite = Embed(title="Invite", color=red)
+embed_invite.add_field(name="Description:", value="Invite Tentro to your server by using this command", inline=False)
+embed_invite.add_field(name="Usage: ", value="t!invite", inline=False)
+embed_invite.set_footer(text="<> - required; [] - optional")
 
 #TEMPlATE
 """embed_ = Embed(title="", color=red)
@@ -70,7 +74,9 @@ embed_dictionary = {
 "kick" : embed_kick,
 "mute" : embed_mute,
 "warn" : embed_warn,
-"nickname" : embed_nickname
+"nickname" : embed_nickname,
+"sus" : embed_sus,
+"invite" : embed_invite
 }
 
 

@@ -56,6 +56,20 @@ class tickets(commands.Cog):
             addedembed = Embed(title="✅| Succesfully added the Tentro ticket system to this server. Run t!help_tickets for more info.", colour = 0x00ff00)
             await ctx.send(embed=addedembed)
             
+            print(ticketmsg.id)
+            cursor.execute(f"SELECT msg_id FROM ticket WHERE guild_id = {ctx.guild.id}")
+            result2 = cursor.fetchone()
+            if result2 is None:
+                sql = ("INSERT INTO ticket(guild_id, msg_id) VALUES(?,?)")
+                val = (ctx.guild.id, ticketmsg.id)
+                await ctx.send(f"Title has been set to {text}")
+            elif result2 is not None:
+                sql = ("UPDATE ticket SET msg_id = ? WHERE guild_id = ?")
+                val = (ticketmsg.id, ctx.guild.id)
+                await ctx.send(f"Msg id  has been set")
+                cursor.execute(sql, val)
+            print(result2)
+ 
             
             
 
@@ -68,13 +82,15 @@ class tickets(commands.Cog):
             await ctx.reply(embed=addedembed)
 
         if result and text==None:
-            pass
+            return
 
 
         if result:
             sql = ("UPDATE ticket SET msg = ? WHERE guild_id = ?")
             val = (text, ctx.guild.id)
             await ctx.reply(f"Ticket message has been set!")
+        print(sql)
+        print(val)
         cursor.execute(sql, val)
         db.commit()
         cursor.close()
@@ -123,25 +139,27 @@ class tickets(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
-        guild_id = payload.guild_id
-        guild = discord.utils.find(lambda g : g.id == guild_id, self.bot.guilds)
-        emoji = payload.emoji.name
-        name = payload.member.name
         member = payload.member
-        role2 = discord.utils.get(guild.roles, name="@everyone")
-        channelname = 877906394530078770
-        
-        if payload.message_id == 877906396216176700:
-  
-            
 
+        db = sqlite3.connect('tentro.sqlite')
+        cursor = db.cursor()
+        cursor.execute("SELECT EXISTS(SELECT msg_id FROM ticket WHERE guild_id=?)", (payload.guild_id,))
+        result_3 = cursor.fetchone()
+        print(result_3)
+
+        if payload.message_id == result_3 and member is not None:
+            guild_id = payload.guild_id
+            guild = discord.utils.find(lambda g : g.id == guild_id, self.bot.guilds)
+            emoji = payload.emoji.name
+            name = payload.member.name     
+            role2 = discord.utils.get(guild.roles, name="@everyone")
+            ticketcategory = discord.utils.get(guild.categories, name="🎫-Tickets")
             role_id = 745925853229350972
-            role = guild.get_role(role_id)
-            ticketcat_e = discord.utils.get(guild.categories, name="🎫-Tickets")
-        if member is not None:
-            tick = await guild.create_text_channel(name=f"ticket-{name}", category=ticketcat_e)
+            role = guild.get_role(role_id)   
+            print(result_3)
+            tick = await guild.create_text_channel(name=f"ticket-{name}", category=ticketcategory)
             await tick.set_permissions(target=role2, speak=False, send_messages=False, read_message_history=False, read_messages=False, add_reactions=False, view_channel=False)
-         
+        
             
 
 
@@ -157,7 +175,7 @@ class tickets(commands.Cog):
         message_id = payload.message_id
         emoji = payload.emoji.name
 
-
+   
 
     
 

@@ -96,6 +96,50 @@ class tickets(commands.Cog):
         cursor.close()
         db.close()
 
+    @commands.Cog.listener()
+    async def on_raw_reaction_add(self, payload):
+        member = payload.member
+
+        db = sqlite3.connect('tentro.sqlite')
+        cursor = db.cursor()
+        cursor.execute("SELECT msg_id FROM ticket WHERE EXISTS(SELECT msg_id FROM ticket WHERE guild_id=?)", (payload.guild_id,))
+        result_3 = cursor.fetchone()
+      
+
+        if payload.message_id == result_3[0] and member is not None:
+            
+            guild_id = payload.guild_id
+            channel = self.bot.get_channel(payload.channel_id)
+            message = await channel.fetch_message(payload.message_id)
+            user = self.bot.get_user(payload.user_id)
+            guild = discord.utils.find(lambda g : g.id == guild_id, self.bot.guilds)
+            emoji = payload.emoji.name
+ 
+            name = payload.member.name     
+            role2 = discord.utils.get(guild.roles, name="@everyone")
+            ticketcategory = discord.utils.get(guild.categories, name="🎫-Tickets")
+
+            tick = await guild.create_text_channel(name=f"ticket-{name}", category=ticketcategory)
+            await message.remove_reaction(emoji, user)
+            await tick.set_permissions(target=role2, speak=False, send_messages=False, read_message_history=False, read_messages=False, add_reactions=False, view_channel=False)
+            await tick.set_permissions(target=user, speak=True, send_messages=True, read_message_history=True, read_messages=True, view_channel=True, add_reactions=False)
+
+            
+
+
+        guild_id = payload.guild_id
+        guild = self.bot.get_guild(guild_id)
+
+        user_id = payload.user_id
+        user = self.bot.get_user(user_id)
+
+        channel_id = payload.channel_id
+        channel = self.bot.get_channel(channel_id)
+
+        message_id = payload.message_id
+        emoji = payload.emoji.name
+
+
       
 
 

@@ -88,7 +88,7 @@ class user(commands.Cog):
 
             if result is None:
                 sql = ("INSERT INTO rolejoin(guild_id, role_id) VALUES(?,?)")
-                val = (role.id, ctx.guild.id)
+                val = (ctx.guild.id, role.id)
                 cursor.execute(sql, val)
                 await ctx.send(f"Role has been set to {role}!")
             elif result is not None:
@@ -102,6 +102,8 @@ class user(commands.Cog):
             
         else:
             await ctx.send("You do not have the required permissions to do that!")
+
+            
 
 
 

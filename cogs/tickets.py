@@ -62,7 +62,7 @@ class tickets(commands.Cog):
             if result2 is None:
                 sql = ("INSERT INTO ticket(guild_id, msg_id) VALUES(?,?)")
                 val = (ctx.guild.id, ticketmsg.id)
-                await ctx.send(f"Title has been set to {text}")
+                await ctx.send(f"Msg id has been set")
             elif result2 is not None:
                 sql = ("UPDATE ticket SET msg_id = ? WHERE guild_id = ?")
                 val = (ticketmsg.id, ctx.guild.id)
@@ -84,6 +84,12 @@ class tickets(commands.Cog):
         if result and text==None:
             return
 
+        if result is None:
+            sql = ("INSERT INTO ticket(guild_id, msg) VALUES(?,?)")
+            val = (ctx.guild.id, text)
+            cursor.execute(sql, val)
+            await ctx.send(f"msg has been set to {text}!")
+            
 
         if result:
             sql = ("UPDATE ticket SET msg = ? WHERE guild_id = ?")
@@ -145,6 +151,7 @@ class tickets(commands.Cog):
         cursor = db.cursor()
         cursor.execute("SELECT msg_id FROM ticket WHERE EXISTS(SELECT msg_id FROM ticket WHERE guild_id=?)", (payload.guild_id,))
         result_3 = cursor.fetchone()
+        
       
 
         if payload.message_id == result_3[0] and member is not None:
@@ -155,17 +162,44 @@ class tickets(commands.Cog):
             user = self.bot.get_user(payload.user_id)
             guild = discord.utils.find(lambda g : g.id == guild_id, self.bot.guilds)
             emoji = payload.emoji.name
+            
  
             name = payload.member.name     
             role2 = discord.utils.get(guild.roles, name="@everyone")
             ticketcategory = discord.utils.get(guild.categories, name="🎫-Tickets")
 
             tick = await guild.create_text_channel(name=f"ticket-{name}", category=ticketcategory)
-            await message.remove_reaction(emoji, user)
-            await tick.set_permissions(target=role2, speak=False, send_messages=False, read_message_history=False, read_messages=False, add_reactions=False, view_channel=False)
+            channel = self.bot.get_channel(tick)
+            
+            await message.remove_reaction(emoji, user)         
+            await tick.set_permissions(target=role2, speak=False, send_messages=False, read_message_history=False, read_messages=False, add_reactions=False, view_channel=False)##permissions
             await tick.set_permissions(target=user, speak=True, send_messages=True, read_message_history=True, read_messages=True, view_channel=True, add_reactions=False)
 
+
+            embed = discord.Embed(title="Ticket utils (staff only)", color=0xf7fcfd)##embed
+            embed.add_field(name="📄 Claim the Ticket!", value="Claim the ticket so that the other supporters know that it is already being processed.", inline=False)
+            embed.add_field(name="🗑️ Delete the ticket!", value="Delete the current ticket.", inline=False)
+            embed.add_field(name="🔒 Lock the Ticket!", value="Lock the ticket from the perso who has opened it.", inline=False)
+            ticketembed = await tick.send(embed=embed)
+            ticketembed_id = ticketembed.id
+            await ticketembed.add_reaction('📄')
+            await ticketembed.add_reaction('🗑️')
+            await ticketembed.add_reaction('🔒')
             
+
+        if ticketembed_id and discord.Emoji == "🔒":
+
+    
+
+            embed = discord.Embed(title = "Ticket closed!", description = f"``🎟️ The ticket was just closed by .``", color = 0xf7fcfd)
+
+            await channel.send(embed=embed)
+        
+
+         
+
+
+        
 
 
         guild_id = payload.guild_id
@@ -179,6 +213,9 @@ class tickets(commands.Cog):
 
         message_id = payload.message_id
         emoji = payload.emoji.name
+
+
+
 
    
 

@@ -1,17 +1,19 @@
-from operator import is_not, not_
-from discord import Embed, Member, User, channel, client, colour, guild, message, user, utils
+from operator import is_not
+from discord import Embed, Member, User, utils
 
 from discord.ext import commands
 import asyncio, discord
 from discord.ext.commands import bot
+from discord.ext.commands.core import has_role
 from discord.ext.commands.errors import MissingPermissions
-import random
-from typing import Dict, List, Pattern, Set, Tuple, Union
+import random, sqlite3
+from typing import Dict, List, Tuple, Union
 import re, unicodedata
-import cmath as math, sqlite3
+import cmath as math
 from typing import List
 import lib as mod
 from typing import Dict, List, Tuple, Union
+
 
 
 
@@ -60,64 +62,75 @@ class admin(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
+    @commands.command(name='mutesetup', aliases=['ms'])
+    async def mutesetup(self, ctx, role: discord.Role):
+        db = sqlite3.connect('tentro.sqlite')
+        cursor = db.cursor()
+        cursor.execute(f"SELECT muterole FROM mute WHERE guild_id = {ctx.guild.id}")
+        result = cursor.fetchone()
+        if result is None:
+            sql = ("INSERT INTO mute(guild_id, muterole) VALUES(?,?)")
+            val = (ctx.guild.id, role.id)
+            await ctx.send(f"MutedRole has been set to {role}")
+        elif result is not None:
+            sql = ("UPDATE mute SET muterole = ? WHERE guild_id = ?")
+            val = (role.id, ctx.guild.id)
+            await ctx.send(f"MutedRole has been updated to {role}") 
+        cursor.execute(sql, val)
+        db.commit()
+        cursor.close()
+        db.close()
 
+    @commands.command(name='mute', aliases=["m"])
+    @commands.has_permissions(manage_messages=True, administrator=True)
+    async def _Mute(self, ctx, member: discord.Member, time=None, *, reason=None):
+        db = sqlite3.connect('tentro.sqlite')
+        cursor = db.cursor()
+        cursor.execute("SELECT muterole FROM mute WHERE EXISTS(SELECT muterole FROM mute WHERE guild_id=?)", (ctx.guild.id,))
+        result = cursor.fetchone()
+        print(result[0])
+        mutedrole = discord.utils.get(ctx.guild.roles, id=result[0])
 
+        cursor.execute(f"SELECT user_id FROM ismuted WHERE guild_id = {ctx.guild.id}") ##GETS USER ID 
+        result_1 = cursor.fetchone()
+        if result_1 is None:
+            sql = ("INSERT INTO ismuted(guild_id, user_id) VALUES(?,?)")
+            val = (ctx.guild.id, member.id)
+        elif result_1 is not None:
+            sql = ("UPDATE ismuted SET user_id = ? WHERE guild_id = ?")
+            val = (member.id, ctx.guild.id)
+
+        cursor.execute(sql, val)
+
+        if time==None and reason==None: ##IF NO TIME AND NO REASON
+            await member.add_roles(mutedrole)
+            cursor.execute("SELECT user_id FROM ismuted WHERE EXISTS(SELECT user_id FROM ismuted WHERE guild_id=?)", (ctx.guild.id,)) ##GETS USER ID
+            resultuser = cursor.fetchone()
+            print(resultuser[0])
+            cursor.execute("SELECT ismuted FROM ismuted WHERE EXISTS(SELECT ismuted FROM ismuted WHERE guild_id=?)", (ctx.guild.id,))## GETS ISMUTED : TRUE/FALSE
+            resultismuted = cursor.fetchone()
+            print(resultismuted)
+            
+            
+                
+
+            
+            embed = Embed(description=f"**{member.mention} has been muted indefinitely.**", color=red) #embed of the information
+            embed.timestamp = ctx.message.created_at
+            await ctx.send(embed=embed)
+
+            embed = Embed(title=f"You have been muted in: {ctx.guild.name}.\n**Time period:** indefinitely.", colour=red)
+            await member.send(embed=embed)
+
+        cursor.execute(sql, val)
+        db.commit()
+        cursor.close()
+        db.close()
    
     
    
 
-    @commands.command(name="mute", aliases=["m"])
-    async def _Mute(self, ctx,  member: Member, time=None, *, reason=None):
-#this is where the shit mute command is
-        
-        if ctx.author.guild_permissions.manage_messages == False:
-            await ctx.send("You dont have the required permissions to do that!", delete_after=5)
-            return
 
-        guild = ctx.guild
-        mutedRole = utils.get(guild.roles, name="Muted")## this gets a role named muted if there is one
-        if time is None:  # if there is no time it will do:
-            guild = ctx.guild
-            mutedRole = utils.get(guild.roles, name="Muted") #this gets a role named muted if there is one
-            if not mutedRole: #if there is no mutedrole
-                mutedRole = await guild.create_role(name="Muted", colour=green)
-                for channel in guild.channels:
-                    await channel.set_permissions(mutedRole, speak=False, read_messages=False) #it will set permissions to this
-            else:
-                await member.add_roles(mutedRole, reason=reason) #adds muted role to user
-                muted_role = utils.get(ctx.guild.roles, name="Muted") 
-                await member.add_roles(muted_role)
-
-                embed = Embed(description=f"**{member.mention} has been muted indefinitely.\nReason:{reason}**", color=red) #embed of the information
-                embed.timestamp = ctx.message.created_at
-                await ctx.send(embed=embed)
-
-                embed = Embed(title=f"You have been muted in: {guild.name}.\n**Time period:** indefinitely.\n**Reason:**{reason}", colour=red)
-                await member.send(embed=embed)
-
-        elif time is not None and not mutedRole: # if there is time specified and there is not mutedrole
-            mutedRole = await guild.create_role(name="Muted", colour=green) #creates mutedrole
-            for channel in guild.channels:
-                await channel.set_permissions(mutedRole, speak=False, read_messages=False) #sets permissions
-        else:
-            await member.add_roles(mutedRole, reason=reason)
-            muted_role = utils.get(ctx.guild.roles, name="Muted")
-            await member.add_roles(muted_role) #adds it to user
-
-            embed = Embed(description=f"**{member.mention} has been muted for {time}.\nReason:{reason}**", color=red)
-            embed.timestamp = ctx.message.created_at
-            await ctx.send(embed=embed)  
-                 #aall this here is info in embed
-
-            embed = Embed(title=f"You have been muted in: {guild.name}.\n**Time period:** {time}.\n**Reason:**{reason}", colour=red) 
-            await member.send(embed=embed)
-
-            duration = float(time[0: -1]) * time_convert[time[-1]]  #now this is the time cmd
-            await asyncio.sleep(duration) # asyncio.sleep duration = specified time
-            await member.remove_roles(muted_role) #after time is over remove user's roles
-
-            embed = Embed(title=f"You have been unmuted in: {guild.name}.", colour=red)
-            await member.send(embed=embed)                     #more info
       
       
   

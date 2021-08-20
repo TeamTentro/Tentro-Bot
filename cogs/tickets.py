@@ -96,6 +96,47 @@ class tickets(commands.Cog):
         cursor.close()
         db.close()
 
+      
+
+
+    @commands.command(name="tickets_remove")
+    @commands.is_owner()
+    async def tickets_remove(self, ctx):
+        
+        ticketcategory = discord.utils.get(ctx.guild.categories, name="🎫-Tickets")
+        ticketchannel = discord.utils.get(ctx.guild.text_channels, name="ticketinfo")
+        if ticketcategory == None or ticketchannel == None:
+            embed = Embed(title="✅| There are no ticket utils", colour = 0x00ff00)
+            await ctx.reply(embed=embed)
+        
+        else:
+          await ticketcategory.delete()
+          await ticketchannel.delete()
+          embed = Embed(title="✅| Successfully removed the ticket utilities from this server", colour = 0x00ff00)
+          await ctx.reply(embed=embed)
+
+    @commands.command(name="roleperm")
+    @commands.is_owner()
+    async def roleperm(self, ctx, role: discord.Role):
+        db = sqlite3.connect('tentro.sqlite')
+        cursor = db.cursor()
+        cursor.execute(f"SELECT role_id FROM ticket WHERE guild_id = {ctx.guild.id}")
+        result = cursor.fetchone()
+        if result is None:
+            sql = ("INSERT INTO ticket(guild_id, role_id) VALUES(?,?)")
+            val = (ctx.guild.id, role)
+            await ctx.send(f"Role_id has been set to {role}")
+        elif result is not None:
+            sql = ("UPDATE ticket SET role_id = ? WHERE guild_id = ?")
+            val = (role, ctx.guild.id)
+            await ctx.send(f"Role_id has been updated to {role}") 
+        cursor.execute(sql, val)
+        db.commit()
+        cursor.close()
+        db.close()
+        
+            
+
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
         member = payload.member
@@ -139,52 +180,10 @@ class tickets(commands.Cog):
         message_id = payload.message_id
         emoji = payload.emoji.name
 
-
-      
-
-
-    @commands.command(name="tickets_remove")
-    @commands.is_owner()
-    async def tickets_remove(self, ctx):
-        
-        ticketcategory = discord.utils.get(ctx.guild.categories, name="🎫-Tickets")
-        ticketchannel = discord.utils.get(ctx.guild.text_channels, name="ticketinfo")
-        if ticketcategory == None or ticketchannel == None:
-            embed = Embed(title="✅| There are no ticket utils", colour = 0x00ff00)
-            await ctx.reply(embed=embed)
-        
-        else:
-          await ticketcategory.delete()
-          await ticketchannel.delete()
-          embed = Embed(title="✅| Successfully removed the ticket utilities from this server", colour = 0x00ff00)
-          await ctx.reply(embed=embed)
-
-    @commands.command(name="roleperm")
-    @commands.is_owner()
-    async def roleperm(self, ctx, role: discord.Role):
-        db = sqlite3.connect('tentro.sqlite')
-        cursor = db.cursor()
-        cursor.execute(f"SELECT role_id FROM ticket WHERE guild_id = {ctx.guild.id}")
-        result = cursor.fetchone()
-        if result is None:
-            sql = ("INSERT INTO ticket(guild_id, role_id) VALUES(?,?)")
-            val = (ctx.guild.id, role)
-            await ctx.send(f"Role_id has been set to {role}")
-        elif result is not None:
-            sql = ("UPDATE ticket SET role_id = ? WHERE guild_id = ?")
-            val = (role, ctx.guild.id)
-            await ctx.send(f"Role_id has been updated to {role}") 
-        cursor.execute(sql, val)
-        db.commit()
-        cursor.close()
-        db.close()
-        
-            
    
 
     
 
 def setup(bot):
     bot.add_cog(tickets(bot))
-
     

@@ -60,6 +60,11 @@ class info(commands.Cog):
             await ctx.send(embed=uptime)
 
 
+    @commands.command(name="invite", aliases=["inv", "add"])
+    async def invite(self, ctx):
+        embed = discord.Embed(title=f"Thanks for the support <3", description="[Add Tentro Now](https://discord.com/api/oauth2/authorize?client_id=861919315506495508&permissions=8&scope=bot%20applications.commands)!", colour=0xff0000)
+        embed.timestamp = ctx.message.created_at
+        await ctx.send(embed=embed)
     
 
 

@@ -20,7 +20,7 @@ DEACTIVATED_COLOR = 0xff0000
 RED = 0xff0000
 DELETE_TIME: float = 5
 
-_BLACK_LIST = ["dood", "nigga", "nigger", "faggot"]
+_BLACK_LIST = ["dood", "nigga", "nigger"]
 _FILLERS = [" ", "\-", "_"]
 
 

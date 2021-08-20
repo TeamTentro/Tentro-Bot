@@ -178,7 +178,21 @@ class misc(commands.Cog):
             cursor.close()
             db.close()
 
-    
+    @commands.command(name='testembed')
+    @commands.is_owner()
+    async def testembed(self, ctx):
+        embed = Embed(title="Ticket utils", description="**🔒-Lock the ticket from the person who opened it\n🗑️-delete the ticket\n📄-claim the ticket**", colour = red)
+        await ctx.send(f'{ctx.author.mention} please provide a reason for your ticket.')
+        a = await ctx.send(embed=embed)
+        await a.add_reaction('🔒')
+        await a.add_reaction('🗑️')
+        await a.add_reaction('📄')
+        
+        
+                     
+            
+       
+
 
     @welcome.command()
     async def message(self, ctx, *, text):

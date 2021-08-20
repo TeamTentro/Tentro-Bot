@@ -24,21 +24,16 @@ class user(commands.Cog):
 
 
     @commands.Cog.listener()
-    async def on_member_join(self, member):
+    async def on_member_join(self, member: discord.Member):
         db = sqlite3.connect('tentro.sqlite')
         cursor = db.cursor()
-        cursor.execute(f"SELECT role_id FROM rolejoin WHERE guild_id = {member.guild.id}")
-        result = cursor.fetchone()
-        
-        if result is None:
-            return
-        else:
-            cursor.execute=(f"SELECT role_id FROM rolejoin WHERE guild_id = {member.guild.id}")
-            result_2 = cursor.fetchone()
 
-            
-            role = discord.utils.get(result_2)
-            await member.add_roles(role)
+        cursor.execute("SELECT role_id FROM rolejoin WHERE EXISTS(SELECT role_id FROM rolejoin WHERE guild_id=?)", (member.guild.id,))
+        result_4 = cursor.fetchone()
+
+
+        role = discord.utils.get(member.guild.roles, id=result_4[0])
+        await member.add_roles(role)
 
 
              

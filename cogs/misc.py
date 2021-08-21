@@ -178,7 +178,24 @@ class misc(commands.Cog):
             cursor.close()
             db.close()
 
-    
+    @commands.command(name='testembed')
+    @commands.is_owner()
+    async def testembed(self, ctx):
+        
+        embed = discord.Embed(title="Ticket utils (staff only)", color=0xf7fcfd)
+        embed.add_field(name="📄 Claim the Ticket!", value="Claim the ticket so that the other supporters know that it is already being processed.", inline=False)
+        embed.add_field(name="🗑️ Delete the ticket!", value="Delete the current ticket.", inline=False)
+        embed.add_field(name="🔒 Lock the Ticket!", value="Lock the ticket from the perso who has opened it.", inline=False)
+        a = await ctx.send(embed=embed)
+        await a.add_reaction('📄')
+        await a.add_reaction('🗑️')
+        await a.add_reaction('🔒')
+        
+        
+                     
+            
+       
+
 
     @welcome.command()
     async def message(self, ctx, *, text):

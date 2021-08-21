@@ -104,7 +104,7 @@ class devcommands(commands.Cog):
             await user.remove_roles(role)
             await role.delete()
             await ctx.message.add_reaction("✅")
-
+            
         except discord.Forbidden:
             await ctx.send("I do not have permission to do this!")
 

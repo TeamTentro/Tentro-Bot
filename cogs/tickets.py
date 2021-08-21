@@ -210,5 +210,4 @@ class tickets(commands.Cog):
 
 def setup(bot):
     bot.add_cog(tickets(bot))
-
     

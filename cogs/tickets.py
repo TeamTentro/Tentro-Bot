@@ -14,7 +14,7 @@ class tickets(commands.Cog):
         self.bot = bot
 
 
-    @commands.command(name="test")
+    @commands.command(name="sussytest")
     @commands.is_owner()
     async def sussytest(self, ctx):
         embed = discord.Embed(title="Ticket utils (staff only)", color=0xf7fcfd)

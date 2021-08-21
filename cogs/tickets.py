@@ -3,8 +3,9 @@ from discord import Embed
 from discord.ext import commands
 import discord.utils, sqlite3
 
-from discord_components import DiscordComponents, Button, ButtonStyle, InteractionType, component
+from discord_components import DiscordComponents, Button, ButtonStyle, component, InteractionType
 from operator import is_not, not_
+from discord_components import *
 from discord import Embed, Member, User, channel, client, colour, guild, message, user, utils
 path = "./data/Tentro.db"
 class tickets(commands.Cog):
@@ -13,7 +14,27 @@ class tickets(commands.Cog):
         self.bot = bot
 
 
-    
+    @commands.command(name="test")
+    @commands.is_owner()
+    async def sussytest(self, ctx):
+        embed = discord.Embed(title="Ticket utils (staff only)", color=0xf7fcfd)
+        embed.add_field(name="📄 Claim the Ticket!", value="Claim the ticket so that the other supporters know that it is already being processed.", inline=False)
+        embed.add_field(name="🗑️ Delete the ticket!", value="Delete the current ticket.", inline=False)
+        embed.add_field(name="🔒 Lock the Ticket!", value="Lock the ticket from the perso who has opened it.", inline=False)
+        components = [[Button(style=3, label="📄 Claim"),Button(style=4, label="🗑️ Delete"), Button(style=2, label="🔒 Lock")]]
+        await ctx.send(embed=embed, components=components)
+        res = await self.bot.wait_for("button_click")
+        if res.channel == ctx.channel:
+            await res.respond(
+                type=InteractionType.ChannelMessageWithSource,
+                content="omagad"
+            )
+
+    @commands.command(name="docs")
+    @commands.is_owner()
+    async def docs(self, ctx):
+        doc_embed = discord.Embed(title="Click the button below to access the discord.py docs.")
+        await ctx.send(embed=doc_embed, components=[Button(style=ButtonStyle.blue, label = "[📄 Discord.py docs](https://www.youtube.com/watch?v=Vr3wuXrT_pk)")])
 
 
 

@@ -5,7 +5,7 @@ from discord import *
 from discord.ext import commands
 from pathlib import Path
 import lib.database as db
-
+from discord_components import DiscordComponents, Button, ButtonStyle, component, InteractionType
 intents = discord.Intents.all()
 
 cwd = Path(__file__).parents[0]
@@ -27,7 +27,7 @@ print(f'Tentro has connected successfully.')
 @bot.event
 async def on_ready():
     
-
+    DiscordComponents(bot)
     general_channel = bot.get_channel(745925853229350975)
     await general_channel.send("Bot is online!")
     await bot.change_presence(activity=discord.Game(name="t!help for Help!"))

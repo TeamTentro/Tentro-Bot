@@ -6,7 +6,7 @@ from discord.ext import commands
 from pathlib import Path
 import lib.database as db
 from discord_components import *
-from discord_components import DiscordComponents, Button, ButtonStyle, component, InteractionType
+from discord_components import DiscordComponents, Button, ButtonStyle, component, InteractionEventType
 intents = discord.Intents.all()
 
 cwd = Path(__file__).parents[0]

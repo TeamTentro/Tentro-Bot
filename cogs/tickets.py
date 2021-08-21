@@ -1,9 +1,10 @@
 
+from enum import IntEnum
 from discord import Embed
 from discord.ext import commands
 import discord.utils, sqlite3
 
-from discord_components import DiscordComponents, Button, ButtonStyle, component, InteractionType
+from discord_components import DiscordComponents, Button, ButtonStyle, component
 from operator import is_not, not_
 from discord_components import *
 from discord import Embed, Member, User, channel, client, colour, guild, message, user, utils
@@ -14,21 +15,19 @@ class tickets(commands.Cog):
         self.bot = bot
 
 
-    @commands.command(name="test")
-    @commands.is_owner()
-    async def sussytest(self, ctx):
-        embed = discord.Embed(title="Ticket utils (staff only)", color=0xf7fcfd)
-        embed.add_field(name="📄 Claim the Ticket!", value="Claim the ticket so that the other supporters know that it is already being processed.", inline=False)
-        embed.add_field(name="🗑️ Delete the ticket!", value="Delete the current ticket.", inline=False)
-        embed.add_field(name="🔒 Lock the Ticket!", value="Lock the ticket from the perso who has opened it.", inline=False)
-        components = [[Button(style=3, label="📄 Claim"),Button(style=4, label="🗑️ Delete"), Button(style=2, label="🔒 Lock")]]
-        await ctx.send(embed=embed, components=components)
-        res = await self.bot.wait_for("button_click")
-        if res.channel == ctx.channel:
-            await res.respond(
-                type=InteractionType.ChannelMessageWithSource,
-                content="omagad"
-            )
+    
+    @commands.command(name="test1")
+    async def button(self, ctx):
+        await ctx.send(
+        "Hello, World!",
+        components = [
+            Button(label = "WOW button!", custom_id = "button1")
+        ]
+    )
+
+        interaction = await self.bot.wait_for("button_click", check = lambda i: i.custom_id == "button1")
+        await interaction.send(content = "Button clicked!")      
+            
 
     @commands.command(name="docs")
     @commands.is_owner()
@@ -175,15 +174,27 @@ class tickets(commands.Cog):
             await tick.set_permissions(target=user, speak=True, send_messages=True, read_message_history=True, read_messages=True, view_channel=True, add_reactions=False)
 
 
-            embed = discord.Embed(title="Ticket utils (staff only)", color=0xf7fcfd)##embed
+            embed = discord.Embed(title="Ticket utils (staff only)", color=0xf7fcfd)
             embed.add_field(name="📄 Claim the Ticket!", value="Claim the ticket so that the other supporters know that it is already being processed.", inline=False)
             embed.add_field(name="🗑️ Delete the ticket!", value="Delete the current ticket.", inline=False)
             embed.add_field(name="🔒 Lock the Ticket!", value="Lock the ticket from the perso who has opened it.", inline=False)
-            ticketembed = await tick.send(embed=embed)
-            ticketembed_id = ticketembed.id
-            await ticketembed.add_reaction('📄')
-            await ticketembed.add_reaction('🗑️')
-            await ticketembed.add_reaction('🔒')
+            components = [[Button(style=3, label="📄 Claim", custom_id="button2"),Button(style=4, label="🗑️ Delete", custom_id="deletebutton"), Button(style=2, label="🔒 Lock", custom_id="lockbutton")]]
+            await tick.send(embed=embed, components=components)
+
+            interaction = await self.bot.wait_for("button_click", check = lambda i: i.custom_id == "button2")
+            await interaction.send(content = "You have claimed the ticket!")
+            await tick.send("Ticket has been claimed by a staff member!")
+            await tick.edit(name="Claimed Ticket", category=ticketcategory)
+
+            interaction = await self.bot.wait_for("button_click", check = lambda i: i.custom_id == "lockbutton")
+            await interaction.send(content = "Ticket has been locked!")
+            await tick.send("Ticket has been locked!")
+            await tick.set_permissions(target=user, speak=False, send_messages=False, read_message_history=False, read_messages=False, view_channel=False, add_reactions=False)
+
+            interaction = await self.bot.wait_for("button_click", check = lambda i: i.custom_id == "deletebutton")
+            await tick.delete()
+            
+
             
          
 

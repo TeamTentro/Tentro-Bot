@@ -3,10 +3,10 @@ from discord import Embed
 from discord.ext import commands
 import discord.utils, sqlite3
 
-
+from discord_components import DiscordComponents, Button, ButtonStyle, InteractionType, component
 from operator import is_not, not_
 from discord import Embed, Member, User, channel, client, colour, guild, message, user, utils
-
+path = "./data/Tentro.db"
 class tickets(commands.Cog):
 
     def __init__(self, bot):
@@ -26,13 +26,10 @@ class tickets(commands.Cog):
     @commands.command(name="tickets_add")
     @commands.is_owner()
     async def tickets_add(self, ctx, *, text=None):
-        db = sqlite3.connect('tentro.sqlite')
-        cursor = db.cursor()
-        cursor.execute(f"SELECT msg FROM ticket WHERE guild_id = {ctx.guild.id}")
-        result = cursor.fetchone()
-       
+        conn = sqlite3.connect(path)
+        c = conn.cursor()
         
-
+       
         # Check if the category already exists
         ticketcat_e = discord.utils.get(ctx.guild.categories, name="🎫-Tickets")
         if ticketcat_e:
@@ -56,22 +53,19 @@ class tickets(commands.Cog):
             addedembed = Embed(title="✅| Succesfully added the Tentro ticket system to this server. Run t!help_tickets for more info.", colour = 0x00ff00)
             await ctx.send(embed=addedembed)
             
-            print(ticketmsg.id)
-            cursor.execute(f"SELECT msg_id FROM ticket WHERE guild_id = {ctx.guild.id}")
-            result2 = cursor.fetchone()
+            
+            c.execute(f"SELECT msg_id FROM ticket WHERE guild_id = {ctx.guild.id}")
+            result2 = c.fetchone()
             if result2 is None:
                 sql = ("INSERT INTO ticket(guild_id, msg_id) VALUES(?,?)")
                 val = (ctx.guild.id, ticketmsg.id)
                 await ctx.send(f"Msg id has been set")
+               
             elif result2 is not None:
                 sql = ("UPDATE ticket SET msg_id = ? WHERE guild_id = ?")
                 val = (ticketmsg.id, ctx.guild.id)
                 await ctx.send(f"Msg id  has been set")
-                cursor.execute(sql, val)
-            print(result2)
- 
-            
-            
+              
 
         elif text==None:
             embedticketchannel = Embed(title=f"Tickets for {ctx.guild.name}", description="React to this message with '🎫' to open a ticket. Use tickets wisely and don't open them for dumb reasons.", color=0xc4f21d)
@@ -81,26 +75,10 @@ class tickets(commands.Cog):
             addedembed = Embed(title="✅| Succesfully added the Tentro ticket system to this server. Run t!help_tickets for more info.", colour = 0x00ff00)
             await ctx.reply(embed=addedembed)
 
-        if result and text==None:
-            return
-
-        if result is None:
-            sql = ("INSERT INTO ticket(guild_id, msg) VALUES(?,?)")
-            val = (ctx.guild.id, text)
-            cursor.execute(sql, val)
-            await ctx.send(f"msg has been set to {text}!")
-            
-
-        if result:
-            sql = ("UPDATE ticket SET msg = ? WHERE guild_id = ?")
-            val = (text, ctx.guild.id)
-            await ctx.reply(f"Ticket message has been set!")
-        print(sql)
-        print(val)
-        cursor.execute(sql, val)
-        db.commit()
-        cursor.close()
-        db.close()
+        c.execute(sql, val)
+        conn.commit()
+        c.close()
+        conn.close()
 
       
 
@@ -124,10 +102,10 @@ class tickets(commands.Cog):
     @commands.command(name="roleperm")
     @commands.is_owner()
     async def roleperm(self, ctx, role: discord.Role):
-        db = sqlite3.connect('tentro.sqlite')
-        cursor = db.cursor()
-        cursor.execute(f"SELECT role_id FROM ticket WHERE guild_id = {ctx.guild.id}")
-        result = cursor.fetchone()
+        conn = sqlite3.connect(path)
+        c = conn.cursor()
+        c.execute(f"SELECT role_id FROM ticket WHERE guild_id = {ctx.guild.id}")
+        result = c.fetchone()
         if result is None:
             sql = ("INSERT INTO ticket(guild_id, role_id) VALUES(?,?)")
             val = (ctx.guild.id, role)
@@ -136,10 +114,10 @@ class tickets(commands.Cog):
             sql = ("UPDATE ticket SET role_id = ? WHERE guild_id = ?")
             val = (role, ctx.guild.id)
             await ctx.send(f"Role_id has been updated to {role}") 
-        cursor.execute(sql, val)
-        db.commit()
-        cursor.close()
-        db.close()
+        c.execute(sql, val)
+        conn.commit()
+        c.close()
+        conn.close()
         
             
 
@@ -147,14 +125,14 @@ class tickets(commands.Cog):
     async def on_raw_reaction_add(self, payload):
         member = payload.member
 
-        db = sqlite3.connect('tentro.sqlite')
-        cursor = db.cursor()
-        cursor.execute("SELECT msg_id FROM ticket WHERE EXISTS(SELECT msg_id FROM ticket WHERE guild_id=?)", (payload.guild_id,))
-        result_3 = cursor.fetchone()
+        conn = sqlite3.connect(path)
+        c = conn.cursor()
+        c.execute("SELECT msg_id FROM ticket WHERE EXISTS(SELECT msg_id FROM ticket WHERE guild_id=?)", (payload.guild_id,))
+        result_3 = c.fetchone()
         
       
-
-        if payload.message_id == result_3[0] and member is not None:
+        
+        if payload.message_id==result_3[0]:
             
             guild_id = payload.guild_id
             channel = self.bot.get_channel(payload.channel_id)
@@ -186,21 +164,7 @@ class tickets(commands.Cog):
             await ticketembed.add_reaction('🗑️')
             await ticketembed.add_reaction('🔒')
             
-
-        if ticketembed_id and discord.Emoji == "🔒":
-
-    
-
-            embed = discord.Embed(title = "Ticket closed!", description = f"``🎟️ The ticket was just closed by .``", color = 0xf7fcfd)
-
-            await channel.send(embed=embed)
-        
-
          
-
-
-        
-
 
         guild_id = payload.guild_id
         guild = self.bot.get_guild(guild_id)
@@ -214,7 +178,9 @@ class tickets(commands.Cog):
         message_id = payload.message_id
         emoji = payload.emoji.name
 
-
+        conn.commit()
+        c.close()
+        conn.close()
 
 
    

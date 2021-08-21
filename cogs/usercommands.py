@@ -11,7 +11,7 @@ intents = discord.Intents.all()
 intents.members = True
 
 path = "./data/Tentro.db"
-conn = sqlite3.connect(path)
+
 
 
 class user(commands.Cog):
@@ -25,15 +25,19 @@ class user(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member: discord.Member):
-        db = sqlite3.connect('tentro.sqlite')
-        cursor = db.cursor()
+        conn = sqlite3.connect(path)
+        c = conn.cursor()
 
-        cursor.execute("SELECT role_id FROM rolejoin WHERE EXISTS(SELECT role_id FROM rolejoin WHERE guild_id=?)", (member.guild.id,))
-        result_4 = cursor.fetchone()
+        c.execute("SELECT role_id FROM rolejoin WHERE EXISTS(SELECT role_id FROM rolejoin WHERE guild_id=?)", (member.guild.id,))
+        result_4 = c.fetchone()
 
-
+        
+   
         role = discord.utils.get(member.guild.roles, id=result_4[0])
         await member.add_roles(role)
+        conn.commit()
+        c.close()
+        conn.close()
 
 
              
@@ -80,28 +84,41 @@ class user(commands.Cog):
     @rolejoin.command(pass_context=True)
     async def role(self, ctx, role: discord.Role):
         if ctx.message.author.guild_permissions.administrator:
-            db = sqlite3.connect('tentro.sqlite')
-            cursor = db.cursor()
+            conn = sqlite3.connect(path)
+            c = conn.cursor() 
 
-            cursor.execute(f"SELECT role_id FROM rolejoin WHERE guild_id = {ctx.guild.id}")
-            result = cursor.fetchone()
+            c.execute(f"SELECT role_id FROM rolejoin WHERE guild_id = {ctx.guild.id}")
+            result = c.fetchone()
 
             if result is None:
                 sql = ("INSERT INTO rolejoin(guild_id, role_id) VALUES(?,?)")
                 val = (ctx.guild.id, role.id)
-                cursor.execute(sql, val)
+                c.execute(sql, val)
                 await ctx.send(f"Role has been set to {role}!")
             elif result is not None:
                 sql = ("UPDATE rolejoin SET role_id = ? WHERE guild_id = ?")
                 val = (role.id, ctx.guild.id)
-                cursor.execute(sql, val)
+                c.execute(sql, val)
                 await ctx.send(f"Role has been updated to {role}!")
 
-            db.commit()
-            cursor.close()
+            conn.commit()
+            c.close()
             
         else:
             await ctx.send("You do not have the required permissions to do that!")
+
+    @commands.command(name='test')
+    async def test(self, ctx, text):
+        path = "./data/Tentro.db"
+        conn = sqlite3.connect(path)
+        c = conn.cursor()
+        c.execute("SELECT role_id FROM test WHERE EXISTS(SELECT role_id FROM test WHERE guild_id=?)", (ctx.guild.id,))
+        result = c.fetchone()
+        print(result)
+        print(result[0])
+        conn.commit()
+        c.close()
+        conn.close()
 
             
 

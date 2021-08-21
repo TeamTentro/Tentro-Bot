@@ -5,6 +5,7 @@ from discord import *
 from discord.ext import commands
 from pathlib import Path
 import lib.database as db
+from discord_components import *
 from discord_components import DiscordComponents, Button, ButtonStyle, component, InteractionType
 intents = discord.Intents.all()
 

@@ -107,18 +107,7 @@ class user(commands.Cog):
         else:
             await ctx.send("You do not have the required permissions to do that!")
 
-    @commands.command(name='test')
-    async def test(self, ctx, text):
-        path = "./data/Tentro.db"
-        conn = sqlite3.connect(path)
-        c = conn.cursor()
-        c.execute("SELECT role_id FROM test WHERE EXISTS(SELECT role_id FROM test WHERE guild_id=?)", (ctx.guild.id,))
-        result = c.fetchone()
-        print(result)
-        print(result[0])
-        conn.commit()
-        c.close()
-        conn.close()
+   
 
             
 

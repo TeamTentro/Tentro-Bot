@@ -13,8 +13,7 @@ class tickets(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-
-
+     
     
     @commands.command(name="test1")
     async def button(self, ctx):
@@ -185,6 +184,7 @@ class tickets(commands.Cog):
             await interaction.send(content = "You have claimed the ticket!")
             await tick.send("Ticket has been claimed by a staff member!")
             await tick.edit(name="Claimed Ticket", category=ticketcategory)
+            
 
             interaction = await self.bot.wait_for("button_click", check = lambda i: i.custom_id == "lockbutton")
             await interaction.send(content = "Ticket has been locked!")
@@ -214,6 +214,9 @@ class tickets(commands.Cog):
         c.close()
         conn.close()
 
+
+
+   
 
    
 

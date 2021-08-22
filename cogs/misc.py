@@ -15,7 +15,7 @@ time_convert = {"s":1, "m":60, "h":3600,"d":86400}
 
 red = 0xff0000
 green = 0x34eb40
-
+path = "./data/Tentro.db"
 intents = discord.Intents.default()
 
 intents.members = True
@@ -31,16 +31,16 @@ class misc(commands.Cog):
     @commands.Cog.listener()
     async def on_member_join(self, member):
         
-        db = sqlite3.connect('tentro.sqlite')
-        cursor = db.cursor()
-        cursor.execute(f"SELECT channel_id FROM tentro WHERE guild_id = {member.guild.id}")
-        result = cursor.fetchone()
+        conn = sqlite3.connect(path)
+        c = conn.cursor()
+        c.execute(f"SELECT channel_id FROM joincmd WHERE guild_id = {member.guild.id}")
+        result = c.fetchone()
         
         if result is None:
             return
         else:
-            cursor.execute(f"SELECT msg FROM tentro WHERE guild_id = {member.guild.id}")
-            result1 = cursor.fetchone()
+            c.execute(f"SELECT msg FROM joincmd WHERE guild_id = {member.guild.id}")
+            result1 = c.fetchone()
             members = len(list(member.guild.members))
             mention = member.mention
             user = member.name
@@ -161,22 +161,22 @@ class misc(commands.Cog):
     @welcome.command(name='channel')
     async def _channel(self, ctx, channel: discord.TextChannel):
         if ctx.message.author.guild_permissions.administrator:
-            db = sqlite3.connect('tentro.sqlite')
-            cursor = db.cursor()
-            cursor.execute(f"SELECT channel_id FROM tentro WHERE guild_id = {ctx.guild.id}")
-            result = cursor.fetchone()
+            conn = sqlite3.connect(path)
+            c = conn.cursor()
+            c.execute(f"SELECT channel_id FROM joincmd WHERE guild_id = {ctx.guild.id}")
+            result = c.fetchone()
             if result is None:
-                sql = ("INSERT INTO tentro(guild_id, channel_id) VALUES(?,?)")
+                sql = ("INSERT INTO joincmd(guild_id, channel_id) VALUES(?,?)")
                 val = (ctx.guild.id, channel.id)
                 await ctx.send(f"Channel has been set to {channel.mention}")
             elif result is not None:
-                sql = ("UPDATE tentro SET channel_id = ? WHERE guild_id = ?")
+                sql = ("UPDATE joincmd SET channel_id = ? WHERE guild_id = ?")
                 val = (channel.id, ctx.guild.id)
                 await ctx.send(f"Channel has been updated to {channel.mention}") 
-            cursor.execute(sql, val)
-            db.commit()
-            cursor.close()
-            db.close()
+            c.execute(sql, val)
+            conn.commit()
+            c.close()
+            conn.close()
 
     @commands.command(name='testembed')
     @commands.is_owner()
@@ -200,37 +200,37 @@ class misc(commands.Cog):
     @welcome.command()
     async def message(self, ctx, *, text):
         if ctx.message.author.guild_permissions.administrator:
-            db = sqlite3.connect('tentro.sqlite')
-            cursor = db.cursor()
-            cursor.execute(f"SELECT msg FROM tentro WHERE guild_id = {ctx.guild.id}")
-            result = cursor.fetchone()
+            conn = sqlite3.connect(path)
+            c = conn.cursor()
+            c.execute(f"SELECT msg FROM joincmd WHERE guild_id = {ctx.guild.id}")
+            result = c.fetchone()
             if result is None:
-                sql = ("INSERT INTO tentro(guild_id, msg) VALUES(?,?)")
+                sql = ("INSERT INTO joincmd(guild_id, msg) VALUES(?,?)")
                 val = (ctx.guild.id, text)
                 await ctx.send(f"Message has been set to {text}")
             elif result is not None:
-                sql = ("UPDATE tentro SET msg = ? WHERE guild_id = ?")
+                sql = ("UPDATE joincmd SET msg = ? WHERE guild_id = ?")
                 val = (text, ctx.guild.id)
                 await ctx.send(f"Message has been updated to {text}") 
-            cursor.execute(sql, val)
-            db.commit()
-            cursor.close()
-            db.close()
+            c.execute(sql, val)
+            conn.commit()
+            c.close()
+            conn.close()
 
 
 
     @commands.group(invoke_without_command=True)
     async def leave(self, ctx):
-        await ctx.send('Setup commands:\nleave channel <channel>\nleave text <message>') 
+        await ctx.send('Setup commands:\nleave channel <channel>\nleave message <message>') 
 
 
     @leave.command()
     async def channel(self, ctx, channel: discord.TextChannel):  
         if ctx.message.author.guild_permissions.administrator:
-            db = sqlite3.connect('tentro.sqlite')
-            cursor = db.cursor()
-            cursor.execute(f"SELECT channel_id FROM leavecmd WHERE guild_id = {ctx.guild.id}")
-            result = cursor.fetchone()
+            conn = sqlite3.connect(path)
+            c = conn.cursor()
+            c.execute(f"SELECT channel_id FROM leavecmd WHERE guild_id = {ctx.guild.id}")
+            result = c.fetchone()
             if result is None:
                 sql = ("INSERT INTO leavecmd(guild_id, channel_id) VALUES(?,?)")
                 val = (ctx.guild.id, channel.id)
@@ -239,19 +239,19 @@ class misc(commands.Cog):
                 sql = ("UPDATE leavecmd SET channel_id = ? WHERE guild_id = ?")
                 val = (channel.id, ctx.guild.id)
                 await ctx.send(f"Channel has been updated to {channel.mention}") 
-            cursor.execute(sql, val)
-            db.commit()
-            cursor.close()
-            db.close()
+            c.execute(sql, val)
+            conn.commit()
+            c.close()
+            conn.close()
       
 
-    @leave.command()
+    @leave.command("message")
     async def text(self, ctx, *, text):
         if ctx.message.author.guild_permissions.administrator:
-            db = sqlite3.connect('tentro.sqlite')
-            cursor = db.cursor()
-            cursor.execute(f"SELECT msg FROM leavecmd WHERE guild_id = {ctx.guild.id}")
-            result = cursor.fetchone()
+            conn = sqlite3.connect(path)
+            c = conn.cursor()
+            c.execute(f"SELECT msg FROM leavecmd WHERE guild_id = {ctx.guild.id}")
+            result = c.fetchone()
             if result is None:
                 sql = ("INSERT INTO leavecmd(guild_id, msg) VALUES(?,?)")
                 val = (ctx.guild.id, text)
@@ -260,10 +260,10 @@ class misc(commands.Cog):
                 sql = ("UPDATE leavecmd SET msg = ? WHERE guild_id = ?")
                 val = (text, ctx.guild.id)
                 await ctx.send(f"Message has been updated to {text}") 
-            cursor.execute(sql, val)
-            db.commit()
-            cursor.close()
-            db.close()
+            c.execute(sql, val)
+            conn.commit()
+            c.close()
+            conn.close()
  
 
 
@@ -319,68 +319,7 @@ class misc(commands.Cog):
             await ctx.send(emoji.url)
             await ctx.message.delete()
 
-    @commands.group()
-    async def embed(self, ctx):
-
-        await ctx.send("To use this command you have to give a few parameters:"
-        "title: <random text that you can choose>"
-        "description: <random text that you can choose>") 
-
-    @embed.command(name="title")
-    async def title(self, ctx, *, text):
-        db = sqlite3.connect('tentro.sqlite')
-        cursor = db.cursor()
-        cursor.execute(f"SELECT text FROM embed WHERE guild_id = {ctx.guild.id}")
-        result = cursor.fetchone()
-        if result is None:
-            sql = ("INSERT INTO embed(guild_id, text) VALUES(?,?)")
-            val = (ctx.guild.id, text)
-            await ctx.send(f"Title has been set to {text}")
-        elif result is not None:
-            sql = ("UPDATE embed SET text = ? WHERE guild_id = ?")
-            val = (text, ctx.guild.id)
-            await ctx.send(f"Title has been updated to {text}") 
-        cursor.execute(sql, val)
-        db.commit()
-        cursor.close()
-        db.close()
-
-    @embed.command(name="description")
-    async def description(self, ctx, *, text):
-        db = sqlite3.connect('tentro.sqlite')
-        cursor = db.cursor()
-        cursor.execute(f"SELECT description FROM embed WHERE guild_id = {ctx.guild.id}")
-        result = cursor.fetchone()
-        if result is None:
-            sql = ("INSERT INTO embed(guild_id, description) VALUES(?,?)")
-            val = (ctx.guild.id, text)
-            await ctx.send(f"Description has been set to {text}")
-        elif result is not None:
-            sql = ("UPDATE embed SET description = ? WHERE guild_id = ?")
-            val = (text, ctx.guild.id)
-            await ctx.send(f"Description has been updated to {text}") 
-        cursor.execute(sql, val)
-        db.commit()
-        cursor.close()
-        db.close()
-
-
-
-    @embed.command(name="send")
-    async def send(self, ctx):
-        db = sqlite3.connect('tentro.sqlite')
-        cursor = db.cursor()
-        cursor.execute(f"SELECT text FROM embed WHERE guild_id = {ctx.guild.id}")
-        result_1 = cursor.fetchone()
-        cursor.execute(f"SELECT description FROM embed WHERE guild_id = {ctx.guild.id}")
-        result_2 = cursor.fetchone()
-        
-
-        embed = Embed(title=f"{result_1}", description=f"{result_2}")
-        await ctx.send(embed=embed)
     
-
-
     
             
 

@@ -133,6 +133,31 @@ class tickets(commands.Cog):
         conn.commit()
         c.close()
         conn.close()
+
+    
+    @commands.group(invoke_without_command=True)
+    async def ticketlog(self, ctx):
+        await ctx.send('Setup command: t!ticketlog (channel)') 
+
+    @ticketlog.command()
+    async def channel(self, ctx, channel: discord.TextChannel):  
+        if ctx.message.author.guild_permissions.administrator:
+            conn = sqlite3.connect(path)
+            c = conn.cursor()
+            c.execute(f"SELECT channel_id FROM ticketlogcmd WHERE guild_id = {ctx.guild.id}")
+            result = c.fetchone()
+            if result is None:
+                sql = ("INSERT INTO ticketlogcmd(guild_id, channel_id) VALUES(?,?)")
+                val = (ctx.guild.id, channel.id)
+                await ctx.send(f"Ticket log channel has been set to {channel.mention}")
+            elif result is not None:
+                sql = ("UPDATE ticketlogcmd SET channel_id = ? WHERE guild_id = ?")
+                val = (channel.id, ctx.guild.id)
+                await ctx.send(f"Ticket log channel has been updated to {channel.mention}") 
+            c.execute(sql, val)
+            conn.commit()
+            c.close()
+            conn.close()
         
             
 

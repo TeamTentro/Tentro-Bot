@@ -1,3 +1,4 @@
+import sqlite3
 from cogs.channelmoderation import channel
 from operator import is_not, not_
 from discord.ext import commands
@@ -11,6 +12,7 @@ import re, unicodedata
 import cmath as math
 from typing import List
 import lib.automod as mod
+path = "./data/Tentro.db"
 
 
 
@@ -49,6 +51,9 @@ class automod(commands.Cog):
     Toggle = False
     @commands.command(name="automod")
     async def _automod(self, ctx):
+        conn = sqlite3.connect(path)
+        c = conn.cursor()
+       
         
         if not eligible(ctx.author):
             await ctx.send("You do not have the required permissions to do that!", delete_after=5)
@@ -76,6 +81,9 @@ class automod(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, message):
+        conn = sqlite3.connect(path)
+        c = conn.cursor()
+        
 
         
  

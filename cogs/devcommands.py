@@ -2,11 +2,13 @@
 
 from discord.ext import commands
 import discord
+from discord import Embed
 from dbfn import reactionbook
 import os, asyncio
 import traceback
 import sys
 from traceback import format_exception
+from discord_components import DiscordComponents, Button, ButtonStyle, component
 
 class devcommands(commands.Cog):
     def __init__(self, bot):
@@ -37,6 +39,13 @@ class devcommands(commands.Cog):
         book = reactionbook(self.bot, ctx, TITLE="Servers")
         book.createpages(guilds, f"`%1`: **%0**")
         await book.createbook(SHOW_RESULTS=True, COLOUR=colour)
+
+
+    @commands.command(name="docs")
+    @commands.is_owner()
+    async def docs(self, ctx):
+        doc_embed = Embed(title="Click the button below to access the discord.py docs.", colour = 0x5865F2)
+        await ctx.send(embed=doc_embed, components=[Button(style=ButtonStyle.URL, label = "📄 Discord.py docs", url="https://discordpy.readthedocs.io/en")])
 
     @commands.command(name="setstatus", hidden=True)
     @commands.is_owner()

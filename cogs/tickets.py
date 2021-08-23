@@ -28,11 +28,7 @@ class tickets(commands.Cog):
         await interaction.send(content = "Button clicked!")      
             
 
-    @commands.command(name="docs")
-    @commands.is_owner()
-    async def docs(self, ctx):
-        doc_embed = discord.Embed(title="Click the button below to access the discord.py docs.")
-        await ctx.send(embed=doc_embed, components=[Button(style=ButtonStyle.blue, label = "[📄 Discord.py docs](https://www.youtube.com/watch?v=Vr3wuXrT_pk)")])
+ 
 
 
 

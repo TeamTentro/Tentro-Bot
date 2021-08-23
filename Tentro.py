@@ -22,12 +22,21 @@ def get_prefix(bot, message):
     if prefix is not None:
         prefix = prefix[0]
     else:
-        prefix = "!t" #return default prefix if guild not saved in database.
+        prefix = "t!" #return default prefix if guild not saved in database.
         c.execute(f"SELECT prefix FROM prefix WHERE guild_id = {message.guild.id}")
         result = c.fetchone()
         print(result)
         sql = ("INSERT INTO prefix(guild_id, prefix) VALUES(?,?)")
-        val = (message.guild.id, "t!")
+        val = (message.guild.id, prefix)
+        c.execute(sql, val)
+    if prefix is None:
+        prefix = "t!" #return default prefix if guild not saved in database.
+        c.execute(f"SELECT prefix FROM prefix WHERE guild_id = {message.guild.id}")
+        result = c.fetchone()
+        print(result)
+        sql = ("INSERT INTO prefix(guild_id, prefix) VALUES(?,?)")
+        val = (message.guild.id, prefix)
+
         
         c.execute(sql, val)
         conn.commit()
@@ -66,6 +75,9 @@ async def on_message(message):
         c.execute(f"SELECT prefix FROM prefix WHERE guild_id = {message.guild.id}")
         result = c.fetchone()
         await message.channel.send(f"My prefix is ``{result[0]}``")
+    elif bot.user.mentioned_in(message) and message.mention_everyone is False:
+        await message.channel.send(f"My prefix is ``t!``")
+
 
     
     

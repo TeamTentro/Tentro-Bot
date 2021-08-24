@@ -1,9 +1,35 @@
-# Tentro-Bot
-A team making a bot
+<h1 align="center">Welcome to Tentro 👋</h1>
+<p>
+  <img alt="Version" src="https://img.shields.io/badge/version-Alpha-blue.svg?cacheSeconds=2592000" />
+</p>
 
-[![Discord](https://img.shields.io/discord/745925853229350972.svg?label=&logo=discord&logoColor=ffffff&color=7389D8&labelColor=6A7EC2)](https://discord.gg/EQQDFmtF)
+> A multipurpose Discord bot.
 
-contributors : 
-codex oculus imperus desuz, judus helpus informus, linus tipus, aksus versus extrus, tonus gusus exvodious fadus impostorsus fingus 
+### 🏠 [Homepage](https://discord.gg/zyms32wdgd)
 
+## Install
 
+```sh
+pip install -r requirements.txt
+```
+
+## Usage
+
+```sh
+py Tentro.py
+```
+
+## Contributors
+
+👤 **Tentro Dev Team**
+📜 **Codeize**
+📜 **tonyG**
+📜 **Aksy**
+📜 **Fad The Chad**
+
+* Website: https://discord.gg/zyms32wdgd
+* Github: [@TentroBot](https://github.com/TentroBot)
+
+## Show your support
+
+Give a ⭐️ if you like this project!

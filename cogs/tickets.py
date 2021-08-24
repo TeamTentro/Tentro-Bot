@@ -163,12 +163,22 @@ class tickets(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
+        guild_id = payload.guild.id
+        ticketchannel_e = discord.utils.get(payload.guild.text_channels, name="ticketinfo")
         member = payload.member
-
+        ticketmsg = await ticketchannel_e.send("Testing, dont mind me") 
         conn = sqlite3.connect(path)
         c = conn.cursor()
         c.execute("SELECT msg_id FROM ticket WHERE EXISTS(SELECT msg_id FROM ticket WHERE guild_id=?)", (payload.guild_id,))
         result_3 = c.fetchone()
+        if result_3 is None:
+            sql = ("INSERT INTO prefix(guild_id, msg_id) VALUES(?,?)")
+            val = (guild_id, ticketmsg.id)
+            await payload.send("TEST")
+        elif result_3 is not None:
+            sql = ("UPDATE ticket SET msg_id = ? WHERE guild_id = ?")
+            val = (ticketmsg.id, guild_id)
+            await payload.send("Finally")
         
       
         

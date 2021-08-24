@@ -123,11 +123,11 @@ class tickets(commands.Cog):
         result = c.fetchone()
         if result is None:
             sql = ("INSERT INTO ticket(guild_id, role_id) VALUES(?,?)")
-            val = (ctx.guild.id, role)
+            val = (ctx.guild.id, role.id)
             await ctx.send(f"Role_id has been set to {role}")
         elif result is not None:
             sql = ("UPDATE ticket SET role_id = ? WHERE guild_id = ?")
-            val = (role, ctx.guild.id)
+            val = (role.id, ctx.guild.id)
             await ctx.send(f"Role_id has been updated to {role}") 
         c.execute(sql, val)
         conn.commit()
@@ -163,26 +163,22 @@ class tickets(commands.Cog):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
-        guild_id = payload.guild.id
-        ticketchannel_e = discord.utils.get(payload.guild.text_channels, name="ticketinfo")
-        member = payload.member
-        ticketmsg = await ticketchannel_e.send("Testing, dont mind me") 
+        
+       
+      
         conn = sqlite3.connect(path)
         c = conn.cursor()
-        c.execute("SELECT msg_id FROM ticket WHERE EXISTS(SELECT msg_id FROM ticket WHERE guild_id=?)", (payload.guild_id,))
+        c.execute(f"SELECT msg_id FROM ticket WHERE guild_id = {payload.guild_id}")
         result_3 = c.fetchone()
-        if result_3 is None:
-            sql = ("INSERT INTO prefix(guild_id, msg_id) VALUES(?,?)")
-            val = (guild_id, ticketmsg.id)
-            await payload.send("TEST")
-        elif result_3 is not None:
-            sql = ("UPDATE ticket SET msg_id = ? WHERE guild_id = ?")
-            val = (ticketmsg.id, guild_id)
-            await payload.send("Finally")
+        
         
       
         
         if payload.message_id==result_3[0]:
+            c.execute(f"SELECT role_id FROM ticket WHERE guild_id = {payload.guild_id}")
+            result6 = c.fetchone()
+            
+            
             
             guild_id = payload.guild_id
             channel = self.bot.get_channel(payload.channel_id)
@@ -198,10 +194,20 @@ class tickets(commands.Cog):
 
             tick = await guild.create_text_channel(name=f"ticket-{name}", category=ticketcategory)
             channel = self.bot.get_channel(tick)
+
+            if result6 is not None:
+                await message.remove_reaction(emoji, user)
+                await tick.send(f"Role_id has access to the channel") 
+                role = discord.utils.get(guild.roles, id=result6[0])
+                await tick.set_permissions(target=role, speak=True, send_messages=False, view_channel=True, add_reactions=True, read_message_history=True, read_messages=True)
+                await tick.set_permissions(target=role2, speak=False, send_messages=False, read_message_history=False, read_messages=False, add_reactions=False, view_channel=False)##permissions
+                await tick.set_permissions(target=user, speak=True, send_messages=True, read_message_history=True, read_messages=True, view_channel=True, add_reactions=False)
+            else:
             
-            await message.remove_reaction(emoji, user)         
-            await tick.set_permissions(target=role2, speak=False, send_messages=False, read_message_history=False, read_messages=False, add_reactions=False, view_channel=False)##permissions
-            await tick.set_permissions(target=user, speak=True, send_messages=True, read_message_history=True, read_messages=True, view_channel=True, add_reactions=False)
+                await message.remove_reaction(emoji, user)         
+                await tick.set_permissions(target=role2, speak=False, send_messages=False, read_message_history=False, read_messages=False, add_reactions=False, view_channel=False)##permissions
+                await tick.set_permissions(target=user, speak=True, send_messages=True, read_message_history=True, read_messages=True, view_channel=True, add_reactions=False)
+            
 
 
             embed = discord.Embed(title="Ticket utils (staff only)", color=0xf7fcfd)

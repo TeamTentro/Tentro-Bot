@@ -13,26 +13,7 @@ class tickets(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-     
     
-    @commands.command(name="test1")
-    async def button(self, ctx):
-        await ctx.send(
-        "Hello, World!",
-        components = [
-            Button(label = "WOW button!", custom_id = "button1")
-        ]
-    )
-
-        interaction = await self.bot.wait_for("button_click", check = lambda i: i.custom_id == "button1")
-        await interaction.send(content = "Button clicked!")      
-            
-
- 
-
-
-
-
     @commands.command(name="help_tickets")
     async def help_ticket(self, ctx):
         embed = Embed(title="Tickets", description="ticket_add: Creates a ticket channel and category, you can also add a custom message to it, if not it will use a default message we have set\nticket_remove: Deletes the ticket channel and category\nticket_addrole: Adds a role that will be able to see the tickets\nticket_removerole: Removes the role's permissions  to view tickets", colour=0xff0000)
@@ -44,7 +25,6 @@ class tickets(commands.Cog):
         conn = sqlite3.connect(path)
         c = conn.cursor()
         
-       
         # Check if the category already exists
         ticketcat_e = discord.utils.get(ctx.guild.categories, name="🎫-Tickets")
         if ticketcat_e:
@@ -65,7 +45,7 @@ class tickets(commands.Cog):
             embedticket = Embed(title=f"Tickets for {ctx.guild.name}", description=f"{text}", color =0xff0000)
             ticketmsg = await ticketchannel.send(embed=embedticket)
             await ticketmsg.add_reaction("🎫")
-            addedembed = Embed(title="✅| Succesfully added the Tentro ticket system to this server. Run t!help_tickets for more info.", colour = 0x00ff00)
+            addedembed = Embed(title="✅| Successfully added the Tentro ticket system to this server. Run t!help_tickets for more info.", colour = 0x00ff00)
             await ctx.send(embed=addedembed)
             
             
@@ -144,23 +124,21 @@ class tickets(commands.Cog):
         if ctx.message.author.guild_permissions.administrator:
             conn = sqlite3.connect(path)
             c = conn.cursor()
-            c.execute(f"SELECT channel_id FROM ticketlogcmd WHERE guild_id = {ctx.guild.id}")
+            c.execute(f"SELECT channel_id FROM ticket WHERE guild_id = {ctx.guild.id}")
             result = c.fetchone()
             if result is None:
-                sql = ("INSERT INTO ticketlogcmd(guild_id, channel_id) VALUES(?,?)")
+                sql = ("INSERT INTO ticket(guild_id, channel_id) VALUES(?,?)")
                 val = (ctx.guild.id, channel.id)
-                await ctx.send(f"Ticket log channel has been set to {channel.mention}")
+                await ctx.reply(f"Ticket log channel has been set to {channel.mention}")
             elif result is not None:
-                sql = ("UPDATE ticketlogcmd SET channel_id = ? WHERE guild_id = ?")
+                sql = ("UPDATE ticket SET channel_id = ? WHERE guild_id = ?")
                 val = (channel.id, ctx.guild.id)
-                await ctx.send(f"Ticket log channel has been updated to {channel.mention}") 
+                await ctx.reply(f"Ticket log channel has been updated to {channel.mention}")
             c.execute(sql, val)
             conn.commit()
             c.close()
             conn.close()
         
-            
-
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):
         member = payload.member
